@@ -19,7 +19,7 @@ import Button from "~/components/Button";
 import styles from "./Header.module.scss";
 import images from "~/assets/images";
 import Menu from "~/components/Popper/Menu";
-import { UploadIcon } from "~/components/Icons";
+import { AnimeListIcon, UploadIcon } from "~/components/Icons";
 import Image from "~/components/Image";
 import Search from "../Search";
 import { InboxIcon, MessageIcon } from "~/components/Icons";
@@ -114,12 +114,14 @@ function Header() {
                             </Tippy>
                             <Tippy
                                 delay={[0, 50]}
-                                content="Message"
+                                content="Anime List"
                                 placement="bottom"
                             >
-                                <button className={cx("action-btn")}>
-                                    <MessageIcon />
-                                </button>
+                                <Link to={config.routes.animes}>
+                                    <button className={cx("action-btn")}>
+                                        <AnimeListIcon />
+                                    </button>
+                                </Link>
                             </Tippy>
                             <Tippy
                                 delay={[0, 50]}

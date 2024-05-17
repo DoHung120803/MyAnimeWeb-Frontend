@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./SuggestedAnimes.module.scss";
-import AccountItem from "./AnimeItem";
+import AnimeItem from "./AnimeItem";
 
 const cx = classNames.bind(styles);
 
@@ -10,13 +10,13 @@ function SuggestedAccounts({ label }) {
         <div className={cx("wrapper")}>
             <p className={cx("label")}>{label}</p>
 
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
+            <AnimeItem />
+            <AnimeItem />
+            <AnimeItem />
+            <AnimeItem />
+            <AnimeItem />
+            <AnimeItem />
+            <AnimeItem />
 
             <p className={cx("more-btn")}>See all</p>
         </div>
