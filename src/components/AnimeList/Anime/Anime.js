@@ -5,7 +5,7 @@ import styles from "../AnimeList.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Anime({ name, thumbnailUrl, rate, view }) {
+function Anime({ name, thumbnailUrl, rate, views }) {
     return (
         <div className={cx("anime-container")}>
             <img
@@ -16,7 +16,7 @@ function Anime({ name, thumbnailUrl, rate, view }) {
             <div className={cx("anime-info")}>
                 <p className={cx("anime-name")}>{name}</p>
                 <p>Rate: {rate}</p>
-                <p>Views: {view}</p>
+                <p>Views: {views}</p>
             </div>
             <button className={cx("update-btn")}>Sửa</button>
             <button className={cx("delete-btn")}>Xóa</button>
@@ -28,7 +28,7 @@ Anime.propTypes = {
     name: PropTypes.string.isRequired,
     thumbnailUrl: PropTypes.string.isRequired,
     rate: PropTypes.number,
-    view: PropTypes.number,
+    views: PropTypes.number,
 };
 
 export default Anime;
