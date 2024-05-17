@@ -10,6 +10,7 @@ function AnimeList({ data }) {
             {data.map((anime, index) => (
                 <Anime
                     key={index}
+                    id={anime.id}
                     name={anime.name}
                     thumbnailUrl={anime.thumbnailUrl}
                     rate={anime.rate}

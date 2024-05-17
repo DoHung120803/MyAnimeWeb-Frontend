@@ -1,8 +1,8 @@
 import * as httpRequest from "~/utils/httpRequest";
 
-export const getAnimes = async () => {
+export const getAnime = async (id) => {
     try {
-        const res = await httpRequest.get("/animes");
+        const res = await httpRequest.getById("/animes/" + id);
         return res;
     } catch (error) {
         console.log(error);

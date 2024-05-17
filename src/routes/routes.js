@@ -11,6 +11,7 @@ import Upload from "~/pages/Upload";
 import Search from "~/pages/Search";
 import Live from "~/pages/Live";
 import AnimeList from "~/pages/AnimeListPage";
+import UpdateAnimePage from "~/pages/UpdateAnimePage/UpdateAnimePage";
 
 // Public routes
 const publicRoutes = [
@@ -21,6 +22,7 @@ const publicRoutes = [
     { path: config.routes.upload, component: Upload },
     { path: config.routes.search, component: Search, layout: null },
     { path: config.routes.animes, component: AnimeList },
+    { path: config.routes.update, component: UpdateAnimePage },
 ];
 
 const privateRoutes = [];

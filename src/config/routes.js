@@ -6,6 +6,7 @@ const routes = {
     search: "/search",
     live: "/live",
     animes: "/animes",
+    update: "/animes/:id/update",
 };
 
 export default routes;
