@@ -1,14 +1,14 @@
+import { useEffect, useState } from "react";
 import * as getAnimesService from "~/services/getAnimesService";
 import AnimeList from "~/components/AnimeList";
-import { useEffect, useState } from "react";
 
 function AninmeListPage() {
-    const [animes, setAmines] = useState([]);
+    const [animes, setAnimes] = useState([]);
 
     useEffect(() => {
         const fetchApi = async () => {
             const data = await getAnimesService.getAnimes();
-            setAmines(data);
+            setAnimes(data);
         };
 
         fetchApi();

@@ -1,28 +1,22 @@
 import classNames from "classnames/bind";
-import * as httpRequest from "~/utils/httpRequest";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import styles from "../AnimeList.module.scss";
-import { Link } from "react-router-dom";
 import config from "~/config";
+import * as deleteAnimeServices from "~/services/deleteAnimeService";
+import * as jqueryUltis from "~/utils/jqueryUltis";
 
 const cx = classNames.bind(styles);
 
 function Anime({ id, name, thumbnailUrl, rate, views }) {
-    // const handleUpdateAnime = () => {
-    //     httpRequest.put(
-    //         "http://localhost:8080/myanime/animes/update/7a3b5c04-ef65-4db8-8f56-9f192d892fc2",
-    //         {
-    //             name: "update anime",
-    //             thumbnailUrl: "update",
-    //             description: "update",
-    //             iframe: "update",
-    //         }
-    //     );
-    // };
+    const handleDelete = () => {
+        deleteAnimeServices.deleteAnime(id);
+        jqueryUltis.hiddenAnimeDeteled(id);
+    };
 
     return (
-        <div className={cx("anime-container")}>
+        <div className={cx("anime-container")} id={id}>
             <img
                 className={cx("thumbnail")}
                 alt="thumbnail"
@@ -36,7 +30,9 @@ function Anime({ id, name, thumbnailUrl, rate, views }) {
             <Link to={config.routes.update.replace(":id", id)}>
                 <button className={cx("update-btn")}>Sửa</button>
             </Link>
-            <button className={cx("delete-btn")}>Xóa</button>
+            <button onClick={handleDelete} className={cx("delete-btn")}>
+                Xóa
+            </button>
         </div>
     );
 }
