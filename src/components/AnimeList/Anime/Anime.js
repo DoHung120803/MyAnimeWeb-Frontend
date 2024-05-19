@@ -6,13 +6,21 @@ import styles from "../AnimeList.module.scss";
 import config from "~/config";
 import * as deleteAnimeServices from "~/services/deleteAnimeService";
 import * as jqueryUltis from "~/utils/jqueryUltis";
+import { StarIcon } from "~/components/Icons";
 
 const cx = classNames.bind(styles);
 
-function Anime({ id, name, thumbnailUrl, rate, views }) {
+function Anime({
+    id,
+    name,
+    thumbnailUrl,
+    rate,
+    views,
+    homePageCustom = false,
+}) {
     const handleDelete = () => {
         deleteAnimeServices.deleteAnime(id);
-        jqueryUltis.hiddenAnimeDeteled(id);
+        jqueryUltis.hiddenAnimeDeteled(id); // ẩn anime khi click xóa
     };
 
     return (
@@ -24,8 +32,22 @@ function Anime({ id, name, thumbnailUrl, rate, views }) {
             ></img>
             <div className={cx("anime-info")}>
                 <p className={cx("anime-name")}>{name}</p>
-                <p>Rate: {rate}</p>
-                <p>Views: {views}</p>
+
+                <p className={cx("rate")}>
+                    {homePageCustom ? (
+                        <span className={cx("rate-icon")}>
+                            <StarIcon />
+                        </span>
+                    ) : (
+                        "Rate: "
+                    )}
+
+                    {rate}
+                </p>
+                <p className={cx("views")}>
+                    {homePageCustom || "Views: "}
+                    {views}
+                </p>
             </div>
             <Link to={config.routes.update.replace(":id", id)}>
                 <button className={cx("update-btn")}>Sửa</button>

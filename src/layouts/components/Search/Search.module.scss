@@ -11,12 +11,13 @@
     background-color: rgba(22, 24, 35, 0.06);
     border-radius: var(--search-border-radius);
     border: 1.5px solid transparent;
+    background: #12171b6e 5px 2px no-repeat;
 
     input {
         flex: 1;
         height: 100%;
         padding-right: 40px;
-        color: var(--black);
+        color: var(--white);
         font-size: 1.6rem;
         font-family: var(--font-family);
         background-color: transparent;
@@ -34,7 +35,7 @@
         right: var(--search-button-width);
         width: 1px;
         height: calc(var(--search-height) - var(--search-top-spacer) * 2);
-        background-color: rgba(22, 24, 35, 0.12);
+        background-color: gray;
     }
 
     &:focus-within {
@@ -77,11 +78,12 @@
     border-top-right-radius: var(--search-border-radius);
     border-bottom-right-radius: var(--search-border-radius);
     font-size: 1.8rem;
-    color: rgba(22, 24, 35, 0.34);
+    background-color: #2b2d31;
+    color: white;
 
     &:hover {
         cursor: pointer;
-        background-color: rgba(22, 24, 35, 0.03);
+        background-color: rgb(8, 8, 8);
     }
 
     &:active {

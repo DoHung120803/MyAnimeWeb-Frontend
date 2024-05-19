@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as getAnimesService from "~/services/getAnimesService";
 import AnimeList from "~/components/AnimeList";
 
-function AninmeListPage() {
+function AninmeListPage({ homePageCustom }) {
     const [animes, setAnimes] = useState([]);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ function AninmeListPage() {
 
         fetchApi();
     }, []);
-    return <AnimeList data={animes} />;
+    return <AnimeList data={animes} homePageCustom={homePageCustom} />;
 }
 
 export default AninmeListPage;

@@ -3,6 +3,8 @@
     --search-height: 46px;
     --search-top-spacer: 9px;
     --search-button-width: 52px;
+    --header-background: #000
+        url(https://anime47.pro/skin/24032017/img/header-bg.jpg) repeat-x;
 
     position: fixed;
     top: 0px;
@@ -13,7 +15,7 @@
     width: 100%;
     height: var(--default-layout-header-height, 60px);
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 1px;
-    background-color: var(--white);
+    background: var(--header-background);
 }
 
 .inner {
@@ -27,6 +29,12 @@
 
 .logo-link {
     display: flex;
+}
+
+.anime-logo {
+    width: 11.8rem;
+    height: 4.2rem;
+    object-fit: cover;
 }
 
 // actions

@@ -10,6 +10,7 @@
 
     &.active {
         color: var(--primary);
+        background-color: rgb(66, 65, 65) !important;
 
         .icon {
             display: none;
@@ -21,7 +22,7 @@
     }
 
     &:hover {
-        background-color: rgba(22, 24, 45, 0.03);
+        background-color: rgba(194, 221, 237, 0.03);
     }
 }
 
