@@ -12,6 +12,7 @@ import Search from "~/pages/Search";
 import Live from "~/pages/Live";
 import AnimeList from "~/pages/AnimeListPage";
 import UpdateAnimePage from "~/pages/UpdateAnimePage/UpdateAnimePage";
+import AnimePlayer from "~/pages/AnimePlayer";
 
 // Public routes
 const publicRoutes = [
@@ -21,6 +22,7 @@ const publicRoutes = [
     { path: config.routes.profile, component: Profile },
     { path: config.routes.upload, component: Upload },
     { path: config.routes.search, component: Search, layout: null },
+    { path: config.routes.anime, component: AnimePlayer },
     { path: config.routes.animes, component: AnimeList },
     { path: config.routes.update, component: UpdateAnimePage },
 ];

@@ -5,6 +5,7 @@ const routes = {
     upload: "/upload",
     search: "/search",
     live: "/live",
+    anime: "/animes/:id",
     animes: "/animes",
     update: "/animes/:id/update",
 };

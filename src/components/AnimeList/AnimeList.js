@@ -16,9 +16,11 @@ function AnimeList({ data, homePageCustom = "" }) {
                     key={index}
                     id={anime.id}
                     name={anime.name}
+                    description={anime.description}
                     thumbnailUrl={anime.thumbnailUrl}
                     rate={anime.rate}
                     views={anime.views}
+                    iframe={anime.iframe}
                     homePageCustom={!!homePageCustom}
                 />
             ))}
