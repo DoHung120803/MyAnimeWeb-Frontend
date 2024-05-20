@@ -9,7 +9,7 @@ function Update() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const data = await getAnimeService.getAnime(id);
+            const data = await getAnimeService.get(id);
             setAnimeUpdated(data);
         };
 

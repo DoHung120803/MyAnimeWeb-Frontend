@@ -10,12 +10,6 @@ export const get = async (path, options = {}) => {
     return response.data;
 };
 
-// method get anime by id
-export const getById = async (path, options = {}) => {
-    const response = await httpRequest.get(path, options);
-    return response.data;
-};
-
 // method delete anime
 export const deleteAnime = async (path, options = {}) => {
     const response = await httpRequest.delete(path, options);

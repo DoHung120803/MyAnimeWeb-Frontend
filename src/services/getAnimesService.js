@@ -1,6 +1,6 @@
 import * as httpRequest from "~/utils/httpRequest";
 
-export const getAnimes = async () => {
+export const get = async () => {
     try {
         const res = await httpRequest.get("/animes");
         return res;

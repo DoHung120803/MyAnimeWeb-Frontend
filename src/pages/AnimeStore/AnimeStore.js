@@ -7,7 +7,7 @@ function AnimeStore({ homePageCustom = "" }) {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const data = await getAnimesService.getAnimes();
+            const data = await getAnimesService.get();
             setAnimes(data);
         };
 

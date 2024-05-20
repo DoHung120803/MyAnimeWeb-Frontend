@@ -2,14 +2,24 @@ import Tippy from "@tippyjs/react/headless";
 
 import classNames from "classnames/bind";
 import styles from "./SuggestedAnimes.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { Wrapper as PopperWrapper } from "../Popper";
 import AccountPreview from "./AnimePreview/AnimePreview";
+import { Link } from "react-router-dom";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function AccountItem() {
+function AccountItem({
+    index,
+    id,
+    name,
+    description,
+    rate,
+    views,
+    iframe,
+    thumbnailUrl,
+}) {
+    console.log(index);
     const renderPreview = (props) => {
         return (
             <div className={cx("preview")} tabIndex="-1" {...props}>
@@ -29,23 +39,36 @@ function AccountItem() {
                 placement="bottom"
                 render={renderPreview}
             >
-                <div className={cx("account-item")}>
-                    <img
-                        className={cx("avatar")}
-                        src="https://i.ytimg.com/vi/ilKg0DZrOwY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLD2rVw2_5acczDOI1-1z-8IA9hLEw"
-                        alt="avatar"
-                    />
-                    <div className={cx("item-info")}>
-                        <p className={cx("nickname")}>
-                            <strong>domanhhung</strong>
-                            <FontAwesomeIcon
-                                className={cx("check")}
-                                icon={faCheckCircle}
-                            />
-                        </p>
-                        <p className={cx("name")}>Đỗ Mạnh Hùng</p>
+                <Link
+                    to={config.routes.anime.replace(":id", id)}
+                    state={{
+                        id,
+                        name,
+                        description,
+                        iframe,
+                        rate,
+                        views,
+                        thumbnailUrl,
+                    }}
+                >
+                    <div
+                        className={cx("anime-item", index % 2 === 0 && "even")}
+                    >
+                        <img
+                            className={cx("thumbnail")}
+                            src={thumbnailUrl}
+                            alt={name}
+                        />
+                        <div className={cx("item-info")}>
+                            <p className={cx("name")}>
+                                <strong>{name}</strong>
+                            </p>
+                            <p className={cx("views")}>
+                                Lượt xem: <span>{views}</span>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </Link>
             </Tippy>
         </div>
     );

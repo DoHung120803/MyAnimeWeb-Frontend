@@ -14,7 +14,7 @@ function AnimePlayer() {
             <h2 className={cx("anime-name")}>{name}</h2>
             <iframe
                 className={cx("iframe")}
-                src={iframe}
+                src={`https://www.youtube.com/embed/${iframe}`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
