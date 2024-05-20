@@ -8,10 +8,22 @@ import Image from "~/components/Image";
 import config from "~/config";
 
 const cx = classNames.bind(styles);
-function AccountItem({ data }) {
+
+function AnimeSearchItem({ data }) {
+    const { name, description, rate, views, iframe } = data;
+
+    const animeData = {
+        name,
+        description,
+        rate,
+        views,
+        iframe,
+    };
+
     return (
         <Link
             to={config.routes.anime.replace(":id", data.id)}
+            state={animeData}
             className={cx("wrapper")}
         >
             <Image
@@ -28,8 +40,8 @@ function AccountItem({ data }) {
     );
 }
 
-AccountItem.propTypes = {
+AnimeSearchItem.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-export default AccountItem;
+export default AnimeSearchItem;

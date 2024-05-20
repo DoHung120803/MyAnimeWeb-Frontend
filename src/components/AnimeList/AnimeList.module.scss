@@ -26,8 +26,23 @@
 
     .update-btn,
     .delete-btn {
-        height: 2rem;
+        width: 5rem;
+        height: 3rem;
         margin-right: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.5;
+        }
+    }
+
+    .update-btn {
+        background-color: rgb(80, 190, 80);
+    }
+
+    .delete-btn {
+        background-color: rgb(216, 39, 39);
     }
 }
 
@@ -38,11 +53,12 @@
     overflow: overlay;
     flex: 1;
 
+    &:hover {
+        opacity: 0.5;
+    }
+
     .anime-name {
         font-weight: 600;
-        &:hover {
-            color: #dacb46 !important;
-        }
     }
 
     .rate-icon {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import * as getAnimeService from "~/services/getAnimeService";
 import FormSubmit from "~/components/FormSubmit";
 
-function UpdateAnimePage() {
+function Update() {
     const { id } = useParams();
     const [animeUpdated, setAnimeUpdated] = useState({});
 
@@ -26,4 +26,4 @@ function UpdateAnimePage() {
     );
 }
 
-export default UpdateAnimePage;
+export default Update;

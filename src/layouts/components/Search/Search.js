@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 
 import * as searchServices from "~/services/searchService";
 import { Wrapper as PopperWrapper } from "~/components/Popper";
-import AccountItem from "~/components/AnimeSearchItem";
+import AnimeSearchItem from "~/components/AnimeSearchItem";
 import { SearchIcon } from "~/components/Icons";
 import { useDebounce } from "~/hooks";
 import styles from "./Search.module.scss";
@@ -73,9 +73,14 @@ function Search() {
                         {...attrs}
                     >
                         <PopperWrapper>
-                            <h4 className={cx("search-title")}>Accounts</h4>
+                            <h4 className={cx("search-title")}>
+                                Anime Searching...
+                            </h4>
                             {searchResult.map((result) => (
-                                <AccountItem key={result.id} data={result} />
+                                <AnimeSearchItem
+                                    key={result.id}
+                                    data={result}
+                                />
                             ))}
                         </PopperWrapper>
                     </div>

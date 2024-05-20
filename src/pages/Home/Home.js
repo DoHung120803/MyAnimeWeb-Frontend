@@ -1,9 +1,9 @@
-import AnimeListPage from "../AnimeListPage";
+import AnimeStore from "../AnimeStore";
 
 function Home() {
     return (
         <div>
-            <AnimeListPage homePageCustom="home-page-custom" />
+            <AnimeStore homePageCustom="home-page-custom" />
         </div>
     );
 }

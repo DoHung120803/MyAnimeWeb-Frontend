@@ -28,6 +28,11 @@ function Anime({
         jqueryUltis.hiddenAnimeDeteled(id); // ẩn anime khi click xóa
     };
 
+    // chuyển hướng sang update
+    const handleClickUpdateBtn = () => {
+        navigator(config.routes.update.replace(":id", id));
+    };
+
     // chuyển hướng sang /animes/:id
     const handleOnClickThumbnail = () => {
         navigator(config.routes.anime.replace(":id", id), {
@@ -62,9 +67,9 @@ function Anime({
                     {views}
                 </p>
             </div>
-            <Link to={config.routes.update.replace(":id", id)}>
-                <button className={cx("update-btn")}>Sửa</button>
-            </Link>
+            <button onClick={handleClickUpdateBtn} className={cx("update-btn")}>
+                Sửa
+            </button>
             <button onClick={handleDelete} className={cx("delete-btn")}>
                 Xóa
             </button>

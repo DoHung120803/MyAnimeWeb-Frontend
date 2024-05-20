@@ -10,8 +10,8 @@ import Profile from "~/pages/Profile";
 import Upload from "~/pages/Upload";
 import Search from "~/pages/Search";
 import Live from "~/pages/Live";
-import AnimeList from "~/pages/AnimeListPage";
-import UpdateAnimePage from "~/pages/UpdateAnimePage/UpdateAnimePage";
+import AnimeList from "~/pages/AnimeStore";
+import Update from "~/pages/Update/Update";
 import AnimePlayer from "~/pages/AnimePlayer";
 
 // Public routes
@@ -24,7 +24,7 @@ const publicRoutes = [
     { path: config.routes.search, component: Search, layout: null },
     { path: config.routes.anime, component: AnimePlayer },
     { path: config.routes.animes, component: AnimeList },
-    { path: config.routes.update, component: UpdateAnimePage },
+    { path: config.routes.update, component: Update },
 ];
 
 const privateRoutes = [];

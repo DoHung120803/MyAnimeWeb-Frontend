@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as getAnimesService from "~/services/getAnimesService";
 import AnimeList from "~/components/AnimeList";
 
-function AninmeListPage({ homePageCustom }) {
+function AnimeStore({ homePageCustom = "" }) {
     const [animes, setAnimes] = useState([]);
 
     useEffect(() => {
@@ -13,7 +13,12 @@ function AninmeListPage({ homePageCustom }) {
 
         fetchApi();
     }, []);
-    return <AnimeList data={animes} homePageCustom={homePageCustom} />;
+    return (
+        <div>
+            {!!homePageCustom || <h2>Anime Repository</h2>}
+            <AnimeList data={animes} homePageCustom={homePageCustom} />
+        </div>
+    );
 }
 
-export default AninmeListPage;
+export default AnimeStore;
