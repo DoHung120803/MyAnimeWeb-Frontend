@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     padding: 9px 16px;
+    border-bottom: 1px solid white;
     cursor: pointer;
 
     &:hover {
@@ -9,7 +10,7 @@
     }
 }
 
-.avatar {
+.thumbnail {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -23,16 +24,12 @@
 
 .name {
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: 700;
+    color: black;
 }
 
-.check {
-    margin-left: 8px;
-    font-size: 1.2rem;
-    color: rgb(32, 213, 236);
-}
-
-.username {
-    font-size: 1.4rem;
-    color: rgba(22, 24, 35, 0.5);
+.views,
+.rate {
+    color: #888;
+    font-size: 1.3rem;
 }
