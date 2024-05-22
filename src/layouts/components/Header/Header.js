@@ -22,7 +22,9 @@ import Menu from "~/components/Popper/Menu";
 import { AnimeListIcon, UploadIcon } from "~/components/Icons";
 import Image from "~/components/Image";
 import Search from "../Search";
-import { InboxIcon, MessageIcon } from "~/components/Icons";
+import Options from "./Options";
+import { InboxIcon } from "~/components/Icons";
+import React from "react";
 
 const cx = classNames.bind(styles);
 
@@ -90,83 +92,86 @@ function Header() {
     ];
 
     return (
-        <header className={cx("wrapper")}>
-            <div className={cx("inner")}>
-                <Link to={config.routes.home} className={cx("logo-link")}>
-                    <img
-                        src={images.logo}
-                        alt="anime-logo"
-                        className={cx("anime-logo")}
-                    ></img>
-                </Link>
+        <React.Fragment>
+            <div className={cx("wrapper")}>
+                <div className={cx("inner")}>
+                    <Link to={config.routes.home} className={cx("logo-link")}>
+                        <img
+                            src={images.logo}
+                            alt="anime-logo"
+                            className={cx("anime-logo")}
+                        ></img>
+                    </Link>
 
-                <Search />
+                    <Search />
 
-                <div className={cx("actions")}>
-                    {currentUser ? (
-                        <>
-                            <Tippy
-                                delay={[0, 50]}
-                                content="Upload Anime"
-                                placement="bottom"
-                            >
-                                <Link to={config.routes.upload}>
-                                    <button className={cx("action-btn")}>
-                                        <UploadIcon />
-                                    </button>
-                                </Link>
-                            </Tippy>
-                            <Tippy
-                                delay={[0, 50]}
-                                content="Anime List"
-                                placement="bottom"
-                            >
-                                <Link to={config.routes.animes}>
-                                    <button className={cx("action-btn")}>
-                                        <AnimeListIcon />
-                                    </button>
-                                </Link>
-                            </Tippy>
-                            <Tippy
-                                delay={[0, 50]}
-                                content="Inbox"
-                                placement="bottom"
-                            >
-                                <button className={cx("action-btn")}>
-                                    <InboxIcon />
-                                    <span className={cx("badge")}>12</span>
-                                </button>
-                            </Tippy>
-                        </>
-                    ) : (
-                        <>
-                            <Button text>Upload</Button>
-                            <Button primary>Log in</Button>
-                        </>
-                    )}
-
-                    <Menu
-                        items={currentUser ? userMenu : MENU_ITEMS}
-                        onChange={handleMenuChange}
-                    >
+                    <div className={cx("actions")}>
                         {currentUser ? (
-                            <Image
-                                className={cx("user-avatar")}
-                                alt="Nguyen Van A"
-                                src="htps://th.bing.com/th/id/R.122f0b47e6716f6c6f6b4c39def4685f?rik=kXE0BEE3Pm1E%2fg&pid=ImgRaw&r=0"
-                                fallback="https://lh5.googleusercontent.com/p/AF1QipN7NJcUBnM3MENzywr2yZ-FgjgzQGrWiZ4TfLIu=w320-h240-n-k-no"
-                            />
+                            <>
+                                <Tippy
+                                    delay={[0, 50]}
+                                    content="Upload Anime"
+                                    placement="bottom"
+                                >
+                                    <Link to={config.routes.upload}>
+                                        <button className={cx("action-btn")}>
+                                            <UploadIcon />
+                                        </button>
+                                    </Link>
+                                </Tippy>
+                                <Tippy
+                                    delay={[0, 50]}
+                                    content="Anime List"
+                                    placement="bottom"
+                                >
+                                    <Link to={config.routes.animes}>
+                                        <button className={cx("action-btn")}>
+                                            <AnimeListIcon />
+                                        </button>
+                                    </Link>
+                                </Tippy>
+                                <Tippy
+                                    delay={[0, 50]}
+                                    content="Inbox"
+                                    placement="bottom"
+                                >
+                                    <button className={cx("action-btn")}>
+                                        <InboxIcon />
+                                        <span className={cx("badge")}>12</span>
+                                    </button>
+                                </Tippy>
+                            </>
                         ) : (
-                            <button className={cx("more-btn")}>
-                                <FontAwesomeIcon
-                                    icon={faEllipsisVertical}
-                                ></FontAwesomeIcon>
-                            </button>
+                            <>
+                                <Button text>Upload</Button>
+                                <Button primary>Log in</Button>
+                            </>
                         )}
-                    </Menu>
+
+                        <Menu
+                            items={currentUser ? userMenu : MENU_ITEMS}
+                            onChange={handleMenuChange}
+                        >
+                            {currentUser ? (
+                                <Image
+                                    className={cx("user-avatar")}
+                                    alt="Nguyen Van A"
+                                    src="htps://th.bing.com/th/id/R.122f0b47e6716f6c6f6b4c39def4685f?rik=kXE0BEE3Pm1E%2fg&pid=ImgRaw&r=0"
+                                    fallback="https://lh5.googleusercontent.com/p/AF1QipN7NJcUBnM3MENzywr2yZ-FgjgzQGrWiZ4TfLIu=w320-h240-n-k-no"
+                                />
+                            ) : (
+                                <button className={cx("more-btn")}>
+                                    <FontAwesomeIcon
+                                        icon={faEllipsisVertical}
+                                    ></FontAwesomeIcon>
+                                </button>
+                            )}
+                        </Menu>
+                    </div>
                 </div>
             </div>
-        </header>
+            <Options />
+        </React.Fragment>
     );
 }
 

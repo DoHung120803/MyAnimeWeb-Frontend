@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    top: 6rem;
+    background: #131313;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 1px;
+    text-transform: uppercase;
+}
+
+.option-menu {
+    width: var(--default-layout-width);
+    display: flex;
+    padding: 0 var(--default-layout-horizontal-spacer);
+}
+
+.title {
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+    padding: 1.2rem 3rem;
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+    color: rgb(168, 168, 16);
+
+    &:hover {
+        text-shadow: 10px 10px 15px rgb(3, 250, 16);
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .container {
+        display: none;
+    }
+}
