@@ -5,6 +5,7 @@ import Anime from "./Anime/Anime";
 const cx = classNames.bind(styles);
 
 function AnimeList({ data, homePageCustom = "" }) {
+    console.log(data);
     return (
         <div
             className={cx("list-anime", {

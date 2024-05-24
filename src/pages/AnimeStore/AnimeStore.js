@@ -6,9 +6,13 @@ function AnimeStore({ homePageCustom = "" }) {
     const [animes, setAnimes] = useState([]);
 
     useEffect(() => {
+        if (localStorage.getItem("animes")) {
+            return;
+        }
         const fetchApi = async () => {
             const data = await getAnimesService.get();
             setAnimes(data);
+            localStorage.setItem("animes", JSON.stringify(data));
         };
 
         fetchApi();
@@ -16,7 +20,10 @@ function AnimeStore({ homePageCustom = "" }) {
     return (
         <div>
             {!!homePageCustom || <h2>Anime Repository</h2>}
-            <AnimeList data={animes} homePageCustom={homePageCustom} />
+            <AnimeList
+                data={JSON.parse(localStorage.getItem("animes")) || animes}
+                homePageCustom={homePageCustom}
+            />
         </div>
     );
 }

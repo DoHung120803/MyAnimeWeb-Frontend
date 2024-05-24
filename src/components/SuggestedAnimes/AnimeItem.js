@@ -18,8 +18,8 @@ function AccountItem({
     views,
     iframe,
     thumbnailUrl,
+    custom,
 }) {
-    console.log(index);
     const renderPreview = (props) => {
         return (
             <div className={cx("preview")} tabIndex="-1" {...props}>
@@ -35,7 +35,7 @@ function AccountItem({
             <Tippy
                 interactive
                 delay={[800, 0]}
-                offset={[-30, 0]}
+                offset={[-30, !custom ? 0 : 100]} // nếu có custom thì cho tràn để hidden
                 placement="bottom"
                 render={renderPreview}
             >
@@ -52,7 +52,10 @@ function AccountItem({
                     }}
                 >
                     <div
-                        className={cx("anime-item", index % 2 === 0 && "even")}
+                        className={cx(
+                            "anime-item",
+                            index % 2 === 0 && !custom && "even"
+                        )}
                     >
                         <img
                             className={cx("thumbnail")}
@@ -63,9 +66,15 @@ function AccountItem({
                             <p className={cx("name")}>
                                 <strong>{name}</strong>
                             </p>
-                            <p className={cx("views")}>
-                                Lượt xem: <span>{views}</span>
-                            </p>
+                            {custom ? (
+                                <p className={cx("rate")}>
+                                    <span>{rate} / 10</span>
+                                </p>
+                            ) : (
+                                <p className={cx("views")}>
+                                    Lượt xem: <span>{views}</span>
+                                </p>
+                            )}
                         </div>
                     </div>
                 </Link>

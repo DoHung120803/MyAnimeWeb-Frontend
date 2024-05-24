@@ -64,7 +64,7 @@ function Sidebar() {
                 <h2 className={cx("intro-title")}>Top 10 Highest Views</h2>
             </div>
 
-            <SuggestedAnimes />
+            <SuggestedAnimes getBy="top-views" />
         </aside>
     );
 }

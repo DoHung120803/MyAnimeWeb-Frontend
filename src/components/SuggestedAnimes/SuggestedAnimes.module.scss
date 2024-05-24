@@ -1,4 +1,38 @@
-.wrapper {
+@mixin infor-position($bottom, $left, $padding-t-b, $padding-l-r) {
+    position: absolute;
+    left: $left;
+    bottom: $bottom;
+    padding: $padding-t-b $padding-l-r;
+}
+
+@mixin arrow-icon($pos-prop, $pos-prop-value, $icon, $background-value) {
+    position: absolute;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    #{$pos-prop}: $pos-prop-value;
+    padding: 4rem 2rem;
+    background: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+
+    .#{$icon} {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        height: 2.4rem;
+        width: 1.6rem;
+        background: $background-value;
+    }
+    &:hover {
+        background: rgba(0, 0, 0);
+    }
+}
+
+.container {
+    position: relative;
+    max-width: 100%;
+}
+
+// for top views
+.list {
     width: 100%;
     max-width: 100%;
     margin-top: -4rem;
@@ -46,4 +80,79 @@
 
 .even {
     background-color: #d9cfcf0e;
+}
+
+// custom for top rate
+.custom {
+    box-sizing: content-box;
+    margin-top: 8rem;
+    margin-left: 2rem;
+    .list {
+        display: grid;
+        grid-template-columns: repeat(10, minmax(23rem, 1fr));
+        grid-template-rows: 27rem;
+        position: relative;
+        width: var(--default-layout-width);
+        max-width: 100%;
+        overflow: hidden;
+        margin-top: -3rem;
+        margin-bottom: -7rem;
+        padding: 2rem 0;
+    }
+
+    .anime-item {
+        display: flex;
+        flex-direction: column;
+        height: 90%;
+        position: relative;
+        transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+            box-shadow 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        transform-origin: center;
+        margin-right: 2rem;
+        margin-top: 1.4rem;
+        padding: 0;
+
+        &:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 20px rgba(191, 255, 0, 0.991); /* Màu vàng nhạt */
+        }
+
+        .thumbnail {
+            height: 100%;
+            width: 100%;
+            object-fit: fill;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+
+            .name {
+                background: url(https://anime47.pro/skin/24032017/img/mask-title.png)
+                    top repeat-x !important;
+                @include infor-position(0, 0, 3rem, 2rem);
+            }
+
+            .rate {
+                @include infor-position(0, 0, 1rem, 8.5rem);
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+.next {
+    @include arrow-icon(right, -2rem,left-arrow-icon, url(https://anime47.pro/skin/24032017/img/image.png?v=1.2)
+    no-repeat -23px -535px);
+}
+
+.prev {
+    @include arrow-icon(left, 0.2rem,right-arrow-icon, url(https://anime47.pro/skin/24032017/img/image.png?v=1.2)
+    no-repeat -2px -535px);
+}
+
+@media screen and (max-width: 768px) {
+    .custom {
+        width: 500px;
+    }
 }
