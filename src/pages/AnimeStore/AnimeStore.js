@@ -10,9 +10,9 @@ function AnimeStore({ homePageCustom = "" }) {
             return;
         }
         const fetchApi = async () => {
-            const data = await getAnimesService.get();
-            setAnimes(data);
-            localStorage.setItem("animes", JSON.stringify(data));
+            const response = await getAnimesService.get();
+            setAnimes(response.data);
+            localStorage.setItem("animes", JSON.stringify(response.data));
         };
 
         fetchApi();

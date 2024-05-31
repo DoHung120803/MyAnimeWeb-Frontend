@@ -4,7 +4,6 @@ import styles from "./SuggestedAnimes.module.scss";
 import AnimeItem from "./AnimeItem";
 import React, { useEffect, useRef, useState } from "react";
 import * as getTopAnimesService from "~/services/getTopAnimesService";
-import { useLocation } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -14,12 +13,12 @@ function SuggestedAnimes({ getBy, custom = false }) {
 
     useEffect(() => {
         const fetch = async () => {
-            const data = await getTopAnimesService.get(getBy);
-            setSuggestedList(data);
+            const response = await getTopAnimesService.get(getBy);
+            setSuggestedList(response.data);
         };
 
         fetch();
-    }, []);
+    }, [getBy]);
 
     const handleMove = (sign) => {
         // sign = -1 => move right
