@@ -3,7 +3,7 @@ import Tippy from "@tippyjs/react/headless";
 import classNames from "classnames/bind";
 import styles from "./SuggestedAnimes.module.scss";
 import { Wrapper as PopperWrapper } from "../Popper";
-import AccountPreview from "./AnimePreview/AnimePreview";
+import AnimePreview from "./AnimePreview/AnimePreview";
 import { Link } from "react-router-dom";
 import config from "~/config";
 
@@ -24,7 +24,7 @@ function AccountItem({
         return (
             <div className={cx("preview")} tabIndex="-1" {...props}>
                 <PopperWrapper>
-                    <AccountPreview />
+                    <AnimePreview />
                 </PopperWrapper>
             </div>
         );
@@ -33,6 +33,7 @@ function AccountItem({
     return (
         <div>
             <Tippy
+                visible={false}
                 interactive
                 delay={[800, 0]}
                 offset={[-30, !custom ? 0 : 100]} // nếu có custom thì cho tràn để hidden

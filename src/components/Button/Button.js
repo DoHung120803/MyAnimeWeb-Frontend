@@ -9,6 +9,7 @@ function Button({
     to,
     href,
     primary = false,
+    dark = false,
     outline = false,
     text = false,
     small = false,
@@ -48,6 +49,7 @@ function Button({
     const classes = cx("wrapper", {
         [className]: className,
         primary,
+        dark,
         outline,
         small,
         large,
@@ -69,6 +71,7 @@ Button.propTypes = {
     to: PropTypes.string,
     href: PropTypes.string,
     primary: PropTypes.bool,
+    dark: PropTypes.bool,
     outline: PropTypes.bool,
     text: PropTypes.bool,
     small: PropTypes.bool,

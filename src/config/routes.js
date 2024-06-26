@@ -8,6 +8,8 @@ const routes = {
     anime: "/animes/:id",
     animes: "/animes",
     update: "/animes/:id/update",
+    login: "/auth/login",
+    register: "/register",
 };
 
 export default routes;

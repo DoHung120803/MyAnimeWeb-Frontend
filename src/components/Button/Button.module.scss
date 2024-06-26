@@ -61,6 +61,16 @@
     }
 }
 
+.dark {
+    background-color: var(--dark);
+    color: rgb(0, 208, 255);
+
+    &:hover {
+        background: linear-gradient(180deg, #7c7a7a, rgba(0, 0, 0, 0.06));
+        border: none;
+    }
+}
+
 .outline {
     color: var(--primary);
     border-color: currentColor;

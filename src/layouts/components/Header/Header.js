@@ -106,7 +106,7 @@ function Header() {
                     <Search />
 
                     <div className={cx("actions")}>
-                        {currentUser ? (
+                        {/* {currentUser ? (
                             <>
                                 <Tippy
                                     delay={[0, 50]}
@@ -157,7 +157,7 @@ function Header() {
                                     className={cx("user-avatar")}
                                     alt="Nguyen Van A"
                                     src="htps://th.bing.com/th/id/R.122f0b47e6716f6c6f6b4c39def4685f?rik=kXE0BEE3Pm1E%2fg&pid=ImgRaw&r=0"
-                                    fallback="https://lh5.googleusercontent.com/p/AF1QipN7NJcUBnM3MENzywr2yZ-FgjgzQGrWiZ4TfLIu=w320-h240-n-k-no"
+                                    fallback="https://www.vnu.edu.vn/upload/2010/08/62/image/VNU-HUS.jpg"
                                 />
                             ) : (
                                 <button className={cx("more-btn")}>
@@ -166,7 +166,15 @@ function Header() {
                                     ></FontAwesomeIcon>
                                 </button>
                             )}
-                        </Menu>
+                        </Menu> */}
+
+                        <Link to={config.routes.login}>
+                            <Button dark>Log in</Button>
+                        </Link>
+
+                        <Link to={config.routes.register}>
+                            <Button dark>Register</Button>
+                        </Link>
                     </div>
                 </div>
             </div>

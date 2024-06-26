@@ -13,6 +13,8 @@ import Live from "~/pages/Live";
 import AnimeList from "~/pages/AnimeStore";
 import Update from "~/pages/Update/Update";
 import AnimePlayer from "~/pages/AnimePlayer";
+import Login from "~/pages/Login";
+import Register from "~/pages/Register";
 
 // Public routes
 const publicRoutes = [
@@ -25,6 +27,8 @@ const publicRoutes = [
     { path: config.routes.anime, component: AnimePlayer },
     { path: config.routes.animes, component: AnimeList },
     { path: config.routes.update, component: Update },
+    { path: config.routes.login, component: Login, layout: null },
+    { path: config.routes.register, component: Register, layout: null },
 ];
 
 const privateRoutes = [];

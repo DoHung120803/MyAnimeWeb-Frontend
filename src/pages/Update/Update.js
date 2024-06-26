@@ -14,14 +14,14 @@ function Update() {
         };
 
         fetchApi();
-    }, []);
+    }, [id]);
 
     return (
         <FormSubmit
             title="Update Anime"
             putMethod="put"
-            anime={animeUpdated}
-            path={"http://localhost:8080/animes/update/" + id}
+            anime={animeUpdated.data}
+            path={`http://localhost:8080/animes/update/${id}`}
         />
     );
 }
