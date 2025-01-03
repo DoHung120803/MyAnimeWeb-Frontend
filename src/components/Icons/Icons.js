@@ -330,3 +330,23 @@ export const NewsActiveIcon = ({
         <path d="m21.92 26.89 3.4-2.05.76-3.9-3.4 2.06-.76 3.89Z"></path>
     </svg>
 );
+
+export const SwiperNextIcon = ({
+    width = "3.2rem",
+    height = "3.2rem",
+    className,
+}) => (
+    <svg viewBox="0 0 24 24">
+        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+    </svg>
+);
+
+export const SwiperPrevIcon = ({
+    width = "3.2rem",
+    height = "3.2rem",
+    className,
+}) => (
+    <svg x viewBox="0 0 24 24">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+    </svg>
+);

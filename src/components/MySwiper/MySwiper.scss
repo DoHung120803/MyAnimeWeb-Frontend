@@ -1,0 +1,67 @@
+/* --- Phong cách chung cho nút điều hướng --- */
+.swiper-button-prev,
+.swiper-button-next {
+    width: 40px; /* Kích thước nút nhỏ gọn */
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.4); /* Màu tối và mờ (40%) */
+    border-radius: 50%; /* Nút hình tròn */
+    display: flex;
+    justify-content: center;
+    margin-top: -35px;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.swiper-button-prev::after {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE1LjQxIDcuNDFMMTQgNkw4IDEyTDE0IDE4TDE1LjQxIDE2LjU5TDEwLjgzIDEyTDE1LjQxIDcuNDFaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=");
+}
+
+.swiper-button-next::after {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguNTkgMTYuNTlMMTAgMThMMTYgMTJMMTAgNkw4LjU5IDcuNDFMMTMuMTcgMTJMOD41OSAxNi41OVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==");
+}
+
+.swiper-button-prev svg,
+.swiper-button-next svg {
+    width: 20px; /* Kích thước SVG */
+    height: 20px;
+    fill: #fff; /* Màu của mũi tên */
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Màu đậm hơn khi hover */
+    transform: translateY(-2px); /* Nút nổi lên nhẹ */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Bóng đổ đẹp hơn */
+}
+
+.swiper-button-prev {
+    left: 10px;
+}
+
+.swiper-button-next {
+    right: 10px;
+}
+
+@media (max-width: 768px) {
+    .swiper-button-prev,
+    .swiper-button-next {
+        width: 30px;
+        height: 30px;
+    }
+
+    .swiper-button-prev svg,
+    .swiper-button-next svg {
+        width: 16px;
+        height: 16px;
+    }
+}
