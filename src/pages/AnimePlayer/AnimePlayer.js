@@ -2,12 +2,17 @@ import { useLocation } from "react-router-dom";
 import classNames from "classnames/bind";
 
 import styles from "./AnimePlayer.module.scss";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
 function AnimePlayer() {
     const { state } = useLocation();
     const { name, description, iframe, rate, views } = state;
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className={cx("container")}>

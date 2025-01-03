@@ -16,13 +16,14 @@ import {
 } from "~/components/Icons";
 import SuggestedAnimes from "~/components/SuggestedAnimes";
 import Image from "~/components/Image";
+import HotNewsPlayer from "~/components/HotNewsPlayer/HotNewsPlayer";
 
 const cx = classNames.bind(styles);
 
 function Sidebar() {
     return (
         <aside className={cx("wrapper")}>
-            <Menu>
+            {/* <Menu>
                 <MenuItem
                     title="For You"
                     to={config.routes.home}
@@ -53,7 +54,8 @@ function Sidebar() {
                     icon={<LiveIcon />}
                     activeIcon={<LiveActiveIcon />}
                 />
-            </Menu>
+            </Menu> */}
+            <HotNewsPlayer />
 
             <div className={cx("intro")}>
                 <Image
@@ -64,7 +66,7 @@ function Sidebar() {
                 <h2 className={cx("intro-title")}>Top 10 Highest Views</h2>
             </div>
 
-            <SuggestedAnimes getBy="top-views" />
+            <SuggestedAnimes getBy="api/v1/animes/top-animes" />
         </aside>
     );
 }
