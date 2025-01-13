@@ -11,7 +11,7 @@ export const get = async (path, options = {}) => {
 };
 
 // method delete
-export const deleteAnime = async (path, options = {}) => {
+export const _delete = async (path, options = {}) => {
     const response = await httpRequest.delete(path, options);
     return response.data;
 };

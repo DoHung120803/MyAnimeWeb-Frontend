@@ -16,6 +16,7 @@ function HotNewsPlayer() {
                 controls
                 autoPlay
                 muted
+                loop
             >
                 <source src={hotNewsPlayerSrc} type="video/mp4" />
                 Your browser does not support the video tag.
