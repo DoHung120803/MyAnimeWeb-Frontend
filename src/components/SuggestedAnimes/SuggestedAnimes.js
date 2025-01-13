@@ -5,6 +5,7 @@ import AnimeItem from "./AnimeItem";
 import React, { useEffect, useRef, useState } from "react";
 import * as getTopAnimesService from "~/services/getTopAnimesService";
 import MySwiper from "../MySwiper";
+import { Scrollbar, A11y, Navigation } from "swiper/modules";
 
 const cx = classNames.bind(styles);
 
@@ -48,7 +49,19 @@ function SuggestedAnimes({ getBy, custom = false }) {
     return (
         <div className={cx("container", { custom: custom })}>
             <div ref={suggestedListRef} className={cx("list", {})}>
-                {custom ? <MySwiper data={suggestedList} /> : suggestedList}
+                {custom ? (
+                    <MySwiper
+                        data={suggestedList}
+                        modules={[Navigation, Scrollbar, A11y]}
+                        spaceBetween={7}
+                        slidesPerView={6}
+                        navigation
+                        scrollbar={{ draggable: true }}
+                        loop={true}
+                    />
+                ) : (
+                    suggestedList
+                )}
             </div>
         </div>
     );

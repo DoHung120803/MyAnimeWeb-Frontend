@@ -1,0 +1,105 @@
+@mixin icon-mixin($content, $color) {
+    margin-right: 2rem;
+    &::before {
+        margin-right: 5px;
+        content: $content;
+        font-family: "Font Awesome 5 Free";
+        color: $color;
+    }
+}
+
+.container {
+    position: relative;
+
+    .background {
+        opacity: 0.5;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index: 0;
+    }
+
+    .poster-info {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 2rem;
+
+        .title {
+            font-size: 3rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 3.3rem;
+            word-wrap: break-word;
+        }
+
+        .star-icon {
+            font-weight: 700;
+            color: #b5e745;
+            @include icon-mixin("\f005", #b5e745);
+        }
+
+        .clock-icon {
+            @include icon-mixin("\f017", "");
+        }
+
+        .calender-icon {
+            @include icon-mixin("\f073", "");
+        }
+
+        .tag {
+            background-color: #e62117;
+            display: inline-block;
+            vertical-align: top;
+            text-transform: uppercase;
+            line-height: 20px;
+            padding: 0 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 5px;
+            margin-bottom: 12px;
+        }
+
+        .studio {
+            @include icon-mixin("\f1c8", #b5e745);
+
+            span {
+                font-size: 1.2rem;
+                font-weight: 300;
+            }
+
+            .studio-name {
+                font-size: 1.4rem;
+                font-weight: 600;
+            }
+        }
+
+        .genre {
+            @include icon-mixin("\f02e", #b5e745);
+
+            span {
+                font-size: 1.2rem;
+                font-weight: 300;
+            }
+
+            .genre-name {
+                font-size: 1.4rem;
+                font-weight: 600;
+            }
+        }
+
+        .action-btn {
+            padding: 10px;
+            margin: 1rem 1rem 0 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border: 1px solid #000;
+        }
+    }
+}

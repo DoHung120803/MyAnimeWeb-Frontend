@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function optionItem({ title }) {
+function OptionItem({ title, className, onClick }) {
     return (
         <Link>
-            <li className={cx("title")}>
+            <li className={cx("title", className)} onClick={onClick}>
                 <span>{title}</span>
             </li>
         </Link>
     );
 }
 
-export default optionItem;
+export default OptionItem;
