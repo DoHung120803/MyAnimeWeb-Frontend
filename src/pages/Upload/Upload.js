@@ -4,7 +4,7 @@ function Upload() {
     return (
         <FormSubmit
             title="Upload Anime"
-            path="http://localhost:8080/upload/store"
+            path={`${process.env.REACT_APP_BASE_URL}/upload/store`}
         />
     );
 }

@@ -21,7 +21,7 @@ function Update() {
             title="Update Anime"
             putMethod="put"
             anime={animeUpdated.data}
-            path={`http://localhost:8080/animes/update/${id}`}
+            path={`${process.env.REACT_APP_BASE_URL}/animes/update/${id}`}
         />
     );
 }
