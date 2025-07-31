@@ -26,9 +26,6 @@ jobs:
                     -d parse_mode=Markdown \
                     -d text="🌟 *GitHub Actions Build Notification* 🌟%0A%0A🚀 *Build Started*%0A*Job*: \`${{ github.workflow }}\`%0A*Branch*: \`${{ github.ref_name }}\`%0A*Started At*: \`$(date '+%Y-%m-%d %H:%M:%S')\`%0A%0A📊 *Status*: In Progress%0A%0A━━━━━━━━━━━━━━━━━━━━%0A_Stay tuned for the build results!_"
 
-            - name: Simulate Error - Debug Failure
-              run: exit 1
-
             - name: Install Vercel CLI
               run: npm install --global vercel
 
