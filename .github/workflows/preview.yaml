@@ -3,6 +3,8 @@ name: Myanime Preview Deployment
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
 on:
     push:
@@ -25,4 +27,25 @@ jobs:
               run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
             - name: Deploy Project Artifacts
-              run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --confirm
+              run:
+                  vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --confirm
+
+                  # ✅ Thông báo khi thành công
+            - name: Send Telegram message - Build success
+              if: success()
+              continue-on-error: true
+              run: |
+                  curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+                    -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+                    -d parse_mode=Markdown \
+                    -d text="✅  *Build Successful*%0A━━━━━━━━━━━━━━━━━━━%0A%0A🚀 *Build Result*%0A*Job*: \`${{ github.workflow }}\`%0A*Branch*: \`${{ github.ref_name }}\`%0A*Build*: \`#${{ github.run_number }}\`%0A*Finished*: \`$(date '+%Y-%m-%d %H:%M:%S')\`%0A%0A*Status*: ✅ *SUCCESS*%0A%0A━━━━━━━━━━━━━━━━━━━%0A_Check GitHub Actions for detailed logs._"
+
+            # ❌ Thông báo khi thất bại
+            - name: Send Telegram message - Build failed
+              if: failure()
+              continue-on-error: true
+              run: |
+                  curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+                    -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+                    -d parse_mode=Markdown \
+                    -d text="❌  *Build Failed*%0A━━━━━━━━━━━━━━━━━━━%0A%0A🚀 *Build Result*%0A*Job*: \`${{ github.workflow }}\`%0A*Branch*: \`${{ github.ref_name }}\`%0A*Build*: \`#${{ github.run_number }}\`%0A*Finished*: \`$(date '+%Y-%m-%d %H:%M:%S')\`%0A%0A*Status*: ❌ *FAILED*%0A%0A━━━━━━━━━━━━━━━━━━━%0A_Check GitHub Actions for detailed logs._"

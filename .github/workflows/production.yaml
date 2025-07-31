@@ -15,6 +15,13 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
+            - name: Send Telegram message - Build started
+              run: |
+                  curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+                    -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+                    -d parse_mode=Markdown \
+                    -d text="🌟 *GitHub Actions Build Notification* 🌟%0A%0A🚀 *Build Started*%0A*Job Name*: \`${{ github.workflow }}\`%0A*Branch*: \`${{ github.ref_name }}\`%0A*Started At*: \`$(date '+%Y-%m-%d %H:%M:%S')\`%0A%0A📊 *Status*: In Progress%0A%0A━━━━━━━━━━━━━━━━━━━━%0A_Stay tuned for the build results!_"
+
             - name: Install Vercel CLI
               run: npm install --global vercel
 
