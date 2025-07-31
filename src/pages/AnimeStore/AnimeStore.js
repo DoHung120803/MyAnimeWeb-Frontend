@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import * as getAnimesService from "~/services/getAnimesService";
 import AnimeList from "~/components/AnimeList";
+import get from "~/services/getService";
+import endpoints from "~/config/endpoints";
 
 function AnimeStore({ homePageCustom = "" }) {
     const [animes, setAnimes] = useState([]);
@@ -10,9 +11,19 @@ function AnimeStore({ homePageCustom = "" }) {
             return;
         }
         const fetchApi = async () => {
-            const response = await getAnimesService.get();
-            setAnimes(response.data);
-            localStorage.setItem("animes", JSON.stringify(response.data));
+            const response = await get(endpoints.getAnimes, {
+                params: {
+                    page: 1,
+                    size: 100,
+                },
+            });
+
+            setAnimes(response.data.content);
+
+            localStorage.setItem(
+                "animes",
+                JSON.stringify(response.data.content)
+            );
         };
 
         fetchApi();
