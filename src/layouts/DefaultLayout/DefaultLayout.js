@@ -7,6 +7,7 @@ import styles from "./DefaultLayout.module.scss";
 import SuggestedAnimes from "~/components/SuggestedAnimes";
 import config from "~/config";
 import MySwiper from "~/components/MySwiper";
+import Banner from "~/components/Banner";
 
 const cx = classNames.bind(styles);
 
@@ -16,7 +17,10 @@ function DefaultLayout({ children }) {
         <div className={cx("wrapper")}>
             <Header></Header>
             {config.routes.home === currentUrl && (
-                <SuggestedAnimes getBy="api/v1/animes/top-animes" custom />
+                <>
+                    <Banner />
+                    <SuggestedAnimes getBy="api/v1/animes/top-animes" custom />
+                </>
             )}
             <div className={cx("container")}>
                 <Sidebar></Sidebar>
