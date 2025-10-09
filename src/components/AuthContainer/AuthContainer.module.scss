@@ -1,0 +1,73 @@
+.auth-container {
+    position: relative;
+    width: 100%;
+}
+
+.form-wrapper {
+    position: relative;
+}
+
+.switch-mode {
+    text-align: center;
+    margin-top: 24px;
+    padding: 20px 16px 8px;
+    position: relative;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    }
+    
+    span {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 0.3px;
+    }
+}
+
+.switch-btn {
+    background: none;
+    border: none;
+    color: #ff6b81;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+    
+    &:hover {
+        color: #ff4757;
+        background: rgba(255, 107, 129, 0.1);
+        transform: translateY(-1px);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+/* Đảm bảo form container không bị ảnh hưởng */
+:global(.form) {
+    margin: 0;
+    transform: none;
+    max-height: none;
+    overflow: visible;
+}
+
+.auth-container {
+    overflow: visible;
+}
+
+.form-wrapper {
+    overflow: visible;
+}

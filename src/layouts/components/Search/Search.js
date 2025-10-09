@@ -34,7 +34,7 @@ function Search() {
             setLoading(true);
 
             const response = await searchServices.search(debouncedValue);
-            setSearchResult(response.data);
+            setSearchResult(response.data.content);
 
             setLoading(false);
         };

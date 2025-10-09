@@ -8,11 +8,11 @@ import * as registerServices from "~/services/AuthService/registerService";
 
 const cx = classNames.bind(styles);
 
-function RegisterForm() {
+function RegisterForm({ onClose }) {
     const [next, setNext] = useState(false);
-
     const [request, setRequest] = useState({
         username: "",
+        email: "",
         password: "",
         firstName: "",
         lastName: "",
@@ -35,7 +35,20 @@ function RegisterForm() {
 
     const handleRegister = async (event) => {
         event.preventDefault();
-        await registerServices.register(request, navigator);
+        try {
+            await registerServices.register(request, navigator);
+            // Đóng modal nếu đăng ký thành công
+            if (onClose) {
+                onClose();
+            }
+        } catch (error) {
+            console.log("Register failed:", error);
+        }
+    };
+
+    const handleBack = (event) => {
+        event.preventDefault();
+        setNext(false);
     };
 
     return (
@@ -75,33 +88,56 @@ function RegisterForm() {
                             }
                         />
 
-                        <button
-                            onClick={(event) => handleRegister(event)}
-                            className={cx("login-btn")}
-                        >
-                            Register
-                        </button>
+                        <div className={cx('actions')}>
+                            <button
+                                onClick={(event) => handleBack(event)}
+                                className={cx('back-btn')}
+                            >
+                                Back
+                            </button>
+
+                            <button
+                                onClick={(event) => handleRegister(event)}
+                                className={cx('login-btn')}
+                            >
+                                Register
+                            </button>
+                        </div>
                     </Fragment>
                 ) : (
                     <Fragment>
-                        <label>First Name</label>
-                        <input
-                            type="text"
-                            placeholder="Your first name"
-                            value={request.firstName}
-                            onChange={(event) =>
-                                handleChange(event, "firstName")
-                            }
-                        />
+                        <div className={cx('row')}> 
+                            <div className={cx('col')}>
+                                <label>First Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Your first name"
+                                    value={request.firstName}
+                                    onChange={(event) =>
+                                        handleChange(event, "firstName")
+                                    }
+                                />
+                            </div>
 
-                        <label>Last Name</label>
+                            <div className={cx('col')}>
+                                <label>Last Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Your last name"
+                                    value={request.lastName}
+                                    onChange={(event) =>
+                                        handleChange(event, "lastName")
+                                    }
+                                />
+                            </div>
+                        </div>
+
+                        <label>Email</label>
                         <input
-                            type="password"
-                            placeholder="Your last name"
-                            value={request.lastName}
-                            onChange={(event) =>
-                                handleChange(event, "lastName")
-                            }
+                            type="email"
+                            placeholder="you@domain.com"
+                            value={request.email}
+                            onChange={(event) => handleChange(event, "email")}
                         />
 
                         <label>Date of Birth</label>
@@ -111,7 +147,6 @@ function RegisterForm() {
                             value={request.dob}
                             onChange={(event) => handleChange(event, "dob")}
                         />
-
                         <button
                             onClick={(event) => handleNext(event)}
                             className={cx("next-btn")}

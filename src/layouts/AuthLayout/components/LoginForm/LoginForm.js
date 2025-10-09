@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function LoginForm() {
+function LoginForm({ onClose }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigator = useNavigate();
@@ -21,7 +21,15 @@ function LoginForm() {
             password,
         };
 
-        await loginServices.login(request, navigator);
+        try {
+            await loginServices.login(request, navigator);
+            // Đóng modal nếu đăng nhập thành công
+            if (onClose) {
+                onClose();
+            }
+        } catch (error) {
+            console.log("Login failed:", error);
+        }
     };
 
     return (

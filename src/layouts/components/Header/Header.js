@@ -13,6 +13,8 @@ import {
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { Link } from "react-router-dom";
+import { faRightToBracket, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
 
 import config from "~/config";
 import Button from "~/components/Button";
@@ -24,7 +26,8 @@ import Image from "~/components/Image";
 import Search from "../Search";
 import Options from "./Options";
 import { InboxIcon } from "~/components/Icons";
-import React from "react";
+import AuthModal from "~/components/AuthModal";
+import AuthContainer from "~/components/AuthContainer";
 
 const cx = classNames.bind(styles);
 
@@ -60,10 +63,26 @@ const MENU_ITEMS = [
 ];
 
 function Header() {
-    const currentUser = true;
+    const currentUser = false;
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [authMode, setAuthMode] = useState('login'); // 'login' hoặc 'register'
 
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
+    };
+
+    const openLoginModal = () => {
+        setAuthMode('login');
+        setIsAuthModalOpen(true);
+    };
+
+    const openRegisterModal = () => {
+        setAuthMode('register');
+        setIsAuthModalOpen(true);
+    };
+
+    const closeAuthModal = () => {
+        setIsAuthModalOpen(false);
     };
 
     const userMenu = [
@@ -142,10 +161,13 @@ function Header() {
                                 </Tippy>
                             </>
                         ) : (
-                            <>
-                                <Button text>Upload</Button>
-                                <Button primary>Log in</Button>
-                            </>
+                            false
+                            // <>
+                            //     <Button text>Upload</Button>
+                            //     <Button className={'authLogin'} leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}>
+                            //         Log in
+                            //     </Button>
+                            // </>
                         )}
 
                         <Menu
@@ -168,17 +190,38 @@ function Header() {
                             )}
                         </Menu>
 
-                        {/* <Link to={config.routes.login}>
-                            <Button dark>Log in</Button>
-                        </Link>
+                        {/* Prominent auth buttons */}
+                        <Button 
+                            className={'authLogin'} 
+                            leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
+                            onClick={openLoginModal}
+                        >
+                            Log in
+                        </Button>
 
-                        <Link to={config.routes.register}>
-                            <Button dark>Register</Button>
-                        </Link> */}
+                        <Button 
+                            className={'authRegister'} 
+                            leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+                            onClick={openRegisterModal}
+                        >
+                            Register
+                        </Button>
                     </div>
                 </div>
             </div>
             <Options />
+            
+            {/* Auth Modal */}
+            <AuthModal 
+                isOpen={isAuthModalOpen} 
+                onClose={closeAuthModal}
+                title={authMode === 'login' ? 'Đăng nhập' : 'Đăng ký'}
+            >
+                <AuthContainer 
+                    initialMode={authMode} 
+                    onClose={closeAuthModal}
+                />
+            </AuthModal>
         </React.Fragment>
     );
 }
