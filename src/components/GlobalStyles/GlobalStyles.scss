@@ -9,7 +9,7 @@
     --font-family: "TikTokFont", sans-serif;
 
     // default layout
-    --default-layout-header-height: 60px;
+    --default-layout-header-height: 70px;
     --default-layout-width: 1150px;
     --default-layout-horizontal-spacer: 24px;
 }
@@ -27,6 +27,8 @@ body {
     color: var(--text-color);
     overflow-y: overlay;
     background-color: #282828 !important;
+    margin: 0;
+    padding: 0;
 }
 
 //scrollbar css

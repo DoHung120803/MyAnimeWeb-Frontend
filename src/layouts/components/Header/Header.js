@@ -15,6 +15,7 @@ import "tippy.js/dist/tippy.css";
 import { Link } from "react-router-dom";
 import { faRightToBracket, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import config from "~/config";
 import Button from "~/components/Button";
@@ -24,7 +25,6 @@ import Menu from "~/components/Popper/Menu";
 import { AnimeListIcon, UploadIcon } from "~/components/Icons";
 import Image from "~/components/Image";
 import Search from "../Search";
-import Options from "./Options";
 import { InboxIcon } from "~/components/Icons";
 import AuthModal from "~/components/AuthModal";
 import AuthContainer from "~/components/AuthContainer";
@@ -64,6 +64,7 @@ const MENU_ITEMS = [
 
 function Header() {
     const currentUser = false;
+    const currentUrl = useLocation().pathname;
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState('login'); // 'login' hoặc 'register'
 
@@ -114,102 +115,63 @@ function Header() {
         <React.Fragment>
             <div className={cx("wrapper")}>
                 <div className={cx("inner")}>
+                    {/* Logo */}
                     <Link to={config.routes.home} className={cx("logo-link")}>
                         <img
                             src={images.logo}
                             alt="anime-logo"
                             className={cx("anime-logo")}
-                        ></img>
+                        />
                     </Link>
 
-                    <Search />
+                    {/* Navigation Menu */}
+                    <div className={cx("nav-menu")}>
+                        <Link to={config.routes.home} className={cx("nav-item", { active: currentUrl === config.routes.home })}>
+                            TRANG CHỦ
+                        </Link>
+                        <Link to="/genre" className={cx("nav-item")}>
+                            THỂ LOẠI
+                        </Link>
+                        <Link to="/status" className={cx("nav-item")}>
+                            TRẠNG THÁI
+                        </Link>
+                        <Link to="/popular" className={cx("nav-item")}>
+                            XEM NHIỀU
+                        </Link>
+                        <Link to="/commented" className={cx("nav-item")}>
+                            BÌNH LUẬN NHIỀU
+                        </Link>
+                        <Link to="/year" className={cx("nav-item")}>
+                            NĂM
+                        </Link>
+                    </div>
 
-                    <div className={cx("actions")}>
-                        {currentUser ? (
-                            <>
-                                <Tippy
-                                    delay={[0, 50]}
-                                    content="Upload Anime"
-                                    placement="bottom"
-                                >
-                                    <Link to={config.routes.upload}>
-                                        <button className={cx("action-btn")}>
-                                            <UploadIcon />
-                                        </button>
-                                    </Link>
-                                </Tippy>
-                                <Tippy
-                                    delay={[0, 50]}
-                                    content="Anime List"
-                                    placement="bottom"
-                                >
-                                    <Link to={config.routes.animes}>
-                                        <button className={cx("action-btn")}>
-                                            <AnimeListIcon />
-                                        </button>
-                                    </Link>
-                                </Tippy>
-                                <Tippy
-                                    delay={[0, 50]}
-                                    content="Inbox"
-                                    placement="bottom"
-                                >
-                                    <button className={cx("action-btn")}>
-                                        <InboxIcon />
-                                        <span className={cx("badge")}>12</span>
-                                    </button>
-                                </Tippy>
-                            </>
-                        ) : (
-                            false
-                            // <>
-                            //     <Button text>Upload</Button>
-                            //     <Button className={'authLogin'} leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}>
-                            //         Log in
-                            //     </Button>
-                            // </>
-                        )}
+                    {/* Right Side - Search & Auth */}
+                    <div className={cx("header-right")}>
+                        <div className={cx("search-container")}>
+                            <Search />
+                        </div>
+                        
+                        <div className={cx("auth-buttons")}>
+                            <Button 
+                                className={'authLogin'} 
+                                leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
+                                onClick={openLoginModal}
+                            >
+                                Login
+                            </Button>
 
-                        <Menu
-                            items={currentUser ? userMenu : MENU_ITEMS}
-                            onChange={handleMenuChange}
-                        >
-                            {currentUser ? (
-                                <Image
-                                    className={cx("user-avatar")}
-                                    alt="Nguyen Van A"
-                                    src="htps://th.bing.com/th/id/R.122f0b47e6716f6c6f6b4c39def4685f?rik=kXE0BEE3Pm1E%2fg&pid=ImgRaw&r=0"
-                                    fallback="https://static.vecteezy.com/system/resources/previews/011/670/054/original/user-working-on-laptop-flat-icon-free-vector.jpg"
-                                />
-                            ) : (
-                                <button className={cx("more-btn")}>
-                                    <FontAwesomeIcon
-                                        icon={faEllipsisVertical}
-                                    ></FontAwesomeIcon>
-                                </button>
-                            )}
-                        </Menu>
-
-                        {/* Prominent auth buttons */}
-                        <Button 
-                            className={'authLogin'} 
-                            leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
-                            onClick={openLoginModal}
-                        >
-                            Log in
-                        </Button>
-
-                        <Button 
-                            className={'authRegister'} 
-                            leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
-                            onClick={openRegisterModal}
-                        >
-                            Register
-                        </Button>
+                            <Button 
+                                className={'authRegister'} 
+                                leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+                                onClick={openRegisterModal}
+                            >
+                                Register
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <Options />
             
             {/* Auth Modal */}
             <AuthModal 

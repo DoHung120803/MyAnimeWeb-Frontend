@@ -17,10 +17,12 @@ function DefaultLayout({ children }) {
         <div className={cx("wrapper")}>
             <Header></Header>
             {config.routes.home === currentUrl && (
-                <>
+                <div className={cx("banner-section")}>
                     <Banner />
-                    <SuggestedAnimes getBy="api/v1/animes/top-animes" custom />
-                </>
+                </div>
+            )}
+            {config.routes.home === currentUrl && (
+                <SuggestedAnimes getBy="api/v1/animes/top-animes" custom />
             )}
             <div className={cx("container")}>
                 <Sidebar></Sidebar>

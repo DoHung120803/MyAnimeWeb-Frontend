@@ -2,14 +2,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+}
+
+.banner-section {
+    width: 100%;
+    position: relative;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .container {
     width: var(--default-layout-width);
     max-width: 100%;
     padding: 0 var(--default-layout-horizontal-spacer);
-    margin-top: var(--default-layout-header-height);
+    margin-top: 0;
     display: flex;
+    position: relative;
+    z-index: 2;
 }
 
 .content {
