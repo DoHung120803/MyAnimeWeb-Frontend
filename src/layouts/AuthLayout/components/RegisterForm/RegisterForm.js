@@ -8,7 +8,7 @@ import * as registerServices from "~/services/AuthService/registerService";
 
 const cx = classNames.bind(styles);
 
-function RegisterForm() {
+function RegisterForm({ onClose }) {
     const [next, setNext] = useState(false);
     const [request, setRequest] = useState({
         username: "",
@@ -35,7 +35,15 @@ function RegisterForm() {
 
     const handleRegister = async (event) => {
         event.preventDefault();
-        await registerServices.register(request, navigator);
+        try {
+            await registerServices.register(request, navigator);
+            // Đóng modal nếu đăng ký thành công
+            if (onClose) {
+                onClose();
+            }
+        } catch (error) {
+            console.log("Register failed:", error);
+        }
     };
 
     const handleBack = (event) => {

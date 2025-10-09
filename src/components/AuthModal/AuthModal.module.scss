@@ -1,0 +1,173 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    position: relative;
+    max-width: min(90vw, 480px);
+    max-height: 90vh;
+    overflow: visible;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    border-radius: 20px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.header {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+}
+
+.close-btn {
+    margin-right: 10px;;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px) saturate(120%);
+    position: relative;
+    overflow: hidden;
+    
+    /* Subtle inner glow */
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+    
+    /* Elegant gradient overlay */
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.1) 0%, 
+            transparent 50%, 
+            rgba(0, 0, 0, 0.05) 100%);
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    /* Hover ripple effect */
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        background: radial-gradient(circle, rgba(255, 107, 129, 0.2) 0%, transparent 70%);
+        border-radius: inherit;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.95);
+    transform: scale(1.1);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        0 2px 8px rgba(255, 107, 129, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+    
+    &::before {
+        opacity: 1;
+    }
+    
+    &::after {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-btn:active {
+    transform: scale(1.05);
+    transition-duration: 0.1s;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.content {
+    /* Content sẽ được style bởi form component bên trong */
+    position: relative;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .overlay {
+        padding: 16px;
+    }
+    
+    .modal {
+        max-width: 100%;
+        margin: 0;
+        max-height: calc(100vh - 32px);
+    }
+    
+    .header {
+        top: 12px;
+        right: 16px;
+    }
+    
+    .close-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .close-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+    
+    .header {
+        top: 8px;
+        right: 10px;
+    }
+}

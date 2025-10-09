@@ -1,9 +1,10 @@
 import config from "~/config";
+import endpoints from "~/config/endpoints";
 import * as httpRequest from "~/utils/httpRequest";
 
 export const login = async (request, navigator) => {
     try {
-        const response = await httpRequest.post("api/v1/auth/login", request);
+        const response = await httpRequest.post(endpoints.login, request);
 
         if (response && response.data.authenticated) {
             // lưu token vào local storage, điều hướng sang trang home
