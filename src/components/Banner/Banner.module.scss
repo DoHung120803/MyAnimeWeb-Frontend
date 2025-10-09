@@ -7,6 +7,22 @@
     position: relative;
     overflow: hidden;
     border-radius: 0;
+    margin-top: 0;
+    filter: brightness(1.6) contrast(1.05);
+    
+    /* Ensure fade effect works */
+    :global(.swiper) {
+        height: 100%;
+        
+        :global(.swiper-slide) {
+            opacity: 0;
+            transition: opacity 2.5s ease-in-out;
+        }
+        
+        :global(.swiper-slide-active) {
+            opacity: 1;
+        }
+    }
     
     &::after {
         content: '';
@@ -15,7 +31,7 @@
         left: 0;
         right: 0;
         height: 120px;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
         z-index: 1;
         pointer-events: none;
     }

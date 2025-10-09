@@ -65,3 +65,27 @@
         height: 16px;
     }
 }
+
+/* Fade effect styles */
+.swiper {
+    height: 100%;
+}
+
+.swiper-fade {
+    .swiper-slide {
+        opacity: 0 !important;
+        transition: opacity 2.5s ease-in-out !important;
+    }
+    
+    .swiper-slide-active {
+        opacity: 1 !important;
+    }
+    
+    .swiper-slide-next {
+        opacity: 0 !important;
+    }
+    
+    .swiper-slide-prev {
+        opacity: 0 !important;
+    }
+}

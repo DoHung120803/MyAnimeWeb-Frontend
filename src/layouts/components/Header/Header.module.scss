@@ -1,5 +1,5 @@
 .wrapper {
-    --search-border-radius: 25px;
+    --search-border-radius: 4px;
     --search-height: 40px;
     --search-top-spacer: 9px;
     --search-button-width: 52px;
@@ -39,7 +39,7 @@
     width: 6rem;
     height: 2.5rem;
     object-fit: cover;
-    filter: brightness(1.2) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+    filter: brightness(1.2);
 }
 
 // actions
@@ -128,36 +128,32 @@
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.9);
+    color: #00ffff;
     text-decoration: none;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
     font-weight: 600;
     font-size: 1.1rem;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
-    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
     position: relative;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: transparent;
+    border: none;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
     white-space: nowrap;
 
     &:hover {
         color: #ffffff;
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-1px);
+        text-shadow: 0 0 15px rgba(0, 255, 255, 1);
     }
 
     &.active {
-        color: #ffffff;
-        background: rgba(59, 130, 246, 0.4);
-        border-color: rgba(59, 130, 246, 0.6);
-        box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        color: #ff00ff;
+        text-shadow: 0 0 15px rgba(255, 0, 255, 1);
     }
 }
+
+
 
 .header-right {
     display: flex;
@@ -169,10 +165,14 @@
 .search-container {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .auth-buttons {
     display: flex;
     align-items: center;
     gap: 0.8rem;
+    margin-left: 90px;
 }
+
+
