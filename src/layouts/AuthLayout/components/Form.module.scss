@@ -1,39 +1,48 @@
 .form {
-    margin: 0;
+    margin: 0 auto;
+    /* slightly narrower for better balance on wide screens */
     width: 40rem;
-    background-color: rgba(0, 217, 255, 0.13);
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
-    padding: 20px 35px;
+    max-width: calc(100% - 32px);
+    background: linear-gradient(180deg, rgba(10,10,14,0.6), rgba(6,6,10,0.5));
+    border-radius: 14px;
+    backdrop-filter: blur(8px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 12px 40px rgba(2, 6, 23, 0.7);
+    padding: 28px 36px;
     position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateY(-6%);
 
     label {
         display: block;
-        margin-top: 2rem;
-        font-size: 1.6rem;
-        font-weight: 500;
+        margin-top: 1.2rem;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.92);
     }
 
     input {
         display: block;
-        height: 4rem;
+        height: 4.4rem;
         width: 100%;
         max-width: 100%;
-        background-color: rgba(255, 255, 255, 0.07);
-        border-radius: 3px;
-        padding: 0 10px;
+        background-color: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        padding: 0 14px;
         margin-top: 8px;
-        font-size: 14px;
-        font-weight: 300;
+        font-size: 15px;
+        font-weight: 400;
+        color: rgba(255,255,255,0.95);
+        border: 1px solid rgba(255,255,255,0.04);
+        transition: box-shadow 140ms ease, transform 120ms ease;
+    }
+
+    input:focus {
+        box-shadow: 0 8px 20px rgba(2,6,23,0.6);
+        transform: translateY(-1px);
     }
 
     ::placeholder {
-        color: #eeede4;
+        color: rgba(255,255,255,0.55);
     }
 }
 
@@ -46,53 +55,158 @@
 }
 
 .title {
-    font-size: 3.2rem;
-    font-weight: 600;
-    line-height: 4.2rem;
+    font-size: 3.0rem;
+    font-weight: 700;
+    line-height: 3.8rem;
     width: 100%;
     text-align: center;
-    color: #09e832;
+    color: #ffb3c1;
+    text-shadow: 0 6px 28px rgba(255,75,75,0.06);
 }
 
 .next-btn,
 .login-btn {
-    margin-top: 50px;
+    /* remove top margin here so actions container controls spacing */
+    margin-top: 0;
     width: 100%;
-    background-color: #99c3d5;
-    color: #080710;
-    padding: 15px 0;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 5px;
+    background: linear-gradient(90deg,#ff6b81 0%,#ff4b2b 100%);
+    color: white;
+    /* use exact height and box-sizing to ensure pixel-perfect match */
+    box-sizing: border-box;
+    height: 48px;
+    padding: 0 18px; /* vertical centering handled by align-items */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 12px;
     cursor: pointer;
+    border: none;
+    box-shadow: 0 12px 32px rgba(255,75,75,0.12);
 
     &:hover {
-        opacity: 0.7;
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 18px 46px rgba(255,75,75,0.18);
+    }
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 22px;
+    /* small top padding so buttons don't sit too close to preceding input */
+    padding-top: 6px;
+    width: 100%;
+}
+
+.back-btn {
+    background: transparent;
+    color: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.06);
+    min-width: 150px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 700;
+    height: 48px;
+    box-sizing: border-box;
+    transition: background 120ms ease, transform 100ms ease;
+}
+
+.back-btn:hover {
+    background-color: rgba(255,255,255,0.09);
+    transform: translateY(-3px);
+}
+
+/* ensure primary CTA has same style as back button */
+.login-btn {
+    min-width: 150px;
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+.next-btn {
+    border-radius: 14px;
+    margin-top: 22px;
+}
+
+@media (max-width: 520px) {
+    .actions {
+        flex-direction: column-reverse;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .back-btn {
+        width: 100%;
+        max-width: none;
+    }
+
+    .login-btn {
+        width: 100%;
     }
 }
 .social {
-    margin-top: 30px;
+    margin-top: 22px;
     display: flex;
+    gap: 14px;
 
     div {
-        background: red;
-        width: 150px;
-        border-radius: 3px;
-        padding: 5px 10px 10px 5px;
-        background-color: rgba(255, 255, 255, 0.27);
-        color: #eaf0fb;
+        background-color: rgba(255,255,255,0.04);
+        min-width: 150px;
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: rgba(255,255,255,0.92);
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: background 120ms ease, transform 100ms ease;
     }
 
     div:hover {
-        background-color: rgba(255, 255, 255, 0.47);
-        cursor: pointer;
+        background-color: rgba(255,255,255,0.09);
+        transform: translateY(-3px);
     }
 
-    .fb {
-        margin-left: 25px;
-    }
+    /* .fb uses shared styles above */
     .icon {
         margin-right: 4px;
+    }
+}
+
+/* two-column helpers */
+.row {
+    display: flex;
+    gap: 18px;
+}
+.col {
+    flex: 1 1 0;
+}
+
+@media (max-width: 720px) {
+    .form {
+        width: calc(100% - 24px);
+        padding: 20px;
+    }
+
+    .row {
+        flex-direction: column;
     }
 }

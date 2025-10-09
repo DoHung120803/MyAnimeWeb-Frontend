@@ -13,6 +13,7 @@ import {
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { Link } from "react-router-dom";
+import { faRightToBracket, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 import config from "~/config";
 import Button from "~/components/Button";
@@ -60,7 +61,7 @@ const MENU_ITEMS = [
 ];
 
 function Header() {
-    const currentUser = true;
+    const currentUser = false;
 
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
@@ -142,10 +143,13 @@ function Header() {
                                 </Tippy>
                             </>
                         ) : (
-                            <>
-                                <Button text>Upload</Button>
-                                <Button primary>Log in</Button>
-                            </>
+                            false
+                            // <>
+                            //     <Button text>Upload</Button>
+                            //     <Button className={'authLogin'} leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}>
+                            //         Log in
+                            //     </Button>
+                            // </>
                         )}
 
                         <Menu
@@ -168,13 +172,18 @@ function Header() {
                             )}
                         </Menu>
 
-                        {/* <Link to={config.routes.login}>
-                            <Button dark>Log in</Button>
+                        {/* Prominent auth buttons */}
+                        <Link to={config.routes.login}>
+                            <Button className={'authLogin'} leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}>
+                                Log in
+                            </Button>
                         </Link>
 
                         <Link to={config.routes.register}>
-                            <Button dark>Register</Button>
-                        </Link> */}
+                            <Button className={'authRegister'} leftIcon={<FontAwesomeIcon icon={faUserPlus} />}>
+                                Register
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
