@@ -1,14 +1,14 @@
 .container {
-    width: 80%;
+    width: 86%;
     height: 600px;
     margin: 0;
-    margin-left: 20%;
+    margin-left: 14%;
     padding: 0;
     position: relative;
     overflow: hidden;
     border-radius: 0;
     margin-top: 0;
-    filter: brightness(1.6) contrast(1.05);
+    filter: brightness(1.7) contrast(1.05);
     
     /* Ensure fade effect works */
     :global(.swiper) {
@@ -24,15 +24,71 @@
         }
     }
     
+    /* Left dark overlay where sidebar will overlay */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20%;
+        height: 100%;
+        background: linear-gradient(to right, 
+            rgba(0, 0, 0, 0.6) 0%, 
+            rgba(0, 5, 15, 0.5) 30%, 
+            rgba(5, 10, 25, 0.4) 60%, 
+            rgba(10, 15, 35, 0.2) 80%, 
+            rgba(15, 20, 40, 0.1) 95%, 
+            transparent 100%
+        );
+        z-index: 2;
+        pointer-events: none;
+    }
+    
+    /* Top gradient overlay */
     &::after {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 120px;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
-        z-index: 1;
+        bottom: 0;
+        background: 
+            /* Top gradient */
+            linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 10%, transparent 25%),
+            /* Additional left shadow for depth */
+            linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 5%, rgba(0, 0, 0, 0.2) 15%, transparent 25%);
+        z-index: 2;
         pointer-events: none;
     }
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+    background-size: 400% 400%;
+    animation: gradientShift 3s ease infinite;
+}
+
+.loading-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }

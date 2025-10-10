@@ -115,16 +115,19 @@ function Header() {
         <React.Fragment>
             <div className={cx("wrapper")}>
                 <div className={cx("inner")}>
-                    {/* Logo */}
-                    <Link to={config.routes.home} className={cx("logo-link")}>
-                        <img
-                            src={images.logo}
-                            alt="anime-logo"
-                            className={cx("anime-logo")}
-                        />
-                    </Link>
+                    {/* Left Side - Logo */}
+                    <div className={cx("logo-container")}>
+                        <Link to={config.routes.home} className={cx("logo-link")}>
+                            <img
+                                src={images.logo}
+                                alt="anime-logo"
+                                className={cx("anime-logo")}
+                            />
+                            <span className={cx("anime-text")}>ANIME</span>
+                        </Link>
+                    </div>
 
-                    {/* Navigation Menu */}
+                    {/* Center - Navigation Menu */}
                     <div className={cx("nav-menu")}>
                         <Link to={config.routes.home} className={cx("nav-item", { active: currentUrl === config.routes.home })}>
                             TRANG CHỦ

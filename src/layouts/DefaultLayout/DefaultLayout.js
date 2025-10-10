@@ -8,6 +8,7 @@ import SuggestedAnimes from "~/components/SuggestedAnimes";
 import config from "~/config";
 import MySwiper from "~/components/MySwiper";
 import Banner from "~/components/Banner";
+import HomeSidebar from "~/components/HomeSidebar";
 
 const cx = classNames.bind(styles);
 
@@ -17,7 +18,9 @@ function DefaultLayout({ children }) {
         <div className={cx("wrapper")}>
             <Header></Header>
             {config.routes.home === currentUrl && (
-                <div className={cx("banner-section")}>
+                <div className={cx("banner-section")}> 
+                    {/* New independent left sidebar for home banner area */}
+                    <HomeSidebar />
                     <Banner />
                 </div>
             )}
