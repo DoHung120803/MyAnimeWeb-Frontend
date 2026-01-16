@@ -1,23 +1,26 @@
 /* --- Phong cách chung cho nút điều hướng --- */
 .swiper-button-prev,
 .swiper-button-next {
-    width: 40px; /* Kích thước nút nhỏ gọn */
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0.4); /* Màu tối và mờ (40%) */
+    width: 36px; /* Kích thước nút nhỏ gọn */
+    height: 36px;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu tối và mờ */
     border-radius: 50%; /* Nút hình tròn */
     display: flex;
     justify-content: center;
-    margin-top: -35px;
     align-items: center;
     transition: all 0.3s ease-in-out;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
 
 .swiper-button-prev::after,
 .swiper-button-next::after {
     content: "";
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -32,24 +35,24 @@
 
 .swiper-button-prev svg,
 .swiper-button-next svg {
-    width: 20px; /* Kích thước SVG */
-    height: 20px;
+    width: 18px; /* Kích thước SVG */
+    height: 18px;
     fill: #fff; /* Màu của mũi tên */
 }
 
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
-    background-color: rgba(0, 0, 0, 0.7); /* Màu đậm hơn khi hover */
-    transform: translateY(-2px); /* Nút nổi lên nhẹ */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Bóng đổ đẹp hơn */
+    background-color: rgba(255, 107, 107, 0.9); /* Màu đỏ hồng khi hover */
+    transform: translateY(-50%) scale(1.1); /* Nút nổi lên nhẹ */
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4); /* Bóng đổ đẹp hơn */
 }
 
 .swiper-button-prev {
-    left: 10px;
+    left: 5px;
 }
 
 .swiper-button-next {
-    right: 10px;
+    right: 5px;
 }
 
 @media (max-width: 768px) {

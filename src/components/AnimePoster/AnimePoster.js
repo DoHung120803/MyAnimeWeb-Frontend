@@ -19,59 +19,90 @@ function AnimePoster({ data, banner = false, className }) {
             <Link
                 to={banner || config.routes.anime.replace(":id", data.id)}
                 state={data}
+                className={cx("image-link")}
             >
-                <div className={cx("background")}></div>
+                <div className={cx("background-overlay")}></div>
                 <img
                     className={cx("thumbnail", "w-100 h-100")}
                     alt="anime thumbnail"
                     src={data.thumbnailUrl || data.imageUrl}
                 />
+                <div className={cx("image-gradient")}></div>
             </Link>
 
             {banner || (
                 <div className={cx("poster-info", "col-7 h-100")}>
-                    <Link
-                        to={config.routes.anime.replace(":id", data.id)}
-                        state={data}
-                    >
-                        <div className={cx("title")}>{data.name}</div>
-                    </Link>
-                    <span className={cx("star-icon")}>{data.views}</span>
-                    <span className={cx("clock-icon")}>01/09</span>
-                    <span className={cx("calender-icon")}>2024</span>
-                    <span className={cx("tag")}>HD</span>
-                    <span className={cx("tag")}>4K</span>
-                    <p>{data.description}</p>
-                    <p className={cx("studio")}>
-                        <span>Studio: </span>
-                        <span className={cx("studio-name")}>
-                            Tokyo Animation
-                        </span>
-                    </p>
-                    <p className={cx("genre")}>
-                        <span>Thể loại: </span>
-                        <span className={cx("genre-name")}>
-                            Shounen, Action, Fantasy, Adventure
-                        </span>
-                    </p>
-                    <button
-                        type="button"
-                        class={cx("action-btn", "btn btn-success")}
-                    >
-                        Xem phim
-                    </button>
-                    <button
-                        type="button"
-                        class={cx("action-btn", "btn btn-danger")}
-                    >
-                        Yêu thích
-                    </button>
-                    <button
-                        type="button"
-                        class={cx("action-btn", "btn btn-primary")}
-                    >
-                        Share
-                    </button>
+                    <div className={cx("info-content")}>
+                        <Link
+                            to={config.routes.anime.replace(":id", data.id)}
+                            state={data}
+                            className={cx("title-link")}
+                        >
+                            <h1 className={cx("title")}>{data.name}</h1>
+                        </Link>
+                        
+                        <div className={cx("meta-info")}>
+                            <span className={cx("meta-item", "star-icon")}>
+                                <i className="fas fa-star"></i>
+                                {data.views || "N/A"}
+                            </span>
+                            <span className={cx("meta-item", "clock-icon")}>
+                                <i className="fas fa-clock"></i>
+                                01/09
+                            </span>
+                            <span className={cx("meta-item", "calendar-icon")}>
+                                <i className="fas fa-calendar"></i>
+                                2024
+                            </span>
+                            <div className={cx("tags")}>
+                                <span className={cx("tag", "tag-hd")}>HD</span>
+                                <span className={cx("tag", "tag-4k")}>4K</span>
+                            </div>
+                        </div>
+
+                        <p className={cx("description")}>{data.description}</p>
+                        
+                        <div className={cx("details")}>
+                            <p className={cx("detail-item", "studio")}>
+                                <i className="fas fa-video"></i>
+                                <span className={cx("label")}>Studio: </span>
+                                <span className={cx("value", "studio-name")}>
+                                    Tokyo Animation
+                                </span>
+                            </p>
+                            <p className={cx("detail-item", "genre")}>
+                                <i className="fas fa-bookmark"></i>
+                                <span className={cx("label")}>Thể loại: </span>
+                                <span className={cx("value", "genre-name")}>
+                                    Shounen, Action, Fantasy, Adventure
+                                </span>
+                            </p>
+                        </div>
+
+                        <div className={cx("action-buttons")}>
+                            <button
+                                type="button"
+                                className={cx("action-btn", "btn-watch")}
+                            >
+                                <i className="fas fa-play"></i>
+                                <span>Xem phim</span>
+                            </button>
+                            <button
+                                type="button"
+                                className={cx("action-btn", "btn-favorite")}
+                            >
+                                <i className="fas fa-heart"></i>
+                                <span>Yêu thích</span>
+                            </button>
+                            <button
+                                type="button"
+                                className={cx("action-btn", "btn-share")}
+                            >
+                                <i className="fas fa-share-alt"></i>
+                                <span>Chia sẻ</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

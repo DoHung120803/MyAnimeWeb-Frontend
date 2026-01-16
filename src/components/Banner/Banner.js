@@ -88,8 +88,21 @@ function Banner() {
                     crossFade: true,
                 }}
                 loop={banners.length > 1}
-                data={banners.map((banner) => (
-                    <AnimePoster key={banner.id} data={banner} banner={true} />
+                data={banners.map((banner, index) => (
+                    <div key={banner.id} className={cx("slide-container")}>
+                        <AnimePoster data={banner} banner={true} />
+                        <div className={cx("popular-label")}>
+                            POPULAR ANIME
+                        </div>
+                        <div className={cx("banner-info")}>
+                            <div className={cx("anime-title")}>
+                                {banner.name}
+                            </div>
+                            <div className={cx("anime-description")}>
+                                {banner.description}
+                            </div>
+                        </div>
+                    </div>
                 ))}
             />
         </div>

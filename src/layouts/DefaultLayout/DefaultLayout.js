@@ -4,9 +4,8 @@ import { useLocation } from "react-router-dom";
 import Sidebar from "~/layouts/components/Sidebar";
 import Header from "../components/Header";
 import styles from "./DefaultLayout.module.scss";
-import SuggestedAnimes from "~/components/SuggestedAnimes";
+import PremiumAnimeCarousel from "~/components/PremiumAnimeCarousel";
 import config from "~/config";
-import MySwiper from "~/components/MySwiper";
 import Banner from "~/components/Banner";
 import HomeSidebar from "~/components/HomeSidebar";
 
@@ -25,7 +24,10 @@ function DefaultLayout({ children }) {
                 </div>
             )}
             {config.routes.home === currentUrl && (
-                <SuggestedAnimes getBy="api/v1/animes/top-animes" custom />
+                <PremiumAnimeCarousel 
+                    getBy="api/v1/animes/top-animes" 
+                    title="Top Rated Anime"
+                />
             )}
             <div className={cx("container")}>
                 <Sidebar></Sidebar>
