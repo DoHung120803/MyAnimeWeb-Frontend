@@ -14,7 +14,7 @@ import styles from "./Search.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Search() {
+function Search({ isScrolled = false }) {
     const [searchValue, setSearchValue] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [showResult, setShowResult] = useState(false);
@@ -87,11 +87,12 @@ function Search() {
                 )}
                 onClickOutside={handleHideResult}
             >
-                <div className={cx("search")}>
+                <div className={cx("search", { scrolled: isScrolled })}>
+                    <SearchIcon className={cx("search-icon")} />
                     <input
                         ref={inputRef}
                         value={searchValue}
-                        placeholder="Search anime..."
+                        placeholder="Tìm kiếm phim, diễn viên..."
                         spellCheck={false}
                         onChange={handleChange}
                         onFocus={() => setShowResult(true)}
@@ -109,13 +110,6 @@ function Search() {
                             icon={faSpinner}
                         ></FontAwesomeIcon>
                     )}
-
-                    <button
-                        className={cx("search-btn")}
-                        onMouseDown={(e) => e.preventDefault()}
-                    >
-                        <SearchIcon />
-                    </button>
                 </div>
             </HeadlessTippy>
         </div>

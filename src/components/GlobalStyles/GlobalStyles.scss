@@ -1,6 +1,7 @@
 @import "normalize.css";
 
 :root {
+    // Legacy colors
     --primary: #fe2c55;
     --black: #000;
     --white: #fff;
@@ -8,8 +9,74 @@
     --text-color: #dbdbdb;
     --font-family: "TikTokFont", sans-serif;
 
+    // ==========================================
+    // MODERN STREAMING THEME - NETFLIX/CRUNCHYROLL STYLE
+    // ==========================================
+    
+    // Background Colors (Netflix Dark Theme)
+    --bg-primary: #0F0F0F;          // Main background (Netflix black)
+    --bg-secondary: #141414;         // Secondary background
+    --bg-tertiary: #1A1A1A;          // Tertiary background
+    
+    // Card Colors
+    --card-bg: #1A1A1A;              // Card background
+    --card-hover-bg: #2A2A2A;        // Card hover background
+    --card-border: rgba(255, 255, 255, 0.1);
+    
+    // Accent Colors
+    --accent-primary: #E50914;       // Netflix Red (primary action)
+    --accent-primary-dark: #B20710;  // Darker red for gradients
+    --accent-hot: #FF6B00;           // Orange for HOT badges
+    --accent-hot-dark: #FF4500;      // Darker orange
+    --accent-new: #00D9FF;           // Cyan for NEW badges
+    --accent-new-dark: #0099CC;      // Darker cyan
+    --accent-gold: #FFD700;          // Gold for TOP/ranking
+    
+    // Text Colors
+    --text-primary: #FFFFFF;         // Primary text (white)
+    --text-secondary: #B3B3B3;       // Secondary text (gray)
+    --text-muted: #808080;           // Muted text
+    --text-disabled: #4D4D4D;        // Disabled text
+    
+    // Gradients
+    --gradient-primary: linear-gradient(135deg, #E50914 0%, #B20710 100%);
+    --gradient-hot: linear-gradient(135deg, #FF6B00 0%, #FF4500 100%);
+    --gradient-new: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    --gradient-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+    
+    // Shadows
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+    
+    // Glow Effects
+    --glow-red: 0 0 20px rgba(229, 9, 20, 0.5);
+    --glow-hot: 0 0 20px rgba(255, 107, 0, 0.5);
+    --glow-new: 0 0 20px rgba(0, 217, 255, 0.5);
+    
+    // Transitions
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    // Spacing
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    // Border Radius
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 50px;
+
     // default layout
-    --default-layout-header-height: 60px;
+    --default-layout-header-height: 70px;
     --default-layout-width: 1150px;
     --default-layout-horizontal-spacer: 24px;
 }
@@ -24,25 +91,32 @@ body {
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
-    color: var(--text-color);
+    color: var(--text-color); // Keep old color for compatibility
     overflow-y: overlay;
-    background-color: #282828 !important;
+    background-color: #282828 !important; // Keep old background
+    margin: 0;
+    padding: 0;
 }
 
-//scrollbar css
+//scrollbar css - Modern Dark Theme
 html ::-webkit-scrollbar {
     border-radius: 0px;
-    width: 8px;
+    width: 10px;
 }
 
 html *::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(240, 241, 243, 0.153);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--bg-primary);
+    
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
 }
 
 html ::-webkit-scrollbar-track {
     border-radius: 0px;
-    background-color: rgba(211, 197, 197, 0.068);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 * {

@@ -59,6 +59,7 @@ function Home() {
                     autoplay={{
                         delay: 3000, // delay time
                         disableOnInteraction: false, // Tiếp tục autoplay sau khi tương tác
+                        pauseOnMouseEnter: true, // Dừng khi hover
                     }}
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}

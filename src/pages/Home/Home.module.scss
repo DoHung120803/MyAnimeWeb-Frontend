@@ -1,40 +1,91 @@
 .anime-posters {
     margin-bottom: 2rem;
-    border-radius: 5px;
-    height: 35rem;
+    border-radius: 12px;
+    height: 37rem;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 .list-block {
-    height: 5rem;
     margin: 0;
     margin-bottom: 2rem;
+    padding: 1rem 0;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    align-items: center;
 
     .lb-title {
-        color: #eeeeee;
-        font-size: 18px;
+        color: #ffffff;
+        font-size: 1.1rem;
         font-family: "Roboto", sans-serif;
-        background: linear-gradient(81.43deg, #b71c1c -26.81%, #8e1438 87.89%);
-        border-radius: 6px;
-        padding: 8px;
+        background: linear-gradient(135deg, #e53935 0%, #b71c1c 50%, #880e4f 100%);
+        border-radius: 8px;
+        padding: 12px 20px;
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(183, 28, 28, 0.4);
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(183, 28, 28, 0.5);
+        }
 
         i {
-            margin-left: 10px;
-            font-size: 15px;
+            margin-left: 12px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        &:hover i {
+            transform: translateX(5px);
         }
     }
 
     .option {
-        padding: 12px 2rem;
-        color: #808080;
+        padding: 10px 1.5rem;
+        color: #a0a0a0;
+        font-size: 1.3rem;
+        font-weight: 500;
+        border-radius: 20px;
+        margin: 0 5px;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
 
         &:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
             text-shadow: none;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #e53935, #b71c1c);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        &:hover::after {
+            width: 60%;
         }
     }
 
     .option-selected {
-        color: red;
+        color: #ff5252;
+        background: rgba(229, 57, 53, 0.15);
+        
+        &::after {
+            width: 60%;
+        }
     }
 }

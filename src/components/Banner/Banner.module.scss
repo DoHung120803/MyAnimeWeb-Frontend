@@ -1,11 +1,795 @@
+// RoPhim-inspired Premium Hero Banner Design
 .container {
-    max-width: 66.67%;
-    height: 500px;
-    margin: 0 auto;
-    margin-top: 8rem;
-    margin-bottom: 2rem;
+    width: 100%;
+    height: 100vh; // Full viewport height to reach top of screen
+    min-height: 700px;
+    max-height: none; // Remove max height restriction
+    margin: 0;
     padding: 0;
-    border-radius: 12px;
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    // Remove margin-top to let banner start from top
+    
+    /* Smooth fade transitions for auto-play */
+    :global(.swiper-fade) {
+        :global(.swiper-slide) {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        :global(.swiper-slide-active) {
+            opacity: 1;
+        }
+    }
+    
+    /* Override fade effect for manual slide - make it instant */
+    &.manual-slide {
+        :global(.swiper-fade) {
+            :global(.swiper-slide) {
+                transition: opacity 0.4s ease-out !important;
+            }
+        }
+    }
+}
+
+// Loading State
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f15 100%);
+}
+
+.loading-text {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+    font-family: 'Inter', sans-serif;
+}
+
+// Hero Slide Container
+.hero-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: var(--default-layout-header-height, 70px); // Add padding to account for header
+}
+
+// Background Image Section
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    overflow: hidden;
+    background-color: #000;
+    
+    // Add gradient overlays for better header visibility and content readability
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+        // Top to bottom gradient - darker at top for header visibility
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.6) 0%,
+            rgba(0, 0, 0, 0.3) 20%,
+            rgba(0, 0, 0, 0.1) 40%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.2) 80%,
+            rgba(0, 0, 0, 0.7) 100%
+        );
+        pointer-events: none;
+    }
+    
+    // Side gradient for content visibility
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        background: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(0, 0, 0, 0.3) 30%,
+            transparent 70%
+        );
+        pointer-events: none;
+    }
+}
+
+.hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+    position: relative;
+    z-index: 1; // Below gradient overlays
+}
+
+// Hero Content (Left-aligned)
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 3rem 4rem 3rem;
+    display: flex;
+    align-items: flex-end;
+}
+
+.hero-content-inner {
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+// Name Image - Ảnh tên phim
+.hero-name-image {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.8s ease-out;
+    
+    .name-img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.7))
+                drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+        transition: all 0.3s ease;
+        
+        &:hover {
+            filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.8))
+                    drop-shadow(0 10px 28px rgba(0, 0, 0, 0.6));
+            transform: scale(1.02);
+        }
+    }
+}
+
+// Main Title - Cinematic & Bold
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+    font-family: 'Poppins', 'Inter', sans-serif;
+    letter-spacing: -0.5px;
+    text-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.8),
+        0 4px 16px rgba(0, 0, 0, 0.6);
+    
+    animation: fadeInUp 0.8s ease-out;
+    
+    // Khi có nameImage, giảm kích thước chữ
+    &.has-name-image {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: -0.5rem;
+        text-shadow: 
+            0 1px 4px rgba(0, 0, 0, 0.6),
+            0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+}
+
+// Subtitle/English Title - Elegant
+.hero-subtitle {
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+    margin: -0.8rem 0 0 0;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+    font-style: italic;
+    
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+// Metadata Row (Rating, Year, Season, Episodes) - Modern Premium Design
+.hero-metadata {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.metadata-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    
+    &.rating {
+        background: linear-gradient(135deg, #F5C518 0%, #E6B800 100%);
+        color: #000000;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+            content: 'IMDb';
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+        }
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 197, 24, 0.4);
+        }
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.metadata-item {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Inter', sans-serif;
+    padding: 0.4rem 1rem;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+}
+
+// Genre Tags - Rounded Pills
+.hero-genres {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.genre-tag {
+    padding: 0.55rem 1.3rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 100%);
+    backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 24px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Inter', sans-serif;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    &:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.15) 100%);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-3px);
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        
+        &::before {
+            width: 300px;
+            height: 300px;
+        }
+    }
+    
+    &:active {
+        transform: translateY(-1px);
+    }
+}
+
+// Category List (Modern Chip Design) - Above Synopsis
+.hero-categories {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    
+    animation: fadeInUp 0.8s ease-out 0.35s both;
+}
+
+.category-label {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    margin-right: 0.4rem;
+}
+
+.category-list {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.category-link {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 0.45rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(245, 185, 66, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    &:hover {
+        background: rgba(245, 185, 66, 0.15);
+        border-color: rgba(245, 185, 66, 0.4);
+        color: #f5b942;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 185, 66, 0.2);
+        
+        &::before {
+            left: 100%;
+        }
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.category-separator {
+    display: none;
+}
+
+// Synopsis - 2-3 lines max
+.hero-synopsis {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    
+    /* Limit to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+// CTA Buttons (Bottom-left)
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+// Primary Button - Warm Accent (Yellow/Gold)
+.btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(135deg, #f5b942 0%, #f39c12 100%);
+    border: none;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 12px rgba(245, 185, 66, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.2);
+    
+    svg {
+        font-size: 1.4rem;
+    }
+    
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 
+            0 6px 20px rgba(245, 185, 66, 0.4),
+            0 3px 10px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #f7c556 0%, #f5a623 100%);
+    }
+    
+    &:active {
+        transform: translateY(-1px);
+    }
+}
+
+// Secondary Buttons - Minimal Icons
+.btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    &:active {
+        transform: translateY(-1px);
+    }
+}
+
+// Animations
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Responsive Design
+@media (max-width: 1400px) {
+    .hero-content {
+        padding: 0 2.5rem 3.5rem 2.5rem;
+    }
+    
+    .hero-content-inner {
+        max-width: 600px;
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .container {
+        height: 70vh;
+        min-height: 500px;
+    }
+    
+    .hero-content {
+        padding: 0 2rem 3rem 2rem;
+    }
+    
+    .hero-content-inner {
+        max-width: 550px;
+        gap: 1.5rem;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .hero-synopsis {
+        font-size: 1.4rem;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+    
+    .thumbnail-section {
+        max-width: 450px;
+        right: 30px;
+    }
+    
+    .thumbnail-item {
+        width: 75px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        height: 60vh;
+        min-height: 450px;
+    }
+    
+    .hero-content {
+        padding: 0 1.5rem 2.5rem 1.5rem;
+    }
+    
+    .hero-content-inner {
+        max-width: 100%;
+        gap: 1.2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .hero-metadata {
+        gap: 0.8rem;
+    }
+    
+    .metadata-badge {
+        font-size: 1.2rem;
+        padding: 0.3rem 0.8rem;
+    }
+    
+    .metadata-item {
+        font-size: 1.2rem;
+    }
+    
+    .genre-tag {
+        font-size: 1.2rem;
+        padding: 0.4rem 1.2rem;
+    }
+    
+    .hero-synopsis {
+        font-size: 1.3rem;
+    }
+    
+    .btn-primary {
+        padding: 1rem 2.5rem;
+        font-size: 1.4rem;
+    }
+    
+    .btn-secondary {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+    
+    .thumbnail-section {
+        right: 20px;
+        bottom: 25px;
+        max-width: 350px;
+    }
+    
+    .thumbnail-container {
+        gap: 7px;
+    }
+    
+    .thumbnail-item {
+        width: 65px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        height: 55vh;
+        min-height: 400px;
+        margin-top: 60px;
+    }
+    
+    .hero-content {
+        padding: 0 1rem 2rem 1rem;
+    }
+    
+    .hero-content-inner {
+        gap: 1rem;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-top: -0.5rem;
+    }
+    
+    .hero-genres {
+        gap: 0.6rem;
+    }
+    
+    .genre-tag {
+        font-size: 1.1rem;
+        padding: 0.3rem 1rem;
+    }
+    
+    .hero-synopsis {
+        font-size: 1.2rem;
+    }
+    
+    .hero-actions {
+        gap: 0.8rem;
+    }
+    
+    .btn-primary {
+        padding: 0.9rem 2rem;
+        font-size: 1.3rem;
+        gap: 0.8rem;
+    }
+    
+    .btn-secondary {
+        width: 42px;
+        height: 42px;
+        font-size: 1.3rem;
+    }
+    
+    .thumbnail-section {
+        display: none; // Hide on mobile
+    }
+}
+
+// Thumbnail Navigation Styles (Horizontal at Bottom Right - RoPhim style)
+.thumbnail-section {
+    position: absolute;
+    bottom: 100px;
+    right: 50px;
+    z-index: 15;
+    max-width: 600px;
+}
+
+.thumbnail-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.thumbnail-item {
+    position: relative;
+    width: 90px;
+    height: 55px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.6);
+    flex-shrink: 0;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1;
+        transition: opacity 0.3s ease;
+    }
+    
+    &:hover {
+        transform: translateY(-6px);
+        border-color: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        
+        &::before {
+            opacity: 0.2;
+        }
+    }
+    
+    &.active {
+        border-color: rgba(255, 255, 255, 1);
+        box-shadow: 0 6px 24px rgba(255, 255, 255, 0.5);
+        transform: translateY(-8px) scale(1.1);
+        
+        &::before {
+            opacity: 0;
+        }
+    }
+}
+
+.thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: all 0.3s ease;
+    
+    .thumbnail-item:hover & {
+        filter: brightness(1.2);
+    }
+    
+    .thumbnail-item.active & {
+        filter: brightness(1.15);
+    }
+}
+
+.main-swiper {
+    height: 100%;
 }

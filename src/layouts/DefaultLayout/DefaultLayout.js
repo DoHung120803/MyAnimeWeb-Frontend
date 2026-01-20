@@ -4,9 +4,9 @@ import { useLocation } from "react-router-dom";
 import Sidebar from "~/layouts/components/Sidebar";
 import Header from "../components/Header";
 import styles from "./DefaultLayout.module.scss";
-import SuggestedAnimes from "~/components/SuggestedAnimes";
+import PremiumAnimeCarousel from "~/components/PremiumAnimeCarousel";
+import GenreCarousel from "~/components/GenreCarousel";
 import config from "~/config";
-import MySwiper from "~/components/MySwiper";
 import Banner from "~/components/Banner";
 
 const cx = classNames.bind(styles);
@@ -17,10 +17,20 @@ function DefaultLayout({ children }) {
         <div className={cx("wrapper")}>
             <Header></Header>
             {config.routes.home === currentUrl && (
-                <>
+                <div className={cx("banner-section")}> 
                     <Banner />
-                    <SuggestedAnimes getBy="api/v1/animes/top-animes" custom />
-                </>
+                </div>
+            )}
+            {config.routes.home === currentUrl && (
+                <GenreCarousel 
+                    title="Thể loại"
+                />
+            )}
+            {config.routes.home === currentUrl && (
+                <PremiumAnimeCarousel 
+                    getBy="api/v1/animes/top-animes" 
+                    title="Top đánh giá cao"
+                />
             )}
             <div className={cx("container")}>
                 <Sidebar></Sidebar>

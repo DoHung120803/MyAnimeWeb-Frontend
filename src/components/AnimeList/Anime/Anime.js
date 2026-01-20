@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import styles from "../AnimeList.module.scss";
 import config from "~/config";
@@ -19,8 +20,13 @@ function Anime({
     views,
     iframe,
     homePageCustom = false,
+    isHot = false,
+    isNew = false,
+    ranking = null,
+    episode = null,
 }) {
     const navigator = useNavigate();
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     // hàm xử lý xóa anime
     const handleDelete = () => {
@@ -42,31 +48,90 @@ function Anime({
 
     return (
         <div className={cx("anime-container")} id={id}>
-            <img
-                className={cx("thumbnail")}
-                alt="thumbnail"
-                src={thumbnailUrl}
-                onClick={handleOnClickThumbnail}
-            ></img>
-            <div onClick={handleOnClickThumbnail} className={cx("anime-info")}>
-                <p className={cx("anime-name")}>{name}</p>
+            <div className={cx("anime-card")} onClick={handleOnClickThumbnail}>
+                {/* Image Container with Overlay */}
+                <div className={cx("image-wrapper")}>
+                    {/* Skeleton Loading */}
+                    {!imageLoaded && <div className={cx("image-skeleton")}></div>}
+                    
+                    <img
+                        className={cx("thumbnail", { loaded: imageLoaded })}
+                        alt={name}
+                        src={thumbnailUrl}
+                        onLoad={() => setImageLoaded(true)}
+                        loading="lazy"
+                    />
 
-                <p className={cx("rate")}>
-                    {homePageCustom ? (
-                        <span className={cx("rate-icon")}>
-                            <StarIcon />
-                        </span>
-                    ) : (
-                        "Rate: "
+                    {/* Gradient Overlay */}
+                    <div className={cx("image-overlay")}></div>
+
+                    {/* Badges */}
+                    <div className={cx("badges")}>
+                        {isHot && (
+                            <span className={cx("badge", "badge-hot")}>
+                                <i className="fas fa-fire"></i> HOT
+                            </span>
+                        )}
+                        {isNew && (
+                            <span className={cx("badge", "badge-new")}>
+                                <i className="fas fa-star"></i> NEW
+                            </span>
+                        )}
+                        {episode && (
+                            <span className={cx("badge", "badge-episode")}>
+                                Tập {episode}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Ranking Badge */}
+                    {ranking && ranking <= 10 && (
+                        <div className={cx("ranking-badge")}>
+                            <span className={cx("ranking-number")}>
+                                {String(ranking).padStart(2, "0")}
+                            </span>
+                        </div>
                     )}
 
-                    {rate}
-                </p>
-                <p className={cx("views")}>
-                    {homePageCustom || "Views: "}
-                    {views}
-                </p>
+                    {/* Hover Play Button */}
+                    <div className={cx("play-overlay")}>
+                        <div className={cx("play-button")}>
+                            <i className="fas fa-play"></i>
+                        </div>
+                        <p className={cx("play-text")}>Xem ngay</p>
+                    </div>
+                </div>
+
+                {/* Anime Info */}
+                <div className={cx("anime-info")}>
+                    <h3 className={cx("anime-name")} title={name}>
+                        {name}
+                    </h3>
+
+                    <div className={cx("anime-meta")}>
+                        {homePageCustom && (
+                            <>
+                                <div className={cx("meta-item", "meta-rating")}>
+                                    <StarIcon width="12" height="12" />
+                                    <span>{rate || "N/A"}</span>
+                                </div>
+                                <div className={cx("meta-item", "meta-views")}>
+                                    <i className="fas fa-eye"></i>
+                                    <span>{views ? `${(views / 1000).toFixed(1)}K` : "0"}</span>
+                                </div>
+                            </>
+                        )}
+                        {!homePageCustom && (
+                            <>
+                                <p className={cx("rate")}>Rate: {rate}</p>
+                                <p className={cx("views")}>Views: {views}</p>
+                            </>
+                        )}
+                    </div>
+                </div>
             </div>
+
+            {/* Admin Buttons */}
             <button onClick={handleClickUpdateBtn} className={cx("update-btn")}>
                 Sửa
             </button>
@@ -82,6 +147,10 @@ Anime.propTypes = {
     thumbnailUrl: PropTypes.string.isRequired,
     rate: PropTypes.number,
     views: PropTypes.number,
+    isHot: PropTypes.bool,
+    isNew: PropTypes.bool,
+    ranking: PropTypes.number,
+    episode: PropTypes.string,
 };
 
 export default Anime;

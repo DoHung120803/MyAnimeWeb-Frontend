@@ -71,39 +71,95 @@
     }
 }
 
-/* New auth button styles for Login/Register in header */
+/* Cyberpunk Auth button styles */
 .authLogin {
-    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    color: var(--white);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 8px 18px;
-    font-weight: 700;
-    border-radius: 999px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.32);
-    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-    background-blend-mode: overlay;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.7) 0%, 
+        rgba(0, 50, 100, 0.7) 100%);
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.6);
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 1.3rem;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            rgba(0, 255, 255, 0.3) 50%, 
+            transparent 100%);
+        transition: left 0.5s ease;
+    }
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 28px rgba(0,0,0,0.42);
-        background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+        background: linear-gradient(135deg, 
+            rgba(0, 255, 255, 0.2) 0%, 
+            rgba(0, 100, 150, 0.2) 100%);
+        border-color: #00ffff;
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4),
+                    inset 0 0 20px rgba(0, 255, 255, 0.1);
+        text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        
+        &::before {
+            left: 100%;
+        }
     }
 }
 
 .authRegister {
-    background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%); /* warm pink gradient */
-    color: white;
-    border: none;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.8) 0%, 
+        rgba(100, 0, 50, 0.8) 100%);
+    color: #ff00ff;
+    border: 1px solid rgba(255, 0, 255, 0.7);
     padding: 8px 20px;
-    font-weight: 800;
-    border-radius: 999px;
-    box-shadow: 0 8px 24px rgba(255,65,108,0.18);
-    transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    font-weight: 600;
+    font-size: 1.3rem;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            rgba(255, 0, 255, 0.4) 50%, 
+            transparent 100%);
+        transition: left 0.5s ease;
+    }
 
     &:hover {
-        transform: translateY(-2px) scale(1.02);
-        filter: brightness(1.03);
-        box-shadow: 0 12px 36px rgba(255,65,108,0.26);
+        background: linear-gradient(135deg, 
+            rgba(255, 0, 255, 0.6) 0%, 
+            rgba(255, 20, 100, 0.6) 100%);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 0 35px rgba(255, 0, 255, 0.6),
+                    0 4px 25px rgba(255, 0, 255, 0.4);
+        text-shadow: 0 0 20px rgba(255, 0, 255, 1);
+        
+        &::before {
+            left: 100%;
+        }
     }
 }
 

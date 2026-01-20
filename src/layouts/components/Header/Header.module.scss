@@ -1,48 +1,276 @@
+// RoPhim-inspired premium header design
 .wrapper {
-    --search-border-radius: 92px;
-    --search-height: 46px;
-    --search-top-spacer: 9px;
-    --search-button-width: 52px;
-    --header-background: #000
-        url(https://anime47.my/skin/24032017/img/header-bg.jpg) repeat-x;
+    --search-border-radius: 24px;
+    --search-height: 42px;
 
     position: fixed;
-    top: 0px;
-    left: 0px;
-    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
     display: flex;
     justify-content: center;
     width: 100%;
-    height: var(--default-layout-header-height, 60px);
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 1px;
-    background: var(--header-background);
+    height: var(--default-layout-header-height, 70px);
+    
+    // Default: Transparent background when at top
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    
+    // No border by default
+    border-bottom: 1px solid transparent;
+    
+    // Smooth transitions - increased duration for smoother effect
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    // No shadow by default
+    box-shadow: none;
+    
+    // When scrolled: Apply glassmorphism effect
+    &.scrolled {
+        background: rgba(10, 10, 15, 0.85);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 
+            0 4px 24px rgba(0, 0, 0, 0.3),
+            0 2px 8px rgba(0, 0, 0, 0.2);
+    }
 }
 
 .inner {
     height: 100%;
-    width: var(--default-layout-width);
-    padding: 0 var(--default-layout-horizontal-spacer);
+    width: 100%;
+    max-width: 1920px;
+    padding: 0 3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 2rem;
+    position: relative;
+}
+
+// Logo Section
+.logo-container {
+    display: flex;
+    flex-shrink: 0;
 }
 
 .logo-link {
     display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-1px);
+        
+        .anime-logo {
+            filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        .anime-text {
+            color: rgba(255, 255, 255, 1);
+        }
+    }
 }
 
 .anime-logo {
-    width: 11.8rem;
-    height: 4.2rem;
+    width: 8rem;
+    height: 3.2rem;
     object-fit: cover;
+    filter: brightness(1.1);
+    transition: all 0.3s ease;
 }
 
-// actions
-.actions {
+// Navigation Menu
+.nav-menu {
     display: flex;
     align-items: center;
+    gap: 0.3rem;
+    margin-left: 1.5rem;
 }
 
+.nav-item {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
+    font-size: 1.4rem;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 8px;
+    white-space: nowrap;
+
+    &:hover {
+        color: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+    }
+
+    &.active {
+        color: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.12);
+        font-weight: 600;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+    }
+}
+
+// Search Bar (Center - grows to take available space)
+.search-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+// Right Side Section
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+// Icon Buttons (Notification, Language)
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.95);
+        transform: translateY(-1px);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Increase visibility when scrolled
+.wrapper.scrolled {
+    .icon-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.15);
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+    }
+    
+    .btn-login {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.22);
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+    }
+    
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
+        
+        &:hover {
+            background: linear-gradient(135deg, #7c8ef5 0%, #8a5ab8 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.45);
+        }
+    }
+}
+
+// Auth Buttons
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-left: 0.4rem;
+}
+
+.btn-login {
+    padding: 0.75rem 1.8rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.35);
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.btn-register {
+    padding: 0.75rem 1.8rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+    white-space: nowrap;
+    
+    &:hover {
+        background: linear-gradient(135deg, rgba(124, 142, 245, 0.95) 0%, rgba(138, 90, 184, 0.95) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Menu Items (for dropdown)
 .menu-items {
     width: 224px;
 }
@@ -50,11 +278,19 @@
 .action-btn {
     position: relative;
     display: flex;
-    font-size: 2.2rem;
-    color: #161823;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.75);
     background-color: transparent;
-    padding: 4px 10px;
+    padding: 8px 12px;
     cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+    }
 }
 
 .badge {
@@ -65,18 +301,148 @@
     height: 2rem;
     line-height: 2rem;
     border-radius: 10px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    color: var(--white);
-    font-family: var(--font-family);
-    background-color: var(--primary);
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
 .user-avatar {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     object-fit: cover;
     border-radius: 50%;
-    margin-left: 14px;
     cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.05);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
 }
+
+.more-btn {
+    color: rgba(255, 255, 255, 0.75);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+}
+
+// Responsive Design
+@media (max-width: 1400px) {
+    .inner {
+        padding: 0 2rem;
+        gap: 1.5rem;
+    }
+    
+    .nav-menu {
+        gap: 0.2rem;
+        margin-left: 1.2rem;
+    }
+    
+    .nav-item {
+        font-size: 1.3rem;
+        padding: 0.6rem 1rem;
+    }
+    
+    .search-center {
+        max-width: 480px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .inner {
+        padding: 0 1.5rem;
+        gap: 1.2rem;
+    }
+    
+    .nav-menu {
+        display: none;
+    }
+    
+    .search-center {
+        max-width: 380px;
+    }
+    
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+        
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    
+    .btn-login, .btn-register {
+        padding: 0.7rem 1.5rem;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        height: 60px;
+    }
+    
+    .inner {
+        padding: 0 1rem;
+        gap: 0.8rem;
+    }
+    
+    .anime-logo {
+        width: 6.5rem;
+        height: 2.6rem;
+    }
+    
+    .search-center {
+        max-width: 280px;
+    }
+    
+    .icon-btn.lang-btn {
+        display: none;
+    }
+    
+    .auth-buttons {
+        gap: 0.6rem;
+        margin-left: 0;
+    }
+    
+    .btn-login, .btn-register {
+        padding: 0.65rem 1.3rem;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-center {
+        max-width: 180px;
+    }
+    
+    .icon-btn {
+        display: none;
+    }
+    
+    .btn-login {
+        display: none;
+    }
+    
+    .btn-register {
+        padding: 0.7rem 1.6rem;
+    }
+}
+
+

@@ -1,105 +1,193 @@
+// RoPhim-inspired Search Design
 .search,
 .search-result {
-    width: 361px;
+    width: 100%;
 }
 
 .search {
     position: relative;
-    height: var(--search-height);
-    padding-left: 16px;
+    height: 42px;
+    min-width: 350px;
     display: flex;
-    background-color: rgba(22, 24, 35, 0.06);
-    border-radius: var(--search-border-radius);
-    border: 1.5px solid transparent;
-    background: #12171b6e 5px 2px no-repeat;
-
-    input {
-        flex: 1;
-        height: 100%;
-        padding-right: 40px;
-        color: var(--white);
-        font-size: 1.6rem;
-        font-family: var(--font-family);
-        background-color: transparent;
-        caret-color: var(--primary);
-    }
-
-    input:not(:placeholder-shown) ~ .search-btn {
-        color: white;
-    }
-
-    &::after {
-        content: "";
-        position: absolute;
-        top: var(--search-top-spacer);
-        right: var(--search-button-width);
-        width: 1px;
-        height: calc(var(--search-height) - var(--search-top-spacer) * 2);
-        background-color: gray;
-    }
+    align-items: center;
+    // Reduced opacity and blur for better banner visibility
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(4px);
+    border-radius: 24px;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    padding: 0 1.6rem;
+    gap: 1rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:focus-within {
-        border-color: rgba(22, 24, 35, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.22);
+    }
+    
+    // When header is scrolled, increase visibility slightly
+    &.scrolled {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(6px);
+        border-color: rgba(255, 255, 255, 0.18);
+        
+        &:focus-within {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+    }
+}
+
+.search-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    flex-shrink: 0;
+    transition: color 0.3s ease;
+}
+
+.search:focus-within .search-icon {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search input {
+    flex: 1;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.4rem;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    font-weight: 400;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    caret-color: rgba(255, 255, 255, 0.9);
+
+    &::placeholder {
+        color: rgb(255, 255, 255);
+        font-weight: 400;
+    }
+
+    &::-webkit-search-cancel-button {
+        display: none;
     }
 }
 
 .search-title {
-    padding: 5px 12px;
-    font-size: 1.4rem;
+    padding: 1.2rem 1.6rem 0.8rem;
+    font-size: 1.3rem;
     font-weight: 600;
-    color: rgba(22, 24, 35, 0.5);
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Inter', sans-serif;
 }
 
-.clear,
-.loading {
-    position: absolute;
-    right: calc(var(--search-button-width) + 16px);
-    top: 50%;
-    transform: translateY(-50%);
+.clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
     background-color: transparent;
-    color: rgba(232, 233, 240, 0.34);
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    
+    &:hover {
+        color: rgba(255, 255, 255, 0.8);
+        transform: scale(1.1);
+    }
 }
 
 .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.6rem;
+    flex-shrink: 0;
     animation: spinner 0.8s linear infinite;
 }
 
 @keyframes spinner {
     from {
-        transform: translateY(-50%) rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
-        transform: translateY(-50%) rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 
-.search-btn {
-    width: var(--search-button-width);
-    height: 100%;
-    border-top-right-radius: var(--search-border-radius);
-    border-bottom-right-radius: var(--search-border-radius);
-    font-size: 1.8rem;
-    background-color: #2b2d31;
-    color: gray;
-
-    &:hover {
-        cursor: pointer;
-        background-color: rgb(8, 8, 8);
+// Search Results Dropdown
+.search-result {
+    margin-top: 0.8rem;
+    max-height: 500px;
+    overflow-y: auto;
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+        width: 6px;
     }
-
-    &:active {
-        background-color: rgba(22, 24, 35, 0.06);
+    
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     }
 }
 
-.custom-login {
-    color: red;
+// Responsive adjustments for search bar
+@media (min-width: 1600px) {
+    .search {
+        min-width: 500px;
+    }
 }
 
-.more-btn {
-    font-size: 2rem;
-    margin-left: 24px;
-    padding: 4px 8px;
-    background-color: transparent;
-    cursor: pointer;
+@media (max-width: 1400px) {
+    .search {
+        min-width: 320px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .search {
+        min-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search {
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search {
+        min-width: 180px;
+    }
 }
