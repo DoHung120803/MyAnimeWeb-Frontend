@@ -1,31 +1,57 @@
+// RoPhim-inspired premium header design
 .wrapper {
-    --search-border-radius: 4px;
-    --search-height: 40px;
-    --search-top-spacer: 9px;
-    --search-button-width: 52px;
+    --search-border-radius: 24px;
+    --search-height: 42px;
 
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    right: 0;
+    z-index: 1000;
     display: flex;
     justify-content: center;
     width: 100%;
     height: var(--default-layout-header-height, 70px);
+    
+    // Default: Transparent background when at top
     background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    
+    // No border by default
+    border-bottom: 1px solid transparent;
+    
+    // Smooth transitions - increased duration for smoother effect
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    // No shadow by default
+    box-shadow: none;
+    
+    // When scrolled: Apply glassmorphism effect
+    &.scrolled {
+        background: rgba(10, 10, 15, 0.85);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 
+            0 4px 24px rgba(0, 0, 0, 0.3),
+            0 2px 8px rgba(0, 0, 0, 0.2);
+    }
 }
 
 .inner {
     height: 100%;
     width: 100%;
-    max-width: 1400px;
-    padding: 0 2rem;
+    max-width: 1920px;
+    padding: 0 3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 2rem;
     position: relative;
 }
 
+// Logo Section
 .logo-container {
     display: flex;
     flex-shrink: 0;
@@ -36,117 +62,215 @@
     align-items: center;
     text-decoration: none;
     gap: 1rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-1px);
+        
+        .anime-logo {
+            filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        .anime-text {
+            color: rgba(255, 255, 255, 1);
+        }
+    }
 }
 
 .anime-logo {
-    width: 7.5rem;
-    height: 3rem;
+    width: 8rem;
+    height: 3.2rem;
     object-fit: cover;
-    filter: brightness(1.2);
+    filter: brightness(1.1);
+    transition: all 0.3s ease;
 }
 
-.anime-text {
-    color: #ffffff;
-    font-size: 2rem;
-    font-weight: 900;
-    font-family: 'Courier New', monospace;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+// Navigation Menu
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: 1.5rem;
+}
+
+.nav-item {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
+    font-size: 1.4rem;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
     position: relative;
-    text-shadow: 
-        0 0 5px #00ffff,
-        0 0 10px #00ffff,
-        0 0 15px #00ffff,
-        0 0 20px #00ffff,
-        0 0 35px #00ffff;
-    
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.2) 50%, transparent 70%);
-        animation: scanline 2s linear infinite;
-        pointer-events: none;
+    border-radius: 8px;
+    white-space: nowrap;
+
+    &:hover {
+        color: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
     }
+
+    &.active {
+        color: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.12);
+        font-weight: 600;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+    }
+}
+
+// Search Bar (Center - grows to take available space)
+.search-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+// Right Side Section
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+// Icon Buttons (Notification, Language)
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     
-    &::after {
-        content: 'ANIME';
-        position: absolute;
-        top: 0;
-        left: 2px;
-        color: #ff00ff;
-        text-shadow: 
-            0 0 5px #ff00ff,
-            0 0 10px #ff00ff;
-        z-index: -1;
-        opacity: 0.8;
+    svg {
+        width: 18px;
+        height: 18px;
     }
     
     &:hover {
-        text-shadow: 
-            0 0 5px #00ffff,
-            0 0 10px #00ffff,
-            0 0 15px #00ffff,
-            0 0 20px #00ffff,
-            0 0 35px #00ffff,
-            0 0 40px #00ffff;
-        animation: glitch 0.3s ease-in-out;
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.95);
+        transform: translateY(-1px);
+    }
+    
+    &:active {
+        transform: translateY(0);
     }
 }
 
-@keyframes scanline {
-    0%, 100% {
-        transform: translateX(-100%);
+// Increase visibility when scrolled
+.wrapper.scrolled {
+    .icon-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.15);
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
     }
-    50% {
-        transform: translateX(100%);
+    
+    .btn-login {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.22);
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
     }
-}
-
-@keyframes glitch {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    20% {
-        transform: translateX(-2px);
-    }
-    40% {
-        transform: translateX(2px);
-    }
-    60% {
-        transform: translateX(-1px);
-    }
-    80% {
-        transform: translateX(1px);
-    }
-}
-
-@keyframes navGlitch {
-    0%, 90%, 100% {
-        transform: translateX(0);
-    }
-    92% {
-        transform: translateX(-1px);
-    }
-    94% {
-        transform: translateX(1px);
-    }
-    96% {
-        transform: translateX(-0.5px);
+    
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
+        
+        &:hover {
+            background: linear-gradient(135deg, #7c8ef5 0%, #8a5ab8 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.45);
+        }
     }
 }
 
-// actions
-.actions {
+// Auth Buttons
+.auth-buttons {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-left: auto;
+    gap: 0.8rem;
+    margin-left: 0.4rem;
 }
 
+.btn-login {
+    padding: 0.75rem 1.8rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.35);
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.btn-register {
+    padding: 0.75rem 1.8rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+    white-space: nowrap;
+    
+    &:hover {
+        background: linear-gradient(135deg, rgba(124, 142, 245, 0.95) 0%, rgba(138, 90, 184, 0.95) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Menu Items (for dropdown)
 .menu-items {
     width: 224px;
 }
@@ -154,8 +278,8 @@
 .action-btn {
     position: relative;
     display: flex;
-    font-size: 2.2rem;
-    color: rgba(255, 255, 255, 0.9);
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.75);
     background-color: transparent;
     padding: 8px 12px;
     cursor: pointer;
@@ -163,8 +287,8 @@
     transition: all 0.3s ease;
 
     &:hover {
-        color: #ffffff;
-        background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 0.08);
         transform: translateY(-1px);
     }
 }
@@ -177,161 +301,106 @@
     height: 2rem;
     line-height: 2rem;
     border-radius: 10px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    color: var(--white);
-    font-family: var(--font-family);
-    background-color: var(--primary);
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
 .user-avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     object-fit: cover;
     border-radius: 50%;
-    margin-left: 14px;
     cursor: pointer;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 
     &:hover {
-        border-color: rgba(255, 255, 255, 0.8);
+        border-color: rgba(255, 255, 255, 0.5);
         transform: scale(1.05);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
     }
 }
 
 .more-btn {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.75);
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 8px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 1.8rem;
     transition: all 0.3s ease;
 
     &:hover {
-        color: #ffffff;
-        background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 0.08);
     }
 }
 
-// Navigation menu styles
-.nav-menu {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    flex: 1;
-    justify-content: center;
-    margin: 0 2rem;
-}
-
-.nav-item {
-    // color: #00ffff;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 0.5rem 0.8rem;
-    font-weight: 600;
-    font-size: 1.2rem;
-    font-family: 'Orbitron', 'Rajdhani', 'Exo 2', 'Courier New', 'Consolas', 'Monaco', monospace;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s ease;
-    position: relative;
-    background: transparent;
-    border: none;
-    text-shadow: 
-        0 0 5px rgba(0, 255, 255, 0.8),
-        0 0 10px rgba(0, 255, 255, 0.6),
-        0 0 15px rgba(0, 255, 255, 0.4);
-    white-space: nowrap;
-
-    &:hover {
-        color: #ffffff;
-        text-shadow: 
-            0 0 5px rgba(255, 255, 255, 1),
-            0 0 10px rgba(0, 255, 255, 1),
-            0 0 15px rgba(0, 255, 255, 1),
-            0 0 20px rgba(0, 255, 255, 0.8);
-        transform: translateY(-1px);
-        letter-spacing: 3px;
-        animation: navGlitch 2s infinite;
-    }
-
-    &.active {
-        color: #ff00ff;
-        text-shadow: 
-            0 0 5px rgba(255, 0, 255, 1),
-            0 0 10px rgba(255, 0, 255, 1),
-            0 0 15px rgba(255, 0, 255, 1),
-            0 0 20px rgba(255, 0, 255, 0.8);
-        
-        &::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ff00ff, transparent);
-            box-shadow: 0 0 10px #ff00ff;
-        }
-    }
-}
-
-
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    flex-shrink: 0;
-    min-width: 0; /* Allow flex items to shrink */
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.auth-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-// Responsive design
-@media (max-width: 1200px) {
+// Responsive Design
+@media (max-width: 1400px) {
     .inner {
-        max-width: 100%;
-        padding: 0 1.5rem;
+        padding: 0 2rem;
+        gap: 1.5rem;
     }
     
     .nav-menu {
-        gap: 0.6rem;
-        margin: 0 1rem;
+        gap: 0.2rem;
+        margin-left: 1.2rem;
     }
     
     .nav-item {
-        font-size: 1.1rem;
-        padding: 0.5rem 0.6rem;
+        font-size: 1.3rem;
+        padding: 0.6rem 1rem;
     }
     
-    .anime-text {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
+    .search-center {
+        max-width: 480px;
     }
 }
 
-@media (max-width: 1024px) {
-    .nav-item {
-        font-size: 1rem;
-        padding: 0.5rem 0.5rem;
+@media (max-width: 1200px) {
+    .inner {
+        padding: 0 1.5rem;
+        gap: 1.2rem;
     }
     
-    .header-right {
-        gap: 1rem;
+    .nav-menu {
+        display: none;
+    }
+    
+    .search-center {
+        max-width: 380px;
+    }
+    
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+        
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    
+    .btn-login, .btn-register {
+        padding: 0.7rem 1.5rem;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        height: 60px;
+    }
+    
+    .inner {
+        padding: 0 1rem;
+        gap: 0.8rem;
     }
     
     .anime-logo {
@@ -339,9 +408,40 @@
         height: 2.6rem;
     }
     
-    .anime-text {
-        font-size: 1.6rem;
-        letter-spacing: 1px;
+    .search-center {
+        max-width: 280px;
+    }
+    
+    .icon-btn.lang-btn {
+        display: none;
+    }
+    
+    .auth-buttons {
+        gap: 0.6rem;
+        margin-left: 0;
+    }
+    
+    .btn-login, .btn-register {
+        padding: 0.65rem 1.3rem;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-center {
+        max-width: 180px;
+    }
+    
+    .icon-btn {
+        display: none;
+    }
+    
+    .btn-login {
+        display: none;
+    }
+    
+    .btn-register {
+        padding: 0.7rem 1.6rem;
     }
 }
 

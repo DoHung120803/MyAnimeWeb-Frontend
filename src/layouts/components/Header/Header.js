@@ -14,7 +14,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { Link } from "react-router-dom";
 import { faRightToBracket, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import config from "~/config";
@@ -67,6 +67,18 @@ function Header() {
     const currentUrl = useLocation().pathname;
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState('login'); // 'login' hoặc 'register'
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    // Detect scroll position
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY;
+            setIsScrolled(scrollPosition > 100); // Change threshold as needed
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
@@ -113,7 +125,7 @@ function Header() {
 
     return (
         <React.Fragment>
-            <div className={cx("wrapper")}>
+            <div className={cx("wrapper", { scrolled: isScrolled })}>
                 <div className={cx("inner")}>
                     {/* Left Side - Logo */}
                     <div className={cx("logo-container")}>
@@ -123,54 +135,72 @@ function Header() {
                                 alt="anime-logo"
                                 className={cx("anime-logo")}
                             />
-                            <span className={cx("anime-text")}>ANIME</span>
                         </Link>
                     </div>
 
-                    {/* Center - Navigation Menu */}
+                    {/* Center Left - Navigation Menu */}
                     <div className={cx("nav-menu")}>
                         <Link to={config.routes.home} className={cx("nav-item", { active: currentUrl === config.routes.home })}>
-                            TRANG CHỦ
+                            Trang chủ
+                        </Link>
+                        <Link to="/anime" className={cx("nav-item")}>
+                            Phim Anime
                         </Link>
                         <Link to="/genre" className={cx("nav-item")}>
-                            THỂ LOẠI
+                            Thể loại
                         </Link>
-                        <Link to="/status" className={cx("nav-item")}>
-                            TRẠNG THÁI
+                        <Link to="/country" className={cx("nav-item")}>
+                            Quốc gia
                         </Link>
-                        <Link to="/popular" className={cx("nav-item")}>
-                            XEM NHIỀU
+                        <Link to="/genre" className={cx("nav-item")}>
+                            Yêu thích
                         </Link>
-                        <Link to="/commented" className={cx("nav-item")}>
-                            BÌNH LUẬN NHIỀU
+                        <Link to="/genre" className={cx("nav-item")}>
+                            Bạn bè
                         </Link>
-                        <Link to="/year" className={cx("nav-item")}>
-                            NĂM
+                        <Link to="/more" className={cx("nav-item")}>
+                            Thêm
                         </Link>
                     </div>
 
-                    {/* Right Side - Search & Auth */}
+                    {/* Center Right - Search Bar */}
+                    <div className={cx("search-center")}>
+                        <Search isScrolled={isScrolled} />
+                    </div>
+
+                    {/* Right Side - Icons & Auth Buttons */}
                     <div className={cx("header-right")}>
-                        <div className={cx("search-container")}>
-                            <Search />
-                        </div>
+                        {/* Notification Icon */}
+                        <button className={cx("icon-btn")} aria-label="Notifications">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
+
+                        {/* Language Selector */}
+                        <button className={cx("icon-btn", "lang-btn")} aria-label="Language">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <line x1="2" y1="12" x2="22" y2="12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
                         
                         <div className={cx("auth-buttons")}>
-                            <Button 
-                                className={'authLogin'} 
-                                leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
+                            <button 
+                                className={cx("btn-login")}
                                 onClick={openLoginModal}
                             >
-                                Login
-                            </Button>
+                                Đăng nhập
+                            </button>
 
-                            <Button 
-                                className={'authRegister'} 
-                                leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+                            <button 
+                                className={cx("btn-register")}
                                 onClick={openRegisterModal}
                             >
-                                Register
-                            </Button>
+                                Đăng ký
+                            </button>
                         </div>
                     </div>
                 </div>

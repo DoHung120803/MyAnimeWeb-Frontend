@@ -37,7 +37,7 @@
             top: 50%;
             transform: translateY(-50%);
             width: 3px;
-            height: 16px;
+            height: 30px;
             background: linear-gradient(180deg, #ff6b6b 0%, #ff4757 100%);
             border-radius: 2px;
         }
@@ -173,41 +173,105 @@
                 filter: brightness(0.75);
             }
 
-            .rank-strip {
-                background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
-                color: #fff;
+            .rank-number {
+                transform: scale(1.1);
                 
-                .rank-number {
-                    color: #fff;
+                &.rank-gold {
+                    filter: drop-shadow(0 5px 20px rgba(255, 184, 0, 0.9));
+                }
+                
+                &.rank-silver {
+                    filter: drop-shadow(0 5px 20px rgba(0, 212, 255, 0.9));
+                }
+                
+                &.rank-bronze {
+                    filter: drop-shadow(0 5px 20px rgba(255, 107, 157, 0.9));
+                }
+                
+                &.rank-top5 {
+                    filter: drop-shadow(0 5px 20px rgba(102, 126, 234, 0.8));
+                }
+                
+                &.rank-default {
+                    filter: drop-shadow(0 4px 16px rgba(255, 255, 255, 0.25));
                 }
             }
         }
     }
 
-    // Ranking Strip
-    .rank-strip {
-        position: absolute;
-        top: 8px;
-        left: 0;
-        z-index: 5;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(8px);
-        padding: 3px 10px 3px 7px;
-        border-radius: 0 12px 12px 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    // Info Container - wraps rank number and info panel
+    .info-container {
+        display: flex;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 8px;
     }
 
+    // Ranking Number (left side)
     .rank-number {
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        font-size: 12px;
-        font-weight: 800;
-        color: #0a0a0a;
-        letter-spacing: -0.2px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segeo UI", sans-serif;
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: -2px;
+        transition: all 0.3s ease;
+        line-height: 1;
+        padding: 0 6px;
+        min-width: 50px;
 
         @media (max-width: 768px) {
-            font-size: 11px;
+            font-size: 40px;
+            letter-spacing: -1.5px;
+            min-width: 44px;
         }
+    }
+
+    // Gold rank - #1
+    .rank-gold {
+        background: linear-gradient(135deg, #FFB800 0%, #FF8C00 50%, #FFD700 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 3px 12px rgba(255, 184, 0, 0.6));
+    }
+
+    // Silver rank - #2
+    .rank-silver {
+        background: linear-gradient(135deg, #00D4FF 0%, #0099FF 50%, #66E0FF 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 3px 12px rgba(0, 153, 255, 0.6));
+    }
+
+    // Bronze rank - #3
+    .rank-bronze {
+        background: linear-gradient(135deg, #FF6B9D 0%, #C44569 50%, #FFA8C5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 3px 12px rgba(255, 107, 157, 0.6));
+    }
+
+    // Top 5 rank - #4-5
+    .rank-top5 {
+        background: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 3px 12px rgba(102, 126, 234, 0.5));
+    }
+
+    // Default rank - #6+
+    .rank-default {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.12) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.1));
     }
 
     // Poster Container
@@ -285,7 +349,10 @@
 
     // Info Panel
     .info-panel {
-        margin-top: 8px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         padding: 0 2px;
     }
 

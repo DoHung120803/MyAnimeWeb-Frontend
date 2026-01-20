@@ -5,9 +5,9 @@ import Sidebar from "~/layouts/components/Sidebar";
 import Header from "../components/Header";
 import styles from "./DefaultLayout.module.scss";
 import PremiumAnimeCarousel from "~/components/PremiumAnimeCarousel";
+import GenreCarousel from "~/components/GenreCarousel";
 import config from "~/config";
 import Banner from "~/components/Banner";
-import HomeSidebar from "~/components/HomeSidebar";
 
 const cx = classNames.bind(styles);
 
@@ -18,15 +18,18 @@ function DefaultLayout({ children }) {
             <Header></Header>
             {config.routes.home === currentUrl && (
                 <div className={cx("banner-section")}> 
-                    {/* New independent left sidebar for home banner area */}
-                    <HomeSidebar />
                     <Banner />
                 </div>
             )}
             {config.routes.home === currentUrl && (
+                <GenreCarousel 
+                    title="Thể loại"
+                />
+            )}
+            {config.routes.home === currentUrl && (
                 <PremiumAnimeCarousel 
                     getBy="api/v1/animes/top-animes" 
-                    title="Top Rated Anime"
+                    title="Top đánh giá cao"
                 />
             )}
             <div className={cx("container")}>

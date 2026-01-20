@@ -12,7 +12,7 @@ import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function PremiumAnimeCarousel({ getBy, title = "Top Rated Anime" }) {
+function PremiumAnimeCarousel({ getBy, title = "Top đánh giá cao" }) {
     const [animeList, setAnimeList] = useState([]);
     const [swiperInstance, setSwiperInstance] = useState(null);
     const prevRef = useRef(null);
@@ -49,6 +49,15 @@ function PremiumAnimeCarousel({ getBy, title = "Top Rated Anime" }) {
     }, [getBy]);
 
     const renderAnimeCard = (anime, index) => {
+        // Determine rank color based on position
+        const getRankClass = (rank) => {
+            if (rank === 0) return 'rank-gold';        // #1
+            if (rank === 1) return 'rank-silver';      // #2
+            if (rank === 2) return 'rank-bronze';      // #3
+            if (rank <= 4) return 'rank-top5';         // #4-5
+            return 'rank-default';                      // #6+
+        };
+
         return (
             <Link
                 key={index}
@@ -65,11 +74,6 @@ function PremiumAnimeCarousel({ getBy, title = "Top Rated Anime" }) {
                 className={cx("anime-card-link")}
             >
                 <div className={cx("anime-card")}>
-                    {/* Ranking indicator */}
-                    <div className={cx("rank-strip")}>
-                        <span className={cx("rank-number")}>{index + 1}</span>
-                    </div>
-
                     {/* Poster image */}
                     <div className={cx("poster-container")}>
                         <img
@@ -84,12 +88,17 @@ function PremiumAnimeCarousel({ getBy, title = "Top Rated Anime" }) {
                         </div>
                     </div>
 
-                    {/* Info panel */}
-                    <div className={cx("info-panel")}>
-                        <h3 className={cx("anime-title")}>{anime.name}</h3>
-                        <div className={cx("meta-row")}>
-                            <span className={cx("rating")}>{anime.rate}</span>
-                            <span className={cx("views")}>{formatViews(anime.views)} views</span>
+                    {/* Info panel with ranking */}
+                    <div className={cx("info-container")}>
+                        <div className={cx("rank-number", getRankClass(index))}>
+                            {index + 1}
+                        </div>
+                        <div className={cx("info-panel")}>
+                            <h3 className={cx("anime-title")}>{anime.name}</h3>
+                            <div className={cx("meta-row")}>
+                                <span className={cx("rating")}>{anime.rate}</span>
+                                <span className={cx("views")}>{formatViews(anime.views)} views</span>
+                            </div>
                         </div>
                     </div>
                 </div>
