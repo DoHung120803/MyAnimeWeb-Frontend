@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import hotNewsPlayerSrc from "~/assets/videos/cktg.mp4";
 import classNames from "classnames/bind";
 import styles from "./HotNewsPlayer.module.scss";
 
@@ -7,6 +6,7 @@ const cx = classNames.bind(styles);
 
 function HotNewsPlayer({ showControls = false }) {
     const videoRef = useRef();
+    const hotNewsPlayerSrc = "https://res.cloudinary.com/dqbq0mw4s/video/upload/v1768909778/cktg_hmjbug.mp4";
 
     return (
         <div className={cx("container")}>
