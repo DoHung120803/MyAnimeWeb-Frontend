@@ -1,0 +1,15 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call health check
+        run: |
+          echo "Pinging backend..."
+          curl -L --fail ${{ secrets.BACKEND_URL }}/actuator/health
