@@ -18,20 +18,8 @@ function Home() {
     useEffect(() => {
         const fetchApi = async () => {
             const response = await get(config.endpoints.getTopAnimes);
-            setNewestAnimes(response.data);
-        };
-
-        fetchApi();
-    }, []);
-
-    useEffect(() => {
-        cutData();
-    }, [newestAnimes]);
-
-    // cắt bớt tên, mô tả để không bị quá dài
-    const cutData = () => {
-        setNewestAnimes((prevAnimes) =>
-            prevAnimes.map((item) => ({
+            // Cắt bớt tên, mô tả ngay khi nhận data để tránh infinite loop
+            const processed = response.data.map((item) => ({
                 ...item,
                 name:
                     item.name.length > 40
@@ -41,9 +29,12 @@ function Home() {
                     item.description.length > 145
                         ? item.description.slice(0, 145) + "..."
                         : item.description,
-            }))
-        );
-    };
+            }));
+            setNewestAnimes(processed);
+        };
+
+        fetchApi();
+    }, []);
 
     const handleOptionClick = (title) => {
         console.log(title);

@@ -28,6 +28,8 @@ import Search from "../Search";
 import { InboxIcon } from "~/components/Icons";
 import AuthModal from "~/components/AuthModal";
 import AuthContainer from "~/components/AuthContainer";
+import MessageIcon from "~/components/MessageIcon";
+import { useChatSocket } from "~/hooks";
 
 const cx = classNames.bind(styles);
 
@@ -68,6 +70,18 @@ function Header() {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState('login'); // 'login' hoặc 'register'
     const [isScrolled, setIsScrolled] = useState(false);
+    const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+
+    // WebSocket realtime cho chat (backend tự lấy userId từ token)
+    // Khi có tin nhắn mới, callback này sẽ được gọi
+    const handleNewMessage = (message) => {
+        console.log('New message received:', message);
+        // TODO: Update unread count dựa vào message
+        // Ví dụ: nếu message không phải từ currentUser thì tăng badge
+        setUnreadMessagesCount(prev => prev + 1);
+    };
+
+    const { isConnected } = useChatSocket(handleNewMessage);
 
     // Detect scroll position
     useEffect(() => {
@@ -158,9 +172,9 @@ function Header() {
                         <Link to="/genre" className={cx("nav-item")}>
                             Bạn bè
                         </Link>
-                        <Link to="/more" className={cx("nav-item")}>
+                        {/* <Link to="/more" className={cx("nav-item")}>
                             Thêm
-                        </Link>
+                        </Link> */}
                     </div>
 
                     {/* Center Right - Search Bar */}
@@ -170,6 +184,11 @@ function Header() {
 
                     {/* Right Side - Icons & Auth Buttons */}
                     <div className={cx("header-right")}>
+                        {/* Message Icon - Chat Realtime */}
+                        <MessageIcon 
+                            unreadCount={unreadMessagesCount}
+                        />
+
                         {/* Notification Icon */}
                         <button className={cx("icon-btn")} aria-label="Notifications">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">

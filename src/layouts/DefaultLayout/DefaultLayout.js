@@ -8,6 +8,7 @@ import PremiumAnimeCarousel from "~/components/PremiumAnimeCarousel";
 import GenreCarousel from "~/components/GenreCarousel";
 import config from "~/config";
 import Banner from "~/components/Banner";
+import ChatBoxContainer from "~/components/ChatBoxContainer";
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +37,9 @@ function DefaultLayout({ children }) {
                 <Sidebar></Sidebar>
                 <div className={cx("content")}>{children}</div>
             </div>
+            
+            {/* Chat boxes container - hiển thị ở bottom-right */}
+            <ChatBoxContainer />
         </div>
     );
 }

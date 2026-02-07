@@ -1,8 +1,39 @@
 import axios from "axios";
+import { getToken, logout } from "./authUtils";
 
 const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
 });
+
+// Request interceptor - Tự động thêm token vào header của mỗi request
+httpRequest.interceptors.request.use(
+    (config) => {
+        const token = getToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Response interceptor - Xử lý lỗi chung
+httpRequest.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        // Xử lý lỗi 401 - Unauthorized (token hết hạn hoặc không hợp lệ)
+        if (error.response && error.response.status === 401) {
+            logout();
+            // Redirect về trang home (sẽ hiện modal login)
+            window.location.href = "/";
+        }
+        return Promise.reject(error);
+    }
+);
 
 // method get
 export const get = async (path, options = {}) => {
@@ -16,8 +47,8 @@ export const _delete = async (path, options = {}) => {
     return response.data;
 };
 
-export const post = async (path, options = {}) => {
-    const response = await httpRequest.post(path, options);
+export const post = async (path, data = {}, options = {}) => {
+    const response = await httpRequest.post(path, data, options);
     return response.data;
 };
 

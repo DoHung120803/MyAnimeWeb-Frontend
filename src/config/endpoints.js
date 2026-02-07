@@ -12,6 +12,12 @@ const endpoints = {
 
     // banner
     getBanners: "api/v1/banners",
+
+    // conversations
+    getUserConversations: "api/v1/conversations/get-all",
+    createConversation: "api/v1/conversations",
+    getMessages: "api/v1/conversations/messages",
+    getDirectConversation: "api/v1/conversations/get-direct-conversation",
 };
 
 export default endpoints;
