@@ -84,6 +84,26 @@
     gap: 32px 28px;
     margin-top: 0;
     padding: 0;
+    overflow-y: auto;
+    
+    // Custom scrollbar for better visibility
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    }
 
     // Responsive Grid
     @media (min-width: 1400px) {

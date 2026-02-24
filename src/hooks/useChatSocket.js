@@ -32,7 +32,7 @@ const useChatSocket = (onMessageReceived, soundEnabled = true, onTypingReceived 
     }, [onTypingReceived]);
 
     // WebSocket URL từ backend config
-    const WS_URL = process.env.REACT_APP_WS_URL || 'http://localhost:8080/chat';
+    const WS_URL = process.env.REACT_APP_WS_URL || 'http://localhost:8080/ws';
 
     /**
      * Kết nối WebSocket và subscribe conversation channel

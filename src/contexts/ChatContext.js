@@ -29,13 +29,21 @@ export const ChatProvider = ({ children }) => {
      * - Nếu đã mở → focus vào chat box đó
      * - Nếu chưa mở → thêm vào danh sách
      * - Nếu vượt quá giới hạn → đóng chat box cũ nhất (đầu tiên trong mảng)
+     * @param {object} conversation - Conversation object
+     * @param {object} initialMessages - Messages ban đầu (optional)
      */
-    const openChatBox = useCallback((conversation) => {
+    const openChatBox = useCallback((conversation, initialMessages = null) => {
         setOpenChatBoxes((prev) => {
-            // Kiểm tra đã mở chưa
-            const existingIndex = prev.findIndex(
-                (chatBox) => chatBox.conversationId === conversation.id
-            );
+            // Tạo key: nếu có id thì dùng id, không thì dùng secondUserId (trường hợp conversation mới)
+            const boxKey = conversation.id ?? `new-${conversation.secondUserId}`;
+
+            // Kiểm tra đã mở chưa (so sánh theo id hoặc secondUserId)
+            const existingIndex = prev.findIndex((chatBox) => {
+                if (conversation.id) {
+                    return chatBox.conversationId === conversation.id;
+                }
+                return chatBox.conversationId === boxKey;
+            });
 
             // Nếu đã mở → đưa lên đầu (focus) và expand nếu đang minimize
             if (existingIndex !== -1) {
@@ -46,9 +54,10 @@ export const ChatProvider = ({ children }) => {
 
             // Nếu chưa mở → thêm vào đầu danh sách
             const newChatBox = {
-                conversationId: conversation.id,
+                conversationId: boxKey,
                 conversation: conversation,
                 isMinimized: false,
+                initialMessages: initialMessages, // Thêm messages ban đầu
             };
 
             let updated = [newChatBox, ...prev];
@@ -119,6 +128,22 @@ export const ChatProvider = ({ children }) => {
     }, []);
 
     /**
+     * Cập nhật conversationId và conversation object cho một chat box (sau khi tạo mới)
+     * @param {string|null} secondUserId - secondUserId của conversation mới (dùng để tìm boxKey)
+     * @param {object} newConversation - Conversation mới với id thật
+     */
+    const updateChatBoxConversation = useCallback((secondUserId, newConversation) => {
+        const tempKey = `new-${secondUserId}`;
+        setOpenChatBoxes((prev) =>
+            prev.map((chatBox) =>
+                chatBox.conversationId === tempKey
+                    ? { ...chatBox, conversationId: newConversation.id, conversation: newConversation }
+                    : chatBox
+            )
+        );
+    }, []);
+
+    /**
      * Cập nhật lastMessage và lastMessageTime cho một conversation
      * Được gọi khi gửi hoặc nhận tin nhắn mới
      */
@@ -158,6 +183,7 @@ export const ChatProvider = ({ children }) => {
         conversations,
         updateConversations,
         updateConversationLastMessage,
+        updateChatBoxConversation,
     };
 
     return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

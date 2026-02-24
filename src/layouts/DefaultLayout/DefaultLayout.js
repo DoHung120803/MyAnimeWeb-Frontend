@@ -9,6 +9,7 @@ import GenreCarousel from "~/components/GenreCarousel";
 import config from "~/config";
 import Banner from "~/components/Banner";
 import ChatBoxContainer from "~/components/ChatBoxContainer";
+import FriendsList from "~/components/FriendsList";
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +37,7 @@ function DefaultLayout({ children }) {
             <div className={cx("container")}>
                 <Sidebar></Sidebar>
                 <div className={cx("content")}>{children}</div>
+                <FriendsList />
             </div>
             
             {/* Chat boxes container - hiển thị ở bottom-right */}

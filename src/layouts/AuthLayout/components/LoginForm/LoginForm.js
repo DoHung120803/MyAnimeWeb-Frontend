@@ -4,7 +4,8 @@ import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useState } from "react";
 import styles from "../Form.module.scss";
 import * as loginServices from "~/services/AuthService/loginService";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "~/contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +14,7 @@ function LoginForm({ onClose }) {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const navigator = useNavigate();
+    const { loginSuccess } = useAuth();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -33,14 +34,18 @@ function LoginForm({ onClose }) {
         setError("");
 
         try {
-            await loginServices.login(request, navigator);
-            // Đóng modal nếu đăng nhập thành công
+            await loginServices.login(request);
+            // Cập nhật auth state (fetch user info, đóng modal)
+            await loginSuccess();
+            toast.success("Đăng nhập thành công!");
             if (onClose) {
                 onClose();
             }
         } catch (error) {
             console.log("Login failed:", error);
-            setError(error.response?.data?.message || "Đăng nhập thất bại");
+            const msg = error.response?.data?.message || "Đăng nhập thất bại";
+            setError(msg);
+            toast.error(msg);
         } finally {
             setLoading(false);
         }

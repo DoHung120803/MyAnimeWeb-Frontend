@@ -1,6 +1,9 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import styles from "./FormSubmit.module.scss";
+import httpRequest from "~/utils/httpRequest";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -9,15 +12,43 @@ function FormSubmit({ title, path, putMethod = "", anime = {} }) {
     const [iframe, setIframe] = useState(anime.iframe);
     const [thumbnailUrl, setThumbnailUrl] = useState(anime.thumbnailUrl);
     const [description, setDescription] = useState(anime.description);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const formData = {
+            name,
+            description,
+            iframe,
+            thumbnailUrl
+        };
+
+        try {
+            if (putMethod === "put") {
+                await httpRequest.put(path, formData);
+                toast.success("Cập nhật thành công!");
+            } else {
+                await httpRequest.post(path, formData);
+                toast.success("Thêm mới thành công!");
+            }
+            // Optional: navigate back or clear form
+            // navigate('/'); 
+        } catch (error) {
+            console.error(error);
+            toast.error("Đã có lỗi xảy ra!");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div>
             <h2 className={cx("title")}>{title}</h2>
-            <form action={path} method="POST">
-                {putMethod && (
-                    <input type="hidden" name="_method" value={putMethod} />
-                )}
-                <label className={cx("label")} for="name">
+            <form onSubmit={handleSubmit}>
+                <label className={cx("label")} htmlFor="name">
                     Name
                 </label>
                 <input
@@ -25,12 +56,12 @@ function FormSubmit({ title, path, putMethod = "", anime = {} }) {
                     id="name"
                     name="name"
                     placeholder="Name..."
-                    value={name || anime.name}
+                    value={name || ""}
                     onChange={(e) => {
                         setName(e.target.value);
                     }}
                 />
-                <label className={cx("label")} for="description">
+                <label className={cx("label")} htmlFor="description">
                     Description
                 </label>
                 <input
@@ -38,12 +69,12 @@ function FormSubmit({ title, path, putMethod = "", anime = {} }) {
                     id="description"
                     name="description"
                     placeholder="Description"
-                    value={description || anime.description}
+                    value={description || ""}
                     onChange={(e) => {
                         setDescription(e.target.value);
                     }}
                 />
-                <label className={cx("label")} for="iframe">
+                <label className={cx("label")} htmlFor="iframe">
                     Iframe
                 </label>
                 <input
@@ -51,12 +82,12 @@ function FormSubmit({ title, path, putMethod = "", anime = {} }) {
                     id="iframe"
                     name="iframe"
                     placeholder="Iframe..."
-                    value={iframe || anime.iframe}
+                    value={iframe || ""}
                     onChange={(e) => {
                         setIframe(e.target.value);
                     }}
                 />
-                <label className={cx("label")} for="thumbnail">
+                <label className={cx("label")} htmlFor="thumbnail">
                     Thumbnail
                 </label>
                 <input
@@ -64,16 +95,18 @@ function FormSubmit({ title, path, putMethod = "", anime = {} }) {
                     id="thumbnail"
                     name="thumbnailUrl"
                     placeholder="Thumbnail..."
-                    value={thumbnailUrl || anime.thumbnailUrl}
+                    value={thumbnailUrl || ""}
                     onChange={(e) => {
                         setThumbnailUrl(e.target.value);
                     }}
                 />
-                <input
+                <button
                     className={cx("submit-btn")}
                     type="submit"
-                    value="Submit"
-                />
+                    disabled={loading}
+                >
+                    {loading ? "Processing..." : "Submit"}
+                </button>
             </form>
         </div>
     );

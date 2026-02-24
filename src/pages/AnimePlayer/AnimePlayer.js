@@ -15,6 +15,7 @@ import {
 
 import styles from "./AnimePlayer.module.scss";
 import * as getTopAnimesService from "~/services/getTopAnimesService";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -77,7 +78,14 @@ function AnimePlayer() {
     };
 
     const togglePlay = () => setIsPlaying(!isPlaying);
-    const toggleFavorite = () => setIsFavorite(!isFavorite);
+    const toggleFavorite = () => {
+        setIsFavorite(!isFavorite);
+        if (!isFavorite) {
+            toast.success("Đã thêm vào yêu thích ❤️");
+        } else {
+            toast.info("Đã xóa khỏi yêu thích 💔");
+        }
+    };
     
     const handleCommentSubmit = (e) => {
         e.preventDefault();
@@ -92,7 +100,13 @@ function AnimePlayer() {
             };
             setComments([newComment, ...comments]);
             setComment("");
+            toast.success("Bình luận đã được gửi! 🚀");
         }
+    };
+
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        toast.info("Đã sao chép liên kết vào bộ nhớ tạm! 📋");
     };
 
     return (
@@ -143,7 +157,10 @@ function AnimePlayer() {
                                 <FontAwesomeIcon icon={faHeart} />
                                 <span>{isFavorite ? "Đã yêu thích" : "Yêu thích"}</span>
                             </button>
-                            <button className={cx("action-btn", "outline")}>
+                            <button 
+                                className={cx("action-btn", "outline")}
+                                onClick={handleShare}
+                            >
                                 <FontAwesomeIcon icon={faShare} />
                                 <span>Chia sẻ</span>
                             </button>

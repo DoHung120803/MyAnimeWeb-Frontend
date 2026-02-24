@@ -88,6 +88,46 @@ const chatService = {
             throw error;
         }
     },
+
+    /**
+     * Lấy hoặc tạo direct conversation với một user (helper function)
+     * Backend tự lấy firstUserId từ token, FE chỉ cần truyền secondUserId
+     * @param {string} friendId - ID của friend
+     * @param {object} friendInfo - Thông tin friend (firstName, lastName, avtUrl)
+     * @returns {Promise} - Response chứa conversation object và messages
+     */
+    getOrCreateDirectConversation: async (friendId, friendInfo = {}) => {
+        try {
+            // Gọi API lấy messages của direct conversation
+            const response = await httpRequest.post(
+                config.endpoints.getDirectConversation,
+                { secondUserId: friendId },
+                { params: { page: 0, size: 20 } }
+            );
+
+            // Tạo conversation object từ friendInfo
+            const friendName = `${friendInfo.firstName || ''} ${friendInfo.lastName || ''}`.trim() || friendInfo.username;
+            const conversationObject = {
+                id: null, // Sẽ được fill từ messages nếu có
+                type: 1, // DIRECT
+                name: friendName,
+                chatAvt: friendInfo.avtUrl || 'https://via.placeholder.com/36',
+            };
+
+            // Nếu có messages thì lấy conversationId từ message đầu tiên
+            if (response.data && response.data.content && response.data.content.length > 0) {
+                conversationObject.id = response.data.content[0].conversationId;
+            }
+
+            return {
+                data: conversationObject,
+                messages: response.data || { content: [] },
+            };
+        } catch (error) {
+            console.error('Error getting or creating direct conversation:', error);
+            throw error;
+        }
+    },
 };
 
 export default chatService;

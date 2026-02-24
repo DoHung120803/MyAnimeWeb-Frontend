@@ -1,0 +1,121 @@
+.dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 380px;
+    max-height: 480px;
+    background: rgba(20, 20, 30, 0.98);
+    backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 4px 16px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: dropdownFadeIn 0.2s ease-out;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dropdown-title {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+}
+
+.mark-all-btn {
+    background: none;
+    border: none;
+    color: rgba(102, 126, 234, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: rgba(102, 126, 234, 1);
+        background: rgba(102, 126, 234, 0.1);
+    }
+}
+
+.dropdown-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px;
+    max-height: 400px;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+    }
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: rgba(255, 255, 255, 0.35);
+    gap: 12px;
+
+    p {
+        margin: 0;
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+.load-more {
+    text-align: center;
+    padding: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+}
+
+// Responsive
+@media (max-width: 480px) {
+    .dropdown {
+        position: fixed;
+        top: 60px;
+        left: 8px;
+        right: 8px;
+        width: auto;
+        max-height: calc(100vh - 80px);
+    }
+}

@@ -4,6 +4,7 @@ import styles from './ChatBoxContainer.module.scss';
 import ChatBox from '~/components/ChatBox';
 import { useChatContext } from '~/contexts/ChatContext';
 import useChatSocket from '~/hooks/useChatSocket';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -106,6 +107,7 @@ const ChatBoxContainer = () => {
             sendMessage(messageData);
         } else {
             console.error('WebSocket not connected. Cannot send message.');
+            toast.error('Mất kết nối máy chủ chat. Vui lòng thử lại sau.');
         }
     };
 
@@ -117,6 +119,8 @@ const ChatBoxContainer = () => {
             sendTyping(typingData);
         } else {
             console.error('WebSocket not connected. Cannot send typing status.');
+            // Typing is less critical, maybe allow suppress, or show warning once?
+            // For now, let's just log or maybe no toast to avoid spamming user
         }
     };
 
@@ -139,8 +143,10 @@ const ChatBoxContainer = () => {
                         return (
                             <ChatBox
                                 key={chatBox.conversationId}
+                                conversationKey={chatBox.conversationId}
                                 conversation={chatBox.conversation}
                                 isMinimized={chatBox.isMinimized}
+                                initialMessages={chatBox.initialMessages}
                                 onSendMessage={handleSendMessage}
                                 onSendTyping={handleSendTyping}
                                 onRegisterReceiveMessage={registerReceiveMessage}
@@ -161,8 +167,10 @@ const ChatBoxContainer = () => {
                         return (
                             <ChatBox
                                 key={chatBox.conversationId}
+                                conversationKey={chatBox.conversationId}
                                 conversation={chatBox.conversation}
                                 isMinimized={chatBox.isMinimized}
+                                initialMessages={chatBox.initialMessages}
                                 onSendMessage={handleSendMessage}
                                 onSendTyping={handleSendTyping}
                                 onRegisterReceiveMessage={registerReceiveMessage}

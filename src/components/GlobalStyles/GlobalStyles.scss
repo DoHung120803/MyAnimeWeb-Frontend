@@ -77,8 +77,12 @@
 
     // default layout
     --default-layout-header-height: 70px;
-    --default-layout-width: 1150px;
+    --default-layout-width: 1600px;
     --default-layout-horizontal-spacer: 24px;
+    
+    // Sidebar widths
+    --sidebar-left-width: 320px;
+    --sidebar-right-width: 320px;
 }
 
 html {

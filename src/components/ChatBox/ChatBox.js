@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import classNames from 'classnames/bind';
+import { toast } from 'react-toastify';
 import styles from './ChatBox.module.scss';
 import Image from '~/components/Image';
 import images from '~/assets/images';
@@ -13,23 +14,31 @@ const cx = classNames.bind(styles);
  * Component ChatBox - Hiển thị một cửa sổ chat đơn
  * @param {object} conversation - Dữ liệu conversation
  * @param {boolean} isMinimized - Trạng thái minimize
+ * @param {object} initialMessages - Messages ban đầu (optional) 
  * @param {function} onSendMessage - Callback để gửi tin nhắn qua WebSocket
  * @param {function} onSendTyping - Callback để gửi typing status qua WebSocket
  * @param {function} onRegisterReceiveMessage - Callback để đăng ký nhận tin nhắn
  * @param {function} onRegisterTypingHandler - Callback để đăng ký nhận typing events
  */
 function ChatBox({ 
-    conversation, 
-    isMinimized, 
+    conversation,
+    conversationKey,
+    isMinimized,
+    initialMessages = null,
     onSendMessage, 
     onSendTyping,
     onRegisterReceiveMessage,
     onRegisterTypingHandler
 }) {
-    const { closeChatBox, toggleMinimize, focusChatBox, updateConversationLastMessage } = useChatContext();
+    const { closeChatBox, toggleMinimize, focusChatBox, updateConversationLastMessage, updateChatBoxConversation } = useChatContext();
+
+    // boxKey là key dùng để thao tác với ChatContext (conversation.id hoặc "new-{secondUserId}")
+    // Dùng conversationKey nếu được truyền vào, fallback về conversation.id
+    const boxKey = conversationKey ?? conversation.id;
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
+    const [sending, setSending] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
     const [isTyping, setIsTyping] = useState(false);
@@ -38,6 +47,7 @@ function ChatBox({
     const messagesContainerRef = useRef(null);
     const typingTimeoutRef = useRef(null);
     const currentUserId = getCurrentUserId();
+    const initialMessagesLoadedRef = useRef(false);
 
     /**
      * Fetch messages từ API
@@ -76,9 +86,20 @@ function ChatBox({
 
     /**
      * Load messages khi mở chat box lần đầu
+     * Nếu có initialMessages thì dùng luôn, không thì fetch từ API
      */
     useEffect(() => {
-        fetchMessages(0);
+        if (initialMessages && initialMessages.content && !initialMessagesLoadedRef.current) {
+            // Dùng initialMessages nếu có
+            const msgs = initialMessages.content.map(m => ({ ...m, _stableId: m.id }));
+            setMessages(msgs.reverse());
+            setHasMore(!initialMessages.last);
+            initialMessagesLoadedRef.current = true;
+        } else if (!initialMessages && conversation.id && !initialMessagesLoadedRef.current) {
+            // Không có initialMessages → fetch từ API
+            fetchMessages(0);
+            initialMessagesLoadedRef.current = true;
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -127,10 +148,10 @@ function ChatBox({
 
     // Register receive message handler
     useEffect(() => {
-        if (onRegisterReceiveMessage) {
-            onRegisterReceiveMessage(conversation.id, addNewMessage);
+        if (onRegisterReceiveMessage && boxKey) {
+            onRegisterReceiveMessage(boxKey, addNewMessage);
         }
-    }, [conversation.id, addNewMessage, onRegisterReceiveMessage]);
+    }, [boxKey, addNewMessage, onRegisterReceiveMessage]);
 
     /**
      * Handle typing event từ WebSocket
@@ -167,10 +188,10 @@ function ChatBox({
 
     // Register typing handler
     useEffect(() => {
-        if (onRegisterTypingHandler) {
-            onRegisterTypingHandler(conversation.id, handleTypingEvent);
+        if (onRegisterTypingHandler && boxKey) {
+            onRegisterTypingHandler(boxKey, handleTypingEvent);
         }
-    }, [conversation.id, handleTypingEvent, onRegisterTypingHandler]);
+    }, [boxKey, handleTypingEvent, onRegisterTypingHandler]);
 
     /**
      * Gửi typing status
@@ -213,9 +234,11 @@ function ChatBox({
 
     /**
      * Gửi tin nhắn
+     * - Nếu conversation.id tồn tại: gửi qua WebSocket như bình thường
+     * - Nếu conversation.id = null: tạo conversation mới qua API rồi gửi tin nhắn đầu tiên
      */
-    const handleSendMessage = () => {
-        if (!inputValue.trim()) return;
+    const handleSendMessage = async () => {
+        if (!inputValue.trim() || sending) return;
 
         // Clear typing status khi gửi tin nhắn
         if (isTyping) {
@@ -226,9 +249,68 @@ function ChatBox({
             clearTimeout(typingTimeoutRef.current);
         }
 
+        const content = inputValue.trim();
+        setInputValue('');
+
+        // Trường hợp chưa có conversation (cuộc trò chuyện mới)
+        if (!conversation.id) {
+            setSending(true);
+            try {
+                // Tạo conversation mới
+                const createRes = await chatService.createConversation({
+                    type: 1, // DIRECT
+                    memberIds: [conversation.secondUserId],
+                });
+
+                if (!createRes || !createRes.data) {
+                    toast.error('Không thể tạo cuộc trò chuyện');
+                    setInputValue(content);
+                    return;
+                }
+
+                const newConversation = {
+                    ...conversation,
+                    id: createRes.data.id,
+                };
+
+                // Cập nhật conversationId trong ChatContext
+                updateChatBoxConversation(conversation.secondUserId, newConversation);
+
+                // Gửi tin nhắn đầu tiên qua WebSocket
+                const messageData = {
+                    conversationId: newConversation.id,
+                    content,
+                };
+                if (onSendMessage) {
+                    onSendMessage(messageData);
+                }
+
+                // Optimistic update
+                const tempId = `temp-${Date.now()}`;
+                const tempMessage = {
+                    id: tempId,
+                    _stableId: tempId,
+                    conversationId: newConversation.id,
+                    content,
+                    senderId: currentUserId,
+                    createdAt: new Date().toISOString(),
+                    isTemp: true,
+                };
+                setMessages((prev) => [...prev, tempMessage]);
+                updateConversationLastMessage(newConversation.id, { content, timestamp: new Date().toISOString() });
+            } catch (err) {
+                console.error('Error creating conversation:', err);
+                toast.error('Không thể tạo cuộc trò chuyện');
+                setInputValue(content);
+            } finally {
+                setSending(false);
+            }
+            return;
+        }
+
         const messageData = {
             conversationId: conversation.id,
-            content: inputValue.trim(),
+            content,
         };
 
         // Gửi qua WebSocket → backend sẽ lưu DB và broadcast qua /conversation
@@ -243,7 +325,7 @@ function ChatBox({
             id: tempId, // Temporary ID (string để không trùng với ID thật từ DB)
             _stableId: tempId, // Stable Key cho React
             conversationId: conversation.id,
-            content: inputValue.trim(),
+            content,
             senderId: currentUserId,
             createdAt: new Date().toISOString(),
             isTemp: true,
@@ -252,12 +334,9 @@ function ChatBox({
 
         // Cập nhật lastMessage trong conversations dropdown
         updateConversationLastMessage(conversation.id, {
-            content: inputValue.trim(),
+            content,
             timestamp: new Date().toISOString(),
         });
-
-        // Clear input
-        setInputValue('');
     };
 
     /**
@@ -274,9 +353,9 @@ function ChatBox({
      */
     const handleHeaderClick = () => {
         if (isMinimized) {
-            toggleMinimize(conversation.id);
+            toggleMinimize(boxKey);
         } else {
-            focusChatBox(conversation.id);
+            focusChatBox(boxKey);
         }
     };
 
@@ -288,7 +367,7 @@ function ChatBox({
                     className={cx('close-btn-minimized')}
                     onClick={(e) => {
                         e.stopPropagation();
-                        closeChatBox(conversation.id);
+                        closeChatBox(boxKey);
                     }}
                     aria-label="Close"
                 >
@@ -318,7 +397,7 @@ function ChatBox({
                         className={cx('action-btn')}
                         onClick={(e) => {
                             e.stopPropagation();
-                            toggleMinimize(conversation.id);
+                            toggleMinimize(boxKey);
                         }}
                         aria-label="Minimize"
                     >
@@ -332,7 +411,7 @@ function ChatBox({
                         className={cx('action-btn')}
                         onClick={(e) => {
                             e.stopPropagation();
-                            closeChatBox(conversation.id);
+                            closeChatBox(boxKey);
                         }}
                         aria-label="Close"
                     >
@@ -403,7 +482,7 @@ function ChatBox({
                         <button
                             className={cx('send-btn')}
                             onClick={handleSendMessage}
-                            disabled={!inputValue.trim()}
+                            disabled={!inputValue.trim() || sending}
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

@@ -28,8 +28,8 @@ httpRequest.interceptors.response.use(
         // Xử lý lỗi 401 - Unauthorized (token hết hạn hoặc không hợp lệ)
         if (error.response && error.response.status === 401) {
             logout();
-            // Redirect về trang home (sẽ hiện modal login)
-            window.location.href = "/";
+            // Dispatch event để AuthContext biết và mở modal login
+            window.dispatchEvent(new CustomEvent('auth:unauthorized'));
         }
         return Promise.reject(error);
     }
@@ -49,6 +49,11 @@ export const _delete = async (path, options = {}) => {
 
 export const post = async (path, data = {}, options = {}) => {
     const response = await httpRequest.post(path, data, options);
+    return response.data;
+};
+
+export const put = async (path, data = {}, options = {}) => {
+    const response = await httpRequest.put(path, data, options);
     return response.data;
 };
 

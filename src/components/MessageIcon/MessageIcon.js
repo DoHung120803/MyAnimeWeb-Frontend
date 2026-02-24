@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MessageIcon.module.scss';
 import ChatDropdown from '~/components/ChatDropdown';
-import { isAuthenticated } from '~/utils/authUtils';
+import { useAuth } from '~/contexts/AuthContext';
 import { useChatContext } from '~/contexts/ChatContext';
 
 const cx = classNames.bind(styles);
@@ -15,11 +15,13 @@ function MessageIcon({ unreadCount = 0 }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const wrapperRef = useRef(null);
     const { openChatBox } = useChatContext();
+    const { isAuthenticated, openAuthModal } = useAuth();
 
     const handleToggleDropdown = (e) => {
         e.stopPropagation(); // Ngăn event bubble up
-        // Nếu chưa đăng nhập thì không mở dropdown (tránh lỗi 401 reload trang)
-        if (!isAuthenticated()) {
+        // Nếu chưa đăng nhập thì mở modal login
+        if (!isAuthenticated) {
+            openAuthModal('login');
             return;
         }
         setIsDropdownOpen(!isDropdownOpen);
