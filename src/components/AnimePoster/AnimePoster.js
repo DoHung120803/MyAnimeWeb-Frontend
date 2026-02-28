@@ -26,6 +26,11 @@ function AnimePoster({ data, banner = false, className }) {
                     className={cx("thumbnail", "w-100 h-100")}
                     alt="anime thumbnail"
                     src={data.thumbnailUrl || data.imageUrl}
+                    loading="eager"
+                    decoding="async"
+                    fetchpriority="high"
+                    width={1920}
+                    height={800}
                 />
                 <div className={cx("image-gradient")}></div>
             </Link>

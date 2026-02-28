@@ -17,6 +17,8 @@ function NotificationDropdown({
     onLoadMore,
     onNotificationClick,
     onMarkAllAsRead,
+    onAcceptFriend,
+    onDeclineFriend,
     parentRef,
 }) {
     const dropdownRef = useRef(null);
@@ -83,6 +85,8 @@ function NotificationDropdown({
                                 key={notification.id}
                                 notification={notification}
                                 onClick={onNotificationClick}
+                                onAcceptFriend={onAcceptFriend}
+                                onDeclineFriend={onDeclineFriend}
                             />
                         ))}
                         {hasMore && (

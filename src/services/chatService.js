@@ -26,19 +26,19 @@ const chatService = {
     },
 
     /**
-     * Tạo conversation mới
-     * @param {object} conversationData - Dữ liệu conversation (type, memberIds, name)
+     * Tạo direct conversation mới giữa 2 người
+     * @param {object} conversationData - Dữ liệu conversation (memberIds)
      * @returns {Promise}
      */
-    createConversation: async (conversationData) => {
+    createDirectConversation: async (conversationData) => {
         try {
             const response = await httpRequest.post(
-                config.endpoints.createConversation,
+                config.endpoints.createDirectConversation,
                 conversationData
             );
             return response;
         } catch (error) {
-            console.error('Error creating conversation:', error);
+            console.error('Error creating direct conversation:', error);
             throw error;
         }
     },
@@ -92,6 +92,8 @@ const chatService = {
     /**
      * Lấy hoặc tạo direct conversation với một user (helper function)
      * Backend tự lấy firstUserId từ token, FE chỉ cần truyền secondUserId
+     * Nếu conversation chưa tồn tại → trả về object với id = null,
+     * ChatBox sẽ tự tạo conversation khi gửi tin nhắn đầu tiên
      * @param {string} friendId - ID của friend
      * @param {object} friendInfo - Thông tin friend (firstName, lastName, avtUrl)
      * @returns {Promise} - Response chứa conversation object và messages
@@ -108,10 +110,11 @@ const chatService = {
             // Tạo conversation object từ friendInfo
             const friendName = `${friendInfo.firstName || ''} ${friendInfo.lastName || ''}`.trim() || friendInfo.username;
             const conversationObject = {
-                id: null, // Sẽ được fill từ messages nếu có
+                id: null, // Sẽ được fill từ messages nếu conversation đã tồn tại
                 type: 1, // DIRECT
                 name: friendName,
                 chatAvt: friendInfo.avtUrl || 'https://via.placeholder.com/36',
+                secondUserId: friendId, // Cần để ChatBox tạo conversation khi gửi tin nhắn đầu tiên
             };
 
             // Nếu có messages thì lấy conversationId từ message đầu tiên
@@ -125,6 +128,40 @@ const chatService = {
             };
         } catch (error) {
             console.error('Error getting or creating direct conversation:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Đánh dấu conversation đã đọc
+     * @param {object} request - { conversationId, lastReadMessageId }
+     * @returns {Promise}
+     */
+    markAsRead: async (request) => {
+        try {
+            const response = await httpRequest.put(
+                config.endpoints.markConversationAsRead,
+                request
+            );
+            return response;
+        } catch (error) {
+            console.error('Error marking conversation as read:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Lấy tổng số tin nhắn chưa đọc của user hiện tại
+     * @returns {Promise} - Response chứa số lượng unread
+     */
+    getTotalUnreadCount: async () => {
+        try {
+            const response = await httpRequest.get(
+                config.endpoints.getUnreadMessageCount
+            );
+            return response;
+        } catch (error) {
+            console.error('Error fetching total unread count:', error);
             throw error;
         }
     },

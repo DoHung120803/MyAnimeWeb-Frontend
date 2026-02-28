@@ -146,24 +146,28 @@ a {
     font-family: "TikTokFont";
     src: url("/assets/fonts/TikTokFont-Regular.woff2");
     font-weight: 400;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "TikTokFont";
     src: url("/assets/fonts/TikTokFont-Semibold.woff2");
     font-weight: 600;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "TikTokFont";
     src: url("/assets/fonts/TikTokFont-Bold.woff2");
     font-weight: 700;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "TikTokFont";
     src: url("/assets/fonts/TikTokDisplayFont-Bold.woff2");
     font-weight: 700;
+    font-display: swap;
 }
 
 // custom tippy tooltip

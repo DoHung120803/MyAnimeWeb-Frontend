@@ -4,6 +4,7 @@ import styles from './ChatBoxContainer.module.scss';
 import ChatBox from '~/components/ChatBox';
 import { useChatContext } from '~/contexts/ChatContext';
 import useChatSocket from '~/hooks/useChatSocket';
+import { getCurrentUserId } from '~/utils/authUtils';
 import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
@@ -13,9 +14,33 @@ const cx = classNames.bind(styles);
  * Xếp ngang từ phải sang trái (bottom-right) giống Facebook Messenger
  */
 const ChatBoxContainer = () => {
-    const { openChatBoxes, isSoundEnabled, updateConversationLastMessage } = useChatContext();
+    const { 
+        openChatBoxes, 
+        isSoundEnabled, 
+        updateConversationLastMessage, 
+        incrementUnreadForConversation,
+        markConversationAsRead,
+        openChatBox,
+        conversations,
+        focusedChatBoxId,
+        setFocusedChatBoxId,
+    } = useChatContext();
     const messageRefsMap = useRef(new Map());
     const typingRefsMap = useRef(new Map());
+    const chatBoxContainerRef = useRef(null);
+    // Ref để luôn có state mới nhất trong callback
+    const openChatBoxesRef = useRef(openChatBoxes);
+    const conversationsRef = useRef(conversations);
+    const focusedChatBoxIdRef = useRef(focusedChatBoxId);
+    useEffect(() => {
+        openChatBoxesRef.current = openChatBoxes;
+    }, [openChatBoxes]);
+    useEffect(() => {
+        conversationsRef.current = conversations;
+    }, [conversations]);
+    useEffect(() => {
+        focusedChatBoxIdRef.current = focusedChatBoxId;
+    }, [focusedChatBoxId]);
 
     /**
      * Callback khi nhận tin nhắn mới từ WebSocket
@@ -23,11 +48,14 @@ const ChatBoxContainer = () => {
     const handleMessageReceived = (message) => {
         console.log('New message received in ChatBoxContainer:', message);
         
+        const conversationId = message.conversationId;
+        const currentUserId = getCurrentUserId();
+        const isOwnMessage = String(message.senderId) === String(currentUserId);
+
         // Cập nhật lastMessage trong conversations list
-        updateConversationLastMessage(message.conversationId, message);
+        updateConversationLastMessage(conversationId, message);
         
         // Tìm chat box tương ứng và thêm tin nhắn vào
-        const conversationId = message.conversationId;
         console.log('Available refs:', Array.from(messageRefsMap.current.keys()));
         const addMessageFunc = messageRefsMap.current.get(conversationId);
         
@@ -35,7 +63,28 @@ const ChatBoxContainer = () => {
             console.log('Found Handler for conversation:', conversationId);
             addMessageFunc(message);
         } else {
-            console.log('Chat box not open or handler not registered for conversation:', conversationId);
+            console.log('Chat box not open for conversation:', conversationId);
+
+            // Nếu chatbox chưa mở và tin nhắn không phải của mình → auto mở chatbox (giống Facebook)
+            if (!isOwnMessage) {
+                const conv = conversationsRef.current.find(c => c.id === conversationId);
+                if (conv) {
+                    openChatBox(conv);
+                }
+            }
+        }
+
+        // Tăng unreadCount nếu tin nhắn không phải của mình
+        // VÀ chatbox đó KHÔNG đang được user focus (click vào)
+        if (!isOwnMessage) {
+            const isFocused = focusedChatBoxIdRef.current === conversationId;
+            if (!isFocused) {
+                incrementUnreadForConversation(conversationId);
+            } else if (message.id) {
+                // Chatbox đang focused → mark as read ngay lập tức
+                // (Backend đã tăng unreadCount, cần gọi markAsRead để reset về 0)
+                markConversationAsRead(conversationId, message.id);
+            }
         }
     };
 
@@ -100,6 +149,23 @@ const ChatBoxContainer = () => {
     }, [openChatBoxes]);
 
     /**
+     * Clear focusedChatBoxId khi user click ra ngoài tất cả chatbox
+     * → Để khi tin nhắn mới đến, chatbox không focused sẽ tăng unreadCount
+     */
+    useEffect(() => {
+        const handleDocumentClick = (e) => {
+            if (
+                chatBoxContainerRef.current && 
+                !chatBoxContainerRef.current.contains(e.target)
+            ) {
+                setFocusedChatBoxId(null);
+            }
+        };
+        document.addEventListener('mousedown', handleDocumentClick);
+        return () => document.removeEventListener('mousedown', handleDocumentClick);
+    }, [setFocusedChatBoxId]);
+
+    /**
      * Handle gửi tin nhắn
      */
     const handleSendMessage = (messageData) => {
@@ -135,17 +201,21 @@ const ChatBoxContainer = () => {
     const translateX = hasMinimized ? -90 : 0; // Dịch sang trái 64px nếu có minimized
 
     return (
-        <>
+        <div ref={chatBoxContainerRef} style={{ display: 'contents' }}>
             {/* Minimized chat boxes - xếp dọc ở góc phải */}
             {minimizedChatBoxes.length > 0 && (
                 <div className={cx('minimized-container')}>
                     {minimizedChatBoxes.map((chatBox) => {
+                        const conv = conversations.find(c => c.id === chatBox.conversationId);
+                        const unread = conv?.unreadCount || 0;
                         return (
                             <ChatBox
                                 key={chatBox.conversationId}
                                 conversationKey={chatBox.conversationId}
                                 conversation={chatBox.conversation}
                                 isMinimized={chatBox.isMinimized}
+                                hasUnread={unread > 0}
+                                unreadCount={unread}
                                 initialMessages={chatBox.initialMessages}
                                 onSendMessage={handleSendMessage}
                                 onSendTyping={handleSendTyping}
@@ -164,12 +234,16 @@ const ChatBoxContainer = () => {
                     style={{ transform: `translateX(${translateX}px)` }}
                 >
                     {expandedChatBoxes.map((chatBox) => {
+                        const conv = conversations.find(c => c.id === chatBox.conversationId);
+                        const unread = conv?.unreadCount || 0;
                         return (
                             <ChatBox
                                 key={chatBox.conversationId}
                                 conversationKey={chatBox.conversationId}
                                 conversation={chatBox.conversation}
                                 isMinimized={chatBox.isMinimized}
+                                hasUnread={unread > 0}
+                                unreadCount={unread}
                                 initialMessages={chatBox.initialMessages}
                                 onSendMessage={handleSendMessage}
                                 onSendTyping={handleSendTyping}
@@ -180,7 +254,7 @@ const ChatBoxContainer = () => {
                     })}
                 </div>
             )}
-        </>
+        </div>
     );
 }
 

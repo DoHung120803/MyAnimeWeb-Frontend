@@ -1,47 +1,64 @@
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import { useLocation } from "react-router-dom";
-import Sidebar from "~/layouts/components/Sidebar";
+import { lazy, Suspense } from "react";
 import Header from "../components/Header";
 import styles from "./DefaultLayout.module.scss";
-import PremiumAnimeCarousel from "~/components/PremiumAnimeCarousel";
-import GenreCarousel from "~/components/GenreCarousel";
 import config from "~/config";
-import Banner from "~/components/Banner";
-import ChatBoxContainer from "~/components/ChatBoxContainer";
-import FriendsList from "~/components/FriendsList";
+
+// Lazy load below-the-fold and non-critical components
+const Sidebar = lazy(() => import("~/layouts/components/Sidebar"));
+const Banner = lazy(() => import("~/components/Banner"));
+const PremiumAnimeCarousel = lazy(() => import("~/components/PremiumAnimeCarousel"));
+const GenreCarousel = lazy(() => import("~/components/GenreCarousel"));
+const ChatBoxContainer = lazy(() => import("~/components/ChatBoxContainer"));
+const FriendsList = lazy(() => import("~/components/FriendsList"));
 
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
     const currentUrl = useLocation().pathname;
+    const isHome = config.routes.home === currentUrl;
+
     return (
         <div className={cx("wrapper")}>
-            <Header></Header>
-            {config.routes.home === currentUrl && (
-                <div className={cx("banner-section")}> 
-                    <Banner />
-                </div>
+            <Header />
+            {isHome && (
+                <Suspense fallback={<div className={cx("banner-section")} style={{ minHeight: "70vh", background: "#0F0F0F" }} />}>
+                    <div className={cx("banner-section")}> 
+                        <Banner />
+                    </div>
+                </Suspense>
             )}
-            {config.routes.home === currentUrl && (
-                <GenreCarousel 
-                    title="Thể loại"
-                />
+            {isHome && (
+                <Suspense fallback={<div style={{ minHeight: 200 }} />}>
+                    <GenreCarousel 
+                        title="Thể loại"
+                    />
+                </Suspense>
             )}
-            {config.routes.home === currentUrl && (
-                <PremiumAnimeCarousel 
-                    getBy="api/v1/animes/top-animes" 
-                    title="Top đánh giá cao"
-                />
+            {isHome && (
+                <Suspense fallback={<div style={{ minHeight: 300 }} />}>
+                    <PremiumAnimeCarousel 
+                        getBy="api/v1/animes/top-animes" 
+                        title="Top đánh giá cao"
+                    />
+                </Suspense>
             )}
             <div className={cx("container")}>
-                <Sidebar></Sidebar>
+                <Suspense fallback={<div style={{ width: "var(--sidebar-left-width)" }} />}>
+                    <Sidebar />
+                </Suspense>
                 <div className={cx("content")}>{children}</div>
-                <FriendsList />
+                <Suspense fallback={null}>
+                    <FriendsList />
+                </Suspense>
             </div>
             
             {/* Chat boxes container - hiển thị ở bottom-right */}
-            <ChatBoxContainer />
+            <Suspense fallback={null}>
+                <ChatBoxContainer />
+            </Suspense>
         </div>
     );
 }

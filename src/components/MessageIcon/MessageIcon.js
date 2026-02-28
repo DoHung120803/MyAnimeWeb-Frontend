@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MessageIcon.module.scss';
 import ChatDropdown from '~/components/ChatDropdown';
@@ -11,11 +11,18 @@ const cx = classNames.bind(styles);
  * Component icon message trong header
  * Hiển thị badge số tin chưa đọc và dropdown conversations khi click
  */
-function MessageIcon({ unreadCount = 0 }) {
+function MessageIcon() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const wrapperRef = useRef(null);
-    const { openChatBox } = useChatContext();
+    const { openChatBox, totalUnreadCount, fetchTotalUnreadCount, setFocusedChatBoxId } = useChatContext();
     const { isAuthenticated, openAuthModal } = useAuth();
+
+    // Fetch tổng unread count khi component mount và khi user đăng nhập
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchTotalUnreadCount();
+        }
+    }, [isAuthenticated, fetchTotalUnreadCount]);
 
     const handleToggleDropdown = (e) => {
         e.stopPropagation(); // Ngăn event bubble up
@@ -35,6 +42,11 @@ function MessageIcon({ unreadCount = 0 }) {
         // Mở chat box thay vì chỉ đóng dropdown
         openChatBox(conversation);
         handleCloseDropdown();
+
+        // Set focused chatbox → ChatBox sẽ tự markAsRead khi load xong messages
+        if (conversation.id) {
+            setFocusedChatBoxId(conversation.id);
+        }
     };
 
     return (
@@ -56,9 +68,9 @@ function MessageIcon({ unreadCount = 0 }) {
                 </svg>
                 
                 {/* Badge hiển thị số tin nhắn chưa đọc */}
-                {unreadCount > 0 && (
+                {totalUnreadCount > 0 && (
                     <span className={cx('badge')}>
-                        {unreadCount > 99 ? '99+' : unreadCount}
+                        {totalUnreadCount > 99 ? '99+' : totalUnreadCount}
                     </span>
                 )}
             </button>

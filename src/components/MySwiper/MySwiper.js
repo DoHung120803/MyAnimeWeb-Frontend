@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -7,7 +7,7 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "./MySwiper.scss";
 
-const MySwiper = ({ data = [], ...props }) => {
+const MySwiper = memo(({ data = [], ...props }) => {
     return (
         <Swiper className="h-100" {...props}>
             {data.map((item, index) => (
@@ -15,6 +15,6 @@ const MySwiper = ({ data = [], ...props }) => {
             ))}
         </Swiper>
     );
-};
+});
 
 export default MySwiper;

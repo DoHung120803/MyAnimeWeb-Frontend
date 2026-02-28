@@ -52,6 +52,10 @@ function GenreCarousel({ title = "Thể loại" }) {
                             src={genre.image}
                             alt={genre.name}
                             className={cx("poster-image")}
+                            loading="lazy"
+                            decoding="async"
+                            width={250}
+                            height={150}
                         />
                         <div className={cx("poster-overlay")}>
                             <div className={cx("genre-name-overlay")}>

@@ -168,7 +168,7 @@ function ChatDropdown({isVisible, onClose, onConversationClick, parentRef }) {
                             key={conversation.id}
                             conversation={conversation}
                             onClick={() => handleConversationClick(conversation)}
-                            unreadCount={0} // TODO: Implement unread count từ backend
+                            unreadCount={conversation.unreadCount || 0}
                         />
                     ))
                 )}

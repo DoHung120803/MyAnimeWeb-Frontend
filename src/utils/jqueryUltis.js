@@ -1,5 +1,6 @@
-import $ from "jquery";
-
 export const hiddenAnimeDeteled = (id) => {
-    $("#" + id).css("display", "none");
+    const element = document.getElementById(id);
+    if (element) {
+        element.style.display = "none";
+    }
 };

@@ -31,7 +31,6 @@ import AuthModal from "~/components/AuthModal";
 import AuthContainer from "~/components/AuthContainer";
 import MessageIcon from "~/components/MessageIcon";
 import NotificationIcon from "~/components/NotificationIcon";
-import { useChatSocket } from "~/hooks";
 import { useAuth } from "~/contexts/AuthContext";
 
 const cx = classNames.bind(styles);
@@ -76,25 +75,20 @@ function Header() {
     const [showUserMenu, setShowUserMenu] = useState(false);
     const userMenuRef = useRef(null);
 
-    // WebSocket realtime cho chat (backend tự lấy userId từ token)
-    // Khi có tin nhắn mới, callback này sẽ được gọi
-    const handleNewMessage = (message) => {
-        console.log('New message received:', message);
-        // TODO: Update unread count dựa vào message
-        // Ví dụ: nếu message không phải từ currentUser thì tăng badge
-        setUnreadMessagesCount(prev => prev + 1);
-    };
-
-    const { isConnected } = useChatSocket(handleNewMessage);
-
-    // Detect scroll position
+    // Detect scroll position - throttled for performance
     useEffect(() => {
+        let ticking = false;
         const handleScroll = () => {
-            const scrollPosition = window.scrollY;
-            setIsScrolled(scrollPosition > 100); // Change threshold as needed
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    setIsScrolled(window.scrollY > 100);
+                    ticking = false;
+                });
+                ticking = true;
+            }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -222,9 +216,7 @@ function Header() {
                     {/* Right Side - Icons & Auth Buttons */}
                     <div className={cx("header-right")}>
                         {/* Message Icon - Chat Realtime (luôn hiện, click cần login) */}
-                        <MessageIcon 
-                            unreadCount={unreadMessagesCount}
-                        />
+                        <MessageIcon />
 
                         {/* Notification Icon (luôn hiện, click cần login) */}
                         <NotificationIcon />

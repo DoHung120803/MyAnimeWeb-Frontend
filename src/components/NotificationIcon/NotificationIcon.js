@@ -5,6 +5,7 @@ import NotificationDropdown from '~/components/NotificationDropdown';
 import NotificationPopup from '~/components/NotificationPopup';
 import { useAuth } from '~/contexts/AuthContext';
 import { useNotificationSocket } from '~/hooks';
+import userService from '~/services/userService';
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +36,7 @@ function NotificationIcon() {
         loadNotifications,
         markAsRead,
         markAllAsRead,
+        markNotificationActioned,
     } = useNotificationSocket(handleNewNotification);
 
     const handleToggleDropdown = (e) => {
@@ -62,9 +64,36 @@ function NotificationIcon() {
         if (!notification.isRead) {
             markAsRead(notification.id);
         }
-        // Có thể navigate dựa vào type/referenceId nếu cần
         handleCloseDropdown();
     };
+
+    const handleAcceptFriend = useCallback(async (notification) => {
+        // Đánh dấu đã đọc
+        if (!notification.isRead) markAsRead(notification.id);
+
+        // Optimistic: đánh dấu đã xử lý trên UI
+        markNotificationActioned(notification.id, 'accepted');
+
+        try {
+            await userService.respondToFriendRequest(notification.referenceId, true);
+        } catch (error) {
+            console.error('Error accepting friend request:', error);
+            markNotificationActioned(notification.id, null);
+        }
+    }, [markAsRead]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleDeclineFriend = useCallback(async (notification) => {
+        if (!notification.isRead) markAsRead(notification.id);
+
+        markNotificationActioned(notification.id, 'declined');
+
+        try {
+            await userService.respondToFriendRequest(notification.referenceId, false);
+        } catch (error) {
+            console.error('Error declining friend request:', error);
+            markNotificationActioned(notification.id, null);
+        }
+    }, [markAsRead]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleLoadMore = () => {
         loadNotifications(false);
@@ -109,6 +138,8 @@ function NotificationIcon() {
                     onLoadMore={handleLoadMore}
                     onNotificationClick={handleNotificationClick}
                     onMarkAllAsRead={handleMarkAllAsRead}
+                    onAcceptFriend={handleAcceptFriend}
+                    onDeclineFriend={handleDeclineFriend}
                     parentRef={wrapperRef}
                 />
             </div>
@@ -119,6 +150,8 @@ function NotificationIcon() {
                     key={notification.id}
                     notification={notification}
                     onClose={handlePopupClose}
+                    onAcceptFriend={handleAcceptFriend}
+                    onDeclineFriend={handleDeclineFriend}
                     index={index}
                 />
             ))}

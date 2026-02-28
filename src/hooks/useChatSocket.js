@@ -141,21 +141,30 @@ const useChatSocket = (onMessageReceived, soundEnabled = true, onTypingReceived 
 
     /**
      * Gửi tin nhắn qua WebSocket
-     * @param {object} messageData - { conversationId, content, messageType? }
+     * @param {object} messageData - { conversationId, content, messageType?, attachments? }
+     * messageType: 1 = TEXT, 2 = MEDIA
+     * attachments: [{ fileType, fileUrl, fileName, fileSize }]
      */
     const sendMessage = useCallback((messageData) => {
         const client = stompClientRef.current;
         if (client && client.connected) {
             try {
+                const payload = {
+                    conversationId: messageData.conversationId,
+                    content: messageData.content || null,
+                    messageType: messageData.messageType || 1, // Mặc định TEXT (1)
+                };
+
+                // Thêm attachments nếu là MEDIA message
+                if (messageData.messageType === 2 && messageData.attachments) {
+                    payload.attachments = messageData.attachments;
+                }
+
                 client.publish({
                     destination: '/app/send-message',
-                    body: JSON.stringify({
-                        conversationId: messageData.conversationId,
-                        content: messageData.content,
-                        messageType: messageData.messageType || 0,
-                    }),
+                    body: JSON.stringify(payload),
                 });
-                console.log('Message sent via WebSocket:', messageData);
+                console.log('Message sent via WebSocket:', payload);
                 return true;
             } catch (error) {
                 console.error('Error sending message:', error);

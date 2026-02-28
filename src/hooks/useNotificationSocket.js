@@ -4,6 +4,7 @@ import { Client } from '@stomp/stompjs';
 import { getToken, getCurrentUserId } from '~/utils/authUtils';
 import { playNotificationSound } from '~/utils/soundUtils';
 import notificationService from '~/services/notificationService';
+import { mergeActionedState, saveActionedNotification } from '~/utils/notificationUtils';
 
 /**
  * Custom hook để quản lý WebSocket cho notification realtime
@@ -54,7 +55,8 @@ const useNotificationSocket = (onNotificationReceived = null, soundEnabled = tru
 
             if (response && response.data) {
                 const pageData = response.data;
-                const content = pageData.content || [];
+                // Merge trạng thái đã xử lý từ localStorage để giữ nguyên sau khi fetch lại
+                const content = mergeActionedState(pageData.content || []);
 
                 if (reset) {
                     setNotifications(content);
@@ -95,6 +97,23 @@ const useNotificationSocket = (onNotificationReceived = null, soundEnabled = tru
             );
             setUnreadCount(prev => prev + 1);
         }
+    }, []);
+
+    /**
+     * Đánh dấu trạng thái đã xử lý friend request trên notification (optimistic UI)
+     * Đồng thời persist vào localStorage để giữ trạng thái sau khi fetch lại
+     * @param {number} notificationId
+     * @param {string|null} action - 'accepted' | 'declined' | null (rollback)
+     */
+    const markNotificationActioned = useCallback((notificationId, action) => {
+        saveActionedNotification(notificationId, action);
+        setNotifications(prev =>
+            prev.map(n =>
+                n.id === notificationId
+                    ? { ...n, friendRequestActioned: action }
+                    : n
+            )
+        );
     }, []);
 
     /**
@@ -233,6 +252,7 @@ const useNotificationSocket = (onNotificationReceived = null, soundEnabled = tru
         loadNotifications,
         markAsRead,
         markAllAsRead,
+        markNotificationActioned,
         fetchUnreadCount,
     };
 };

@@ -20,14 +20,20 @@ const endpoints = {
 
     // conversations
     getUserConversations: "api/v1/conversations/get-all",
-    createConversation: "api/v1/conversations",
+    createDirectConversation: "api/v1/conversations/direct",
     getMessages: "api/v1/conversations/messages",
     getDirectConversation: "api/v1/conversations/get-direct-conversation",
+    markConversationAsRead: "api/v1/conversations/mark-as-read",
+    getUnreadMessageCount: "api/v1/conversations/unread-count",
 
     // friends
     getFriends: "api/v1/friendships/get-friends",
     addFriend: "api/v1/friendships/add",
+    respondFriend: "api/v1/friendships/respond",
     getFriendshipStatus: "api/v1/friendships/status", // + /{targetUserId}
+
+    // upload
+    uploadFile: "api/v1/upload",
 
     // notifications
     getNotifications: "api/v1/notifications",

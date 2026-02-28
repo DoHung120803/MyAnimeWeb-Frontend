@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './NotificationItem.module.scss';
 
@@ -7,8 +8,11 @@ const cx = classNames.bind(styles);
 /**
  * Một item trong danh sách notification dropdown
  * Gồm: icon/avatar, nội dung, thời gian, trạng thái đã đọc
+ * FRIEND_REQUEST: có 2 nút Chấp nhận / Từ chối
  */
-function NotificationItem({ notification, onClick }) {
+function NotificationItem({ notification, onClick, onAcceptFriend, onDeclineFriend }) {
+    const navigate = useNavigate();
+
     const getTimeAgo = (dateStr) => {
         if (!dateStr) return '';
         const date = new Date(dateStr);
@@ -44,13 +48,28 @@ function NotificationItem({ notification, onClick }) {
     };
 
     const handleClick = () => {
-        if (onClick) {
-            onClick(notification);
+        if (onClick) onClick(notification);
+        // Navigate tới profile người gửi nếu có senderUsername
+        if (notification.senderUsername) {
+            navigate(`/profile/${notification.senderUsername}`);
         }
     };
 
+    const handleAccept = (e) => {
+        e.stopPropagation();
+        if (onAcceptFriend) onAcceptFriend(notification);
+    };
+
+    const handleDecline = (e) => {
+        e.stopPropagation();
+        if (onDeclineFriend) onDeclineFriend(notification);
+    };
+
+    const isFriendRequest = notification.type === 'FRIEND_REQUEST';
+    const isActioned = notification.friendRequestActioned; // đã xử lý rồi (accepted/declined)
+
     return (
-        <div 
+        <div
             className={cx('notification-item', { unread: !notification.isRead })}
             onClick={handleClick}
         >
@@ -60,6 +79,23 @@ function NotificationItem({ notification, onClick }) {
             <div className={cx('item-body')}>
                 <p className={cx('item-content')}>{notification.content}</p>
                 <span className={cx('item-time')}>{getTimeAgo(notification.createdAt)}</span>
+
+                {/* Action buttons cho FRIEND_REQUEST */}
+                {isFriendRequest && !isActioned && (
+                    <div className={cx('action-buttons')} onClick={(e) => e.stopPropagation()}>
+                        <button className={cx('btn-accept')} onClick={handleAccept}>
+                            Chấp nhận
+                        </button>
+                        <button className={cx('btn-decline')} onClick={handleDecline}>
+                            Từ chối
+                        </button>
+                    </div>
+                )}
+                {isFriendRequest && isActioned && (
+                    <span className={cx('actioned-label', notification.friendRequestActioned)}>
+                        {notification.friendRequestActioned === 'accepted' ? '✓ Đã chấp nhận' : '✗ Đã từ chối'}
+                    </span>
+                )}
             </div>
             {!notification.isRead && (
                 <div className={cx('unread-dot')}></div>

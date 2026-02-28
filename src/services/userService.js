@@ -126,7 +126,7 @@ const userService = {
     /**
      * Lấy trạng thái kết bạn giữa user hiện tại và user khác
      * @param {string} targetUserId - ID của user cần kiểm tra
-     * @returns {Promise} - Response chứa status: NONE | SENT | ACCEPTED | REJECTED | SELF
+     * @returns {Promise} - Response chứa { status, requestId }: NONE | SENT | WAITING | ACCEPTED | REJECTED | SELF
      */
     getFriendshipStatus: async (targetUserId) => {
         try {
@@ -136,6 +136,25 @@ const userService = {
             return response;
         } catch (error) {
             console.error('Error fetching friendship status:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Phản hồi lời mời kết bạn (chấp nhận hoặc từ chối)
+     * @param {string} id - ID của friendship record
+     * @param {boolean} isAccept - true = chấp nhận, false = từ chối
+     * @returns {Promise} - Response từ server
+     */
+    respondToFriendRequest: async (id, isAccept) => {
+        try {
+            const response = await httpRequest.post(
+                config.endpoints.respondFriend,
+                { id, isAccept }
+            );
+            return response;
+        } catch (error) {
+            console.error('Error responding to friend request:', error);
             throw error;
         }
     },

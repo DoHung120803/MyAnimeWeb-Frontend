@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 
 import styles from "../AnimeList.module.scss";
 import config from "~/config";
@@ -29,22 +29,22 @@ function Anime({
     const [imageLoaded, setImageLoaded] = useState(false);
 
     // hàm xử lý xóa anime
-    const handleDelete = () => {
+    const handleDelete = useCallback(() => {
         deleteAnimeServices.deleteAnime(id);
         jqueryUltis.hiddenAnimeDeteled(id); // ẩn anime khi click xóa
-    };
+    }, [id]);
 
     // chuyển hướng sang update
-    const handleClickUpdateBtn = () => {
+    const handleClickUpdateBtn = useCallback(() => {
         navigator(config.routes.update.replace(":id", id));
-    };
+    }, [id, navigator]);
 
     // chuyển hướng sang /animes/:id
-    const handleOnClickThumbnail = () => {
+    const handleOnClickThumbnail = useCallback(() => {
         navigator(config.routes.anime.replace(":id", id), {
             state: { name, description, thumbnailUrl, rate, views, iframe },
         });
-    };
+    }, [id, name, description, thumbnailUrl, rate, views, iframe, navigator]);
 
     return (
         <div className={cx("anime-container")} id={id}>
@@ -60,6 +60,9 @@ function Anime({
                         src={thumbnailUrl}
                         onLoad={() => setImageLoaded(true)}
                         loading="lazy"
+                        decoding="async"
+                        width={300}
+                        height={420}
                     />
 
                     {/* Gradient Overlay */}
@@ -153,4 +156,4 @@ Anime.propTypes = {
     episode: PropTypes.string,
 };
 
-export default Anime;
+export default memo(Anime);

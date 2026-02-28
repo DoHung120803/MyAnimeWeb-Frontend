@@ -7,7 +7,9 @@ import {
   faUserPlus,
   faUserCheck,
   faClock,
-  faPen, 
+  faPen,
+  faCheck,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   faFacebookF, 
@@ -36,7 +38,8 @@ const Profile = () => {
   const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   // Friendship
-  const [friendshipStatus, setFriendshipStatus] = useState('NONE'); // NONE | SENT | ACCEPTED | REJECTED | SELF
+  const [friendshipStatus, setFriendshipStatus] = useState('NONE'); // NONE | SENT | WAITING | ACCEPTED | REJECTED | SELF
+  const [friendshipRequestId, setFriendshipRequestId] = useState(null);
   const [friendActionLoading, setFriendActionLoading] = useState(false);
 
   // Conversations (chỉ hiển thị cho profile của bản thân)
@@ -85,7 +88,8 @@ const Profile = () => {
           // Lấy trạng thái kết bạn bằng id của user vừa tìm được
           const statusResponse = await userService.getFriendshipStatus(userResponse.data.id);
           if (statusResponse?.data !== undefined) {
-            setFriendshipStatus(statusResponse.data);
+            setFriendshipStatus(statusResponse.data.status);
+            setFriendshipRequestId(statusResponse.data.requestId || null);
           }
         }
       } catch (error) {
@@ -135,6 +139,7 @@ const Profile = () => {
     try {
       await userService.addFriend(profileUser.id);
       setFriendshipStatus('SENT');
+      setFriendshipRequestId(null);
       toast.success('Đã gửi lời mời kết bạn!');
     } catch (error) {
       console.error('Error adding friend:', error);
@@ -143,6 +148,28 @@ const Profile = () => {
       setFriendActionLoading(false);
     }
   }, [profileUser]);
+
+  // Phản hồi lời mời kết bạn (chấp nhận hoặc từ chối)
+  const handleRespondFriendRequest = useCallback(async (isAccept) => {
+    if (!friendshipRequestId) return;
+    setFriendActionLoading(true);
+    try {
+      await userService.respondToFriendRequest(friendshipRequestId, isAccept);
+      if (isAccept) {
+        setFriendshipStatus('ACCEPTED');
+        toast.success('Đã chấp nhận lời mời kết bạn!');
+      } else {
+        setFriendshipStatus('REJECTED');
+        setFriendshipRequestId(null);
+        toast.info('Đã từ chối lời mời kết bạn');
+      }
+    } catch (error) {
+      console.error('Error responding to friend request:', error);
+      toast.error('Không thể phản hồi lời mời kết bạn');
+    } finally {
+      setFriendActionLoading(false);
+    }
+  }, [friendshipRequestId]);
 
   // Nhắn tin cho user
   const handleSendMessage = useCallback(async () => {
@@ -207,6 +234,26 @@ const Profile = () => {
           <button className={classNames(styles.btn, styles.btnPending)} disabled>
             <FontAwesomeIcon icon={faClock} /> Đã gửi lời mời
           </button>
+        );
+      case 'WAITING':
+        return (
+          <div className={styles.respondButtons}>
+            <button
+              className={classNames(styles.btn, styles.btnAccept)}
+              onClick={() => handleRespondFriendRequest(true)}
+              disabled={friendActionLoading}
+            >
+              <FontAwesomeIcon icon={faCheck} />
+              {friendActionLoading ? 'Đang xử lý...' : 'Chấp nhận'}
+            </button>
+            <button
+              className={classNames(styles.btn, styles.btnReject)}
+              onClick={() => handleRespondFriendRequest(false)}
+              disabled={friendActionLoading}
+            >
+              <FontAwesomeIcon icon={faTimes} /> Từ chối
+            </button>
+          </div>
         );
       case 'REJECTED':
       case 'NONE':
@@ -421,6 +468,7 @@ const Profile = () => {
                 <span className={styles.infoValue}>
                   {friendshipStatus === 'ACCEPTED' && '🤝 Bạn bè'}
                   {friendshipStatus === 'SENT' && '⏳ Đã gửi lời mời kết bạn'}
+                  {friendshipStatus === 'WAITING' && '🔔 Đang chờ bạn phản hồi'}
                   {friendshipStatus === 'NONE' && '👤 Chưa kết bạn'}
                   {friendshipStatus === 'REJECTED' && '👤 Chưa kết bạn'}
                 </span>
