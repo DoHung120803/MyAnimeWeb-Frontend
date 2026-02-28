@@ -1,16 +1,44 @@
 .auth-container {
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 
 .form-wrapper {
     position: relative;
+    animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.form-wrapper.slide-out {
+    animation: slideOut 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
 }
 
 .switch-mode {
     text-align: center;
-    margin-top: 24px;
-    padding: 20px 16px 8px;
+    margin-top: 28px;
+    padding-top: 20px;
     position: relative;
     
     &::before {
@@ -19,16 +47,15 @@
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 40px;
+        width: 60px;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     }
     
     span {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 15px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 14px;
         font-weight: 400;
-        letter-spacing: 0.3px;
     }
 }
 
@@ -36,38 +63,33 @@
     background: none;
     border: none;
     color: #ff6b81;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 6px;
-    padding: 4px 8px;
-    border-radius: 6px;
+    margin-left: 4px;
+    padding: 4px 10px;
+    border-radius: 8px;
     transition: all 0.3s ease;
     position: relative;
     
-    &:hover {
-        color: #ff4757;
-        background: rgba(255, 107, 129, 0.1);
-        transform: translateY(-1px);
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 10px;
+        right: 10px;
+        height: 1.5px;
+        background: #ff6b81;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
     }
     
-    &:active {
-        transform: translateY(0);
+    &:hover {
+        color: #ff4757;
+        background: rgba(255, 107, 129, 0.08);
+        
+        &::after {
+            transform: scaleX(1);
+        }
     }
-}
-
-/* Đảm bảo form container không bị ảnh hưởng */
-:global(.form) {
-    margin: 0;
-    transform: none;
-    max-height: none;
-    overflow: visible;
-}
-
-.auth-container {
-    overflow: visible;
-}
-
-.form-wrapper {
-    overflow: visible;
 }

@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faUser, faLock, faEnvelope, faCalendar, faEye, faEyeSlash, faArrowLeft, faIdCard } from "@fortawesome/free-solid-svg-icons";
 import { Fragment, useState } from "react";
 import styles from "../Form.module.scss";
 import * as registerServices from "~/services/AuthService/registerService";
@@ -10,7 +11,7 @@ import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 
 function RegisterForm({ onClose }) {
-    const [next, setNext] = useState(false);
+    const [step, setStep] = useState(1);
     const [request, setRequest] = useState({
         username: "",
         email: "",
@@ -21,28 +22,37 @@ function RegisterForm({ onClose }) {
     });
 
     const [rePassword, setRePassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRePassword, setShowRePassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const { loginSuccess } = useAuth();
 
     const handleNext = (event) => {
         event.preventDefault();
-        setNext(true);
+        if (!request.firstName.trim() || !request.lastName.trim() || !request.email.trim()) {
+            setError("Vui lòng điền đầy đủ thông tin");
+            return;
+        }
+        setError("");
+        setStep(2);
     };
 
     const handleChange = (event, fieldChanged) => {
-        setRequest((prev) => {
-            return { ...prev, [fieldChanged]: event.target.value };
-        });
+        setRequest((prev) => ({ ...prev, [fieldChanged]: event.target.value }));
         setError("");
     };
 
     const handleRegister = async (event) => {
         event.preventDefault();
         
-        // Validate password match
         if (request.password !== rePassword) {
             setError("Mật khẩu không khớp");
+            return;
+        }
+
+        if (request.password.length < 6) {
+            setError("Mật khẩu phải có ít nhất 6 ký tự");
             return;
         }
 
@@ -50,13 +60,12 @@ function RegisterForm({ onClose }) {
         setError("");
 
         try {
-            await registerServices.register(request);
-            // Cập nhật auth state
+            const fullName = `${request.firstName} ${request.lastName}`.trim();
+            const avtUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=667eea&color=fff`;
+            await registerServices.register({ ...request, avtUrl });
             await loginSuccess();
             toast.success("Đăng ký thành công!");
-            if (onClose) {
-                onClose();
-            }
+            if (onClose) onClose();
         } catch (error) {
             console.log("Register failed:", error);
             const msg = error.response?.data?.message || "Đăng ký thất bại";
@@ -69,73 +78,112 @@ function RegisterForm({ onClose }) {
 
     const handleBack = (event) => {
         event.preventDefault();
-        setNext(false);
+        setError("");
+        setStep(1);
     };
 
     return (
         <div className={cx("container")}>
-            <form className={cx("form")}>
-                <h3 className={cx("title")}>Register</h3>
+            <form className={cx("form")} onSubmit={step === 1 ? handleNext : handleRegister}>
+                <div className={cx("form-header")}>
+                    <h3 className={cx("title")}>Tạo tài khoản mới</h3>
+                    <p className={cx("subtitle")}>Tham gia cộng đồng anime lớn nhất Việt Nam</p>
+                </div>
+
+                {/* Step indicator */}
+                <div className={cx("step-indicator")}>
+                    <div className={cx("step", { active: step >= 1, completed: step > 1 })}>
+                        <div className={cx("step-dot")}>1</div>
+                        <span>Thông tin</span>
+                    </div>
+                    <div className={cx("step-line", { active: step > 1 })}></div>
+                    <div className={cx("step", { active: step >= 2 })}>
+                        <div className={cx("step-dot")}>2</div>
+                        <span>Tài khoản</span>
+                    </div>
+                </div>
 
                 {error && (
-                    <div style={{ 
-                        color: "red", 
-                        marginBottom: "10px", 
-                        padding: "10px", 
-                        backgroundColor: "#ffe6e6",
-                        borderRadius: "5px",
-                        fontSize: "14px"
-                    }}>
+                    <div className={cx("error-box")}>
+                        <span className={cx("error-icon")}>⚠️</span>
                         {error}
                     </div>
                 )}
 
-                {!!next ? (
+                {step === 2 ? (
                     <Fragment>
-                        <label>Username</label>
-                        <input
-                            type="text"
-                            placeholder="Email or Phone"
-                            value={request.username}
-                            onChange={(event) =>
-                                handleChange(event, "username")
-                            }
-                        />
+                        <div className={cx("input-group")}>
+                            <div className={cx("input-icon")}>
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Tên đăng nhập"
+                                value={request.username}
+                                onChange={(e) => handleChange(e, "username")}
+                                className={cx({ 'has-value': request.username })}
+                            />
+                        </div>
 
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={request.password}
-                            onChange={(event) =>
-                                handleChange(event, "password")
-                            }
-                        />
+                        <div className={cx("input-group")}>
+                            <div className={cx("input-icon")}>
+                                <FontAwesomeIcon icon={faLock} />
+                            </div>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Mật khẩu"
+                                value={request.password}
+                                onChange={(e) => handleChange(e, "password")}
+                                className={cx({ 'has-value': request.password })}
+                            />
+                            <button 
+                                type="button" 
+                                className={cx("toggle-password")}
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            </button>
+                        </div>
 
-                        <label>Re-enter Password</label>
-                        <input
-                            type="password"
-                            placeholder="Re-enter Your Password"
-                            value={rePassword}
-                            onChange={(event) =>
-                                setRePassword(event.target.value)
-                            }
-                        />
+                        <div className={cx("input-group")}>
+                            <div className={cx("input-icon")}>
+                                <FontAwesomeIcon icon={faLock} />
+                            </div>
+                            <input
+                                type={showRePassword ? "text" : "password"}
+                                placeholder="Nhập lại mật khẩu"
+                                value={rePassword}
+                                onChange={(e) => setRePassword(e.target.value)}
+                                className={cx({ 'has-value': rePassword })}
+                            />
+                            <button 
+                                type="button" 
+                                className={cx("toggle-password")}
+                                onClick={() => setShowRePassword(!showRePassword)}
+                            >
+                                <FontAwesomeIcon icon={showRePassword ? faEyeSlash : faEye} />
+                            </button>
+                        </div>
 
                         <div className={cx('actions')}>
                             <button
-                                onClick={(event) => handleBack(event)}
+                                type="button"
+                                onClick={handleBack}
                                 className={cx('back-btn')}
                             >
-                                Back
+                                <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: 8 }} />
+                                Quay lại
                             </button>
 
                             <button
-                                onClick={(event) => handleRegister(event)}
-                                className={cx('login-btn')}
+                                type="submit"
+                                className={cx('submit-btn')}
                                 disabled={loading}
                             >
-                                {loading ? "Đang đăng ký..." : "Register"}
+                                {loading ? (
+                                    <span className={cx("loading-spinner")}></span>
+                                ) : null}
+                                {loading ? "Đang đăng ký..." : "Đăng ký"}
                             </button>
                         </div>
                     </Fragment>
@@ -143,68 +191,81 @@ function RegisterForm({ onClose }) {
                     <Fragment>
                         <div className={cx('row')}> 
                             <div className={cx('col')}>
-                                <label>First Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Your first name"
-                                    value={request.firstName}
-                                    onChange={(event) =>
-                                        handleChange(event, "firstName")
-                                    }
-                                />
+                                <div className={cx("input-group")}>
+                                    <div className={cx("input-icon")}>
+                                        <FontAwesomeIcon icon={faIdCard} />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Họ"
+                                        value={request.firstName}
+                                        onChange={(e) => handleChange(e, "firstName")}
+                                        className={cx({ 'has-value': request.firstName })}
+                                    />
+                                </div>
                             </div>
 
                             <div className={cx('col')}>
-                                <label>Last Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Your last name"
-                                    value={request.lastName}
-                                    onChange={(event) =>
-                                        handleChange(event, "lastName")
-                                    }
-                                />
+                                <div className={cx("input-group")}>
+                                    <div className={cx("input-icon")}>
+                                        <FontAwesomeIcon icon={faIdCard} />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Tên"
+                                        value={request.lastName}
+                                        onChange={(e) => handleChange(e, "lastName")}
+                                        className={cx({ 'has-value': request.lastName })}
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            placeholder="you@domain.com"
-                            value={request.email}
-                            onChange={(event) => handleChange(event, "email")}
-                        />
+                        <div className={cx("input-group")}>
+                            <div className={cx("input-icon")}>
+                                <FontAwesomeIcon icon={faEnvelope} />
+                            </div>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={request.email}
+                                onChange={(e) => handleChange(e, "email")}
+                                className={cx({ 'has-value': request.email })}
+                            />
+                        </div>
 
-                        <label>Date of Birth</label>
-                        <input
-                            type="date"
-                            data-date-format="YYYY MM DD"
-                            value={request.dob}
-                            onChange={(event) => handleChange(event, "dob")}
-                        />
-                        <button
-                            onClick={(event) => handleNext(event)}
-                            className={cx("next-btn")}
-                        >
-                            Next
+                        <div className={cx("input-group")}>
+                            <div className={cx("input-icon")}>
+                                <FontAwesomeIcon icon={faCalendar} />
+                            </div>
+                            <input
+                                type="date"
+                                data-date-format="YYYY MM DD"
+                                value={request.dob}
+                                onChange={(e) => handleChange(e, "dob")}
+                                className={cx('has-value')}
+                            />
+                        </div>
+
+                        <button type="submit" className={cx("submit-btn")}>
+                            Tiếp tục
                         </button>
                     </Fragment>
                 )}
+
+                <div className={cx("divider")}>
+                    <span>hoặc tiếp tục với</span>
+                </div>
+
                 <div className={cx("social")}>
-                    <div className={cx("go")}>
-                        <FontAwesomeIcon
-                            className={cx("icon")}
-                            icon={faGoogle}
-                        ></FontAwesomeIcon>
+                    <button type="button" className={cx("social-btn", "google-btn")}>
+                        <FontAwesomeIcon className={cx("social-icon")} icon={faGoogle} />
                         Google
-                    </div>
-                    <div className={cx("fb")}>
-                        <FontAwesomeIcon
-                            className={cx("icon")}
-                            icon={faFacebook}
-                        ></FontAwesomeIcon>
+                    </button>
+                    <button type="button" className={cx("social-btn", "facebook-btn")}>
+                        <FontAwesomeIcon className={cx("social-icon")} icon={faFacebook} />
                         Facebook
-                    </div>
+                    </button>
                 </div>
             </form>
         </div>
