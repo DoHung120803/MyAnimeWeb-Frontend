@@ -11,6 +11,11 @@ const Image = forwardRef(
             src,
             alt,
             fallback: customFallback = images.noImage,
+            width,
+            height,
+            loading = "lazy",
+            decoding = "async",
+            fetchPriority,
             ...props
         },
         ref
@@ -26,6 +31,11 @@ const Image = forwardRef(
                 src={fallback || src}
                 alt={alt}
                 ref={ref}
+                width={width}
+                height={height}
+                loading={loading}
+                decoding={decoding}
+                fetchpriority={fetchPriority}
                 {...props}
                 onError={handleError}
             />
@@ -38,6 +48,11 @@ Image.propTypes = {
     src: PropTypes.string,
     alt: PropTypes.string,
     fallback: PropTypes.string,
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    loading: PropTypes.string,
+    decoding: PropTypes.string,
+    fetchPriority: PropTypes.string,
 };
 
 export default Image;

@@ -80,6 +80,10 @@ function PremiumAnimeCarousel({ getBy, title = "Top đánh giá cao" }) {
                             src={anime.thumbnailUrl}
                             alt={anime.name}
                             className={cx("poster-image")}
+                            loading="lazy"
+                            decoding="async"
+                            width={300}
+                            height={420}
                         />
                         <div className={cx("poster-overlay")}>
                             <div className={cx("play-button")}>

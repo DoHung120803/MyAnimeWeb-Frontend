@@ -177,7 +177,7 @@ function Banner() {
                 }}
                 className={cx("main-swiper")}
             >
-                {banners.map((banner) => (
+                {banners.map((banner, index) => (
                     <SwiperSlide key={banner.id}>
                         <div className={cx("hero-slide")}>
                             {/* Background Image */}
@@ -186,6 +186,11 @@ function Banner() {
                                     src={banner.imageUrl || banner.thumbnailUrl}
                                     alt={banner.name}
                                     className={cx("hero-bg-img")}
+                                    loading={index === 0 ? "eager" : "lazy"}
+                                    decoding={index === 0 ? "sync" : "async"}
+                                    fetchpriority={index === 0 ? "high" : "low"}
+                                    width={1920}
+                                    height={1080}
                                 />
                             </div>
 
@@ -199,6 +204,8 @@ function Banner() {
                                                 src={banner.nameImage}
                                                 alt={banner.name}
                                                 className={cx("name-img")}
+                                                loading="lazy"
+                                                decoding="async"
                                             />
                                         </div>
                                     )}
@@ -307,6 +314,10 @@ function Banner() {
                                 src={banner.thumbnailUrl || banner.imageUrl}
                                 alt={banner.name}
                                 className={cx("thumbnail-img")}
+                                loading="lazy"
+                                decoding="async"
+                                width={200}
+                                height={112}
                             />
                         </div>
                     ))}

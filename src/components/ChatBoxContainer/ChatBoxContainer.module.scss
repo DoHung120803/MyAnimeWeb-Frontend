@@ -1,0 +1,66 @@
+// ChatBoxContainer styles - Container cho nhiều chat boxes
+
+// Container cho minimized chat boxes - xếp dọc ở góc phải
+.minimized-container {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px; // Khoảng cách nhỏ giữa các hình tròn
+    z-index: 1001; // Cao hơn expanded để nằm trên
+    pointer-events: none;
+    will-change: transform; // Tối ưu performance
+
+    > * {
+        pointer-events: auto;
+    }
+}
+
+// Container cho expanded chat boxes - xếp ngang ở dưới cùng
+.expanded-container {
+    position: fixed;
+    bottom: 0;
+    right: 16px;
+    display: flex;
+    flex-direction: row-reverse; // Xếp từ phải sang trái
+    align-items: flex-end;
+    gap: 8px; // Khoảng cách giữa các chat boxes
+    z-index: 1000;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); // Easing mượt hơn
+    will-change: transform; // Tối ưu performance
+
+    > * {
+        pointer-events: auto;
+    }
+}
+
+// Responsive - trên mobile stack chat boxes hoặc thu nhỏ
+@media (max-width: 768px) {
+    .minimized-container {
+        right: 8px;
+        bottom: 12px;
+        gap: 6px;
+    }
+    
+    .expanded-container {
+        right: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .minimized-container {
+        right: 8px;
+        bottom: 8px;
+    }
+    
+    .expanded-container {
+        right: 8px;
+        
+        > *:not(:first-child) {
+            display: none; // Ẩn các chat box khác trên mobile nhỏ
+        }
+    }
+}

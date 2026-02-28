@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+$bg-dark: #111827;
+$bg-card: #1f2937;
+$text-primary: #ffffff;
+$text-secondary: #9ca3af;
+$accent-blue: #3b82f6;
+$border-color: #374151;
+
+.profilePage {
+  font-family: 'Inter', sans-serif;
+  background-color: $bg-dark;
+  min-height: 100vh;
+  color: $text-primary;
+  padding-bottom: 2rem;
+}
+
+/* --- Header Background --- */
+.headerBg {
+  height: 250px;
+  width: 100%;
+  background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+
+  .headerOverlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(17, 24, 39, 0.4);
+  }
+}
+
+/* --- Profile Card Floating --- */
+.profileCardContainer {
+  max-width: 1600px;
+  margin: -60px auto 30px auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 10;
+}
+
+.profileHeaderCard {
+  background-color: rgba(31, 41, 55, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  border: 1px solid $border-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Tăng khoảng cách giữa ảnh và chữ */
+
+    .avatar {
+      /* ĐÃ SỬA: Tăng kích thước ảnh từ 70px -> 90px */
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 3px solid #4b5563; /* Dày viền lên 1 chút cho đẹp */
+    }
+
+    .avatarSkeleton {
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+      border: 3px solid #4b5563;
+      background: linear-gradient(
+        90deg,
+        #374151 0%,
+        #4b5563 50%,
+        #374151 100%
+      );
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s ease-in-out infinite;
+    }
+
+    .userDetails {
+      h2 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+      p {
+        margin: 6px 0 0 0;
+        color: $text-secondary;
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .actionButtons {
+    display: flex;
+    gap: 12px;
+
+    .btn {
+      background-color: #374151;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #4b5563;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .btnAddFriend {
+      background-color: #3b82f6;
+
+      &:hover {
+        background-color: #2563eb;
+      }
+    }
+
+    .btnFriend {
+      background-color: #059669;
+
+      &:hover {
+        background-color: #047857;
+      }
+    }
+
+    .btnPending {
+      background-color: #d97706;
+
+      &:hover {
+        background-color: #b45309;
+      }
+    }
+
+    .respondButtons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btnAccept {
+      background-color: #059669;
+
+      &:hover {
+        background-color: #047857;
+      }
+    }
+
+    .btnReject {
+      background-color: #dc2626;
+
+      &:hover {
+        background-color: #b91c1c;
+      }
+    }
+  }
+}
+
+/* --- Grid Layout --- */
+.contentGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px;
+
+  &.twoColumns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+
+    &.twoColumns {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* --- Cards Common Style --- */
+.card {
+  background-color: $bg-card;
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
+  .cardTitle {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: $text-primary;
+  }
+
+  .sectionLabel {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $text-secondary;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    display: block;
+
+    &:first-child { margin-top: 0; }
+  }
+}
+
+/* --- Switch Toggle Style --- */
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+
+  .settingLabel {
+    color: #d1d5db;
+    font-size: 1.25rem;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+
+    input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #4b5563;
+      transition: .4s;
+      border-radius: 34px;
+
+      &:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+    }
+
+    input:checked + .slider {
+      background-color: $accent-blue;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  }
+}
+
+/* --- Profile Info --- */
+.profileDesc {
+  color: $text-secondary;
+  font-size: 1.3rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.infoList {
+  .infoRow {
+    display: flex;
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+
+    .infoLabel {
+      font-weight: 700;
+      min-width: 100px;
+      color: $text-primary;
+    }
+
+    .infoValue {
+      color: $text-secondary;
+    }
+  }
+}
+
+.socialIcons {
+  display: flex;
+  gap: 15px;
+
+  .socialIcon {
+    color: $accent-blue;
+    cursor: pointer;
+    font-size: 1.6rem;
+
+    &:hover { opacity: 0.8; }
+  }
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+
+  .editIcon { color: $text-secondary; cursor: pointer; }
+}
+
+/* --- Conversations --- */
+.conversationsList {
+  .loading, .empty {
+    text-align: center;
+    padding: 20px;
+    color: $text-secondary;
+    font-size: 1.3rem;
+  }
+
+  .conversationItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+    margin-left: -10px;
+    margin-right: -10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(55, 65, 81, 0.5);
+    }
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .convoLeft {
+      display: flex;
+      gap: 12px;
+      flex: 1;
+      min-width: 0; // Để truncate text hoạt động
+
+      .convoAvatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+
+      .convoInfo {
+        flex: 1;
+        min-width: 0; // Để truncate text hoạt động
+
+        h4 {
+          margin: 0;
+          font-size: 1.5rem;
+          color: $text-primary;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        p {
+          margin: 4px 0 0 0;
+          font-size: 1.3rem;
+          color: $text-secondary;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .convoRight {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: 10px;
+
+      .time {
+        font-size: 1.1rem;
+        color: $text-secondary;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+/* --- Extra Info (Other profile) --- */
+.extraInfo {
+  .infoRow {
+    display: flex;
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+
+    .infoLabel {
+      font-weight: 700;
+      min-width: 100px;
+      color: $text-primary;
+    }
+
+    .infoValue {
+      color: $text-secondary;
+    }
+  }
+}
+
+/* --- Keyframe Animations --- */
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

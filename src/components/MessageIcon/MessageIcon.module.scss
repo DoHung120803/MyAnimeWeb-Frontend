@@ -1,0 +1,95 @@
+.message-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+// Icon button giống style của notification và language icons
+.icon-btn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s ease;
+    margin: 0;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+
+    &.active {
+        background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+// Badge hiển thị số tin chưa đọc
+.badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: linear-gradient(135deg, #ff3366 0%, #e41e3f 100%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(10, 10, 15, 0.9);
+    box-shadow: 
+        0 2px 8px rgba(228, 30, 63, 0.4),
+        0 0 0 0 rgba(228, 30, 63, 0.7);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+// Animation cho badge khi có tin mới - subtle pulse effect
+@keyframes badgePulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 
+            0 2px 8px rgba(228, 30, 63, 0.4),
+            0 0 0 0 rgba(228, 30, 63, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 
+            0 2px 12px rgba(228, 30, 63, 0.6),
+            0 0 0 4px rgba(228, 30, 63, 0);
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    .badge {
+        font-size: 9px;
+        min-width: 16px;
+        height: 16px;
+        top: -3px;
+        right: -3px;
+    }
+}

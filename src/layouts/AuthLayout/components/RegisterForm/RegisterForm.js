@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Fragment, useState } from "react";
 import styles from "../Form.module.scss";
 import * as registerServices from "~/services/AuthService/registerService";
+import { useAuth } from "~/contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,9 @@ function RegisterForm({ onClose }) {
     });
 
     const [rePassword, setRePassword] = useState("");
-    const navigator = useNavigate();
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const { loginSuccess } = useAuth();
 
     const handleNext = (event) => {
         event.preventDefault();
@@ -31,18 +34,36 @@ function RegisterForm({ onClose }) {
         setRequest((prev) => {
             return { ...prev, [fieldChanged]: event.target.value };
         });
+        setError("");
     };
 
     const handleRegister = async (event) => {
         event.preventDefault();
+        
+        // Validate password match
+        if (request.password !== rePassword) {
+            setError("Mật khẩu không khớp");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+
         try {
-            await registerServices.register(request, navigator);
-            // Đóng modal nếu đăng ký thành công
+            await registerServices.register(request);
+            // Cập nhật auth state
+            await loginSuccess();
+            toast.success("Đăng ký thành công!");
             if (onClose) {
                 onClose();
             }
         } catch (error) {
             console.log("Register failed:", error);
+            const msg = error.response?.data?.message || "Đăng ký thất bại";
+            setError(msg);
+            toast.error(msg);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -55,6 +76,19 @@ function RegisterForm({ onClose }) {
         <div className={cx("container")}>
             <form className={cx("form")}>
                 <h3 className={cx("title")}>Register</h3>
+
+                {error && (
+                    <div style={{ 
+                        color: "red", 
+                        marginBottom: "10px", 
+                        padding: "10px", 
+                        backgroundColor: "#ffe6e6",
+                        borderRadius: "5px",
+                        fontSize: "14px"
+                    }}>
+                        {error}
+                    </div>
+                )}
 
                 {!!next ? (
                     <Fragment>
@@ -99,8 +133,9 @@ function RegisterForm({ onClose }) {
                             <button
                                 onClick={(event) => handleRegister(event)}
                                 className={cx('login-btn')}
+                                disabled={loading}
                             >
-                                Register
+                                {loading ? "Đang đăng ký..." : "Register"}
                             </button>
                         </div>
                     </Fragment>

@@ -2,12 +2,15 @@ import AnimeStore from "../AnimeStore";
 import classNames from "classnames/bind";
 import styles from "./Home.module.scss";
 import AnimePoster from "~/components/AnimePoster";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, lazy, Suspense } from "react";
 import get from "~/services/getService";
 import config from "~/config";
 import MySwiper from "~/components/MySwiper";
 import { Pagination, Scrollbar, Autoplay } from "swiper/modules";
 import OptionItem from "~/layouts/components/Header/Options/OptionItem";
+
+// Lazy load AnimeStore since it's below the fold
+const LazyAnimeStore = lazy(() => import("../AnimeStore"));
 
 const cx = classNames.bind(styles);
 
@@ -18,20 +21,8 @@ function Home() {
     useEffect(() => {
         const fetchApi = async () => {
             const response = await get(config.endpoints.getTopAnimes);
-            setNewestAnimes(response.data);
-        };
-
-        fetchApi();
-    }, []);
-
-    useEffect(() => {
-        cutData();
-    }, [newestAnimes]);
-
-    // cắt bớt tên, mô tả để không bị quá dài
-    const cutData = () => {
-        setNewestAnimes((prevAnimes) =>
-            prevAnimes.map((item) => ({
+            // Cắt bớt tên, mô tả ngay khi nhận data để tránh infinite loop
+            const processed = response.data.map((item) => ({
                 ...item,
                 name:
                     item.name.length > 40
@@ -41,12 +32,20 @@ function Home() {
                     item.description.length > 145
                         ? item.description.slice(0, 145) + "..."
                         : item.description,
-            }))
-        );
-    };
+            }));
+            setNewestAnimes(processed);
+        };
+
+        fetchApi();
+    }, []);
+
+    // Memoize swiper data to prevent re-creating on each render
+    const swiperData = useMemo(
+        () => newestAnimes.map((item, index) => <AnimePoster key={index} data={item} />),
+        [newestAnimes]
+    );
 
     const handleOptionClick = (title) => {
-        console.log(title);
         setSelectedOption(title);
     };
 
@@ -57,16 +56,14 @@ function Home() {
                     modules={[Pagination, Scrollbar, Autoplay]}
                     slidesPerView={1}
                     autoplay={{
-                        delay: 3000, // delay time
-                        disableOnInteraction: false, // Tiếp tục autoplay sau khi tương tác
-                        pauseOnMouseEnter: true, // Dừng khi hover
+                        delay: 3000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
                     }}
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
                     loop={true}
-                    data={newestAnimes.map((item, index) => (
-                        <AnimePoster key={index} data={item} />
-                    ))}
+                    data={swiperData}
                 />
             </div>
             <div className={cx("list-block", "col-12 row")}>
@@ -98,7 +95,9 @@ function Home() {
                     ))}
                 </div>
             </div>
-            <AnimeStore homePageCustom="home-page-custom" />
+            <Suspense fallback={<div style={{ minHeight: 400 }} />}>
+                <LazyAnimeStore homePageCustom="home-page-custom" />
+            </Suspense>
             {/* custom anime in home page */}
         </div>
     );
