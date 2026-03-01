@@ -41,7 +41,7 @@ function Home() {
 
     // Memoize swiper data to prevent re-creating on each render
     const swiperData = useMemo(
-        () => newestAnimes.map((item, index) => <AnimePoster key={index} data={item} />),
+        () => newestAnimes.map((item, index) => <AnimePoster key={index} data={item} index={index} />),
         [newestAnimes]
     );
 
