@@ -1,4 +1,4 @@
-const { override, useBabelRc, addWebpackAlias } = require("customize-cra");
+const { override, useBabelRc, addWebpackAlias, overrideDevServer } = require("customize-cra");
 const path = require("path");
 const CompressionPlugin = require("compression-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -114,3 +114,40 @@ module.exports = override(
     }),
     optimizeChunks()
 );
+
+module.exports.devServer = overrideDevServer((config) => {
+    config.headers = {
+        ...config.headers,
+        // Static assets are content-hashed → safe to cache 1 year
+        "Cache-Control": "public, max-age=31536000, immutable",
+    };
+
+    // Per-path granular headers using setupMiddlewares
+    const originalSetupMiddlewares = config.setupMiddlewares;
+    config.setupMiddlewares = (middlewares, devServer) => {
+        devServer.app.use((req, res, next) => {
+            const url = req.url.split("?")[0];
+
+            if (/\/static\/(js|css|media)\//.test(url) || /\/sounds\//.test(url)) {
+                // Content-hashed static assets → cache 1 year
+                res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+                res.setHeader("Vary", "Accept-Encoding");
+            } else if (/\.(ico|png)$/.test(url)) {
+                // Icons / images → cache 1 day
+                res.setHeader("Cache-Control", "public, max-age=86400");
+            } else if (/\/(index\.html|manifest\.json|asset-manifest\.json)$/.test(url) || url === "/") {
+                // Entry points → never cache
+                res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                res.setHeader("Pragma", "no-cache");
+            }
+
+            next();
+        });
+
+        return originalSetupMiddlewares
+            ? originalSetupMiddlewares(middlewares, devServer)
+            : middlewares;
+    };
+
+    return config;
+});

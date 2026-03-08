@@ -1,5 +1,5 @@
 const images = {
-    logo: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7QwnosO45JLGJNBSflrVBu3OsZeKul4f7P59TtnaGT-tZvFA_ct4EcvOdzPwcp3uFWSbtsE6CepsnWobvkI9F87z249K_M9_OG6UD-KxtXosQOsY8umD6t0YB9boHFWrxv_GyFeT4NLA/s1600/Anime-logo-square.png",
+    logo: "https://res.cloudinary.com/dqbq0mw4s/image/upload/v1772948144/my_anime/00438b0e-ca04-47a6-8dde-811afa6a767f_anime-logo.webp",
     noImage: require("~/assets/images/no-image.png"),
 };
 
