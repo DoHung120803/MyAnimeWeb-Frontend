@@ -9,7 +9,8 @@ import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function AnimePoster({ data, banner = false, className }) {
+function AnimePoster({ data, banner = false, className, index = 0 }) {
+    const isAboveFold = index === 0;
     return (
         <div
             className={cx("container", "col-12 h-100", {
@@ -26,9 +27,9 @@ function AnimePoster({ data, banner = false, className }) {
                     className={cx("thumbnail", "w-100 h-100")}
                     alt="anime thumbnail"
                     src={data.thumbnailUrl || data.imageUrl}
-                    loading="eager"
-                    decoding="async"
-                    fetchpriority="high"
+                    loading={isAboveFold ? "eager" : "lazy"}
+                    decoding={isAboveFold ? "sync" : "async"}
+                    fetchpriority={isAboveFold ? "high" : "low"}
                     width={1920}
                     height={800}
                 />

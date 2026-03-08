@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
     <head>
         <meta charset="utf-8" />
@@ -18,7 +18,11 @@
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 
-        <!-- Preload critical font (only the main weight used above-the-fold) -->
+        <!-- DNS prefetch for API server (non-blocking) -->
+        <link rel="dns-prefetch" href="https://i.ytimg.com" />
+        <link rel="dns-prefetch" href="https://blogger.googleusercontent.com" />
+
+        <!-- Preload critical font — Regular weight is used above-the-fold -->
         <link rel="preload" href="/assets/fonts/TikTokFont-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
         <!-- Bootstrap CSS - loaded async (non-render-blocking) -->
@@ -39,6 +43,29 @@
             />
         </noscript>
 
+        <!-- Preload Font Awesome critical woff2 fonts to reduce render-blocking -->
+        <link
+            rel="preload"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-brands-400.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-regular-400.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin="anonymous"
+        />
+
         <!-- Font Awesome - loaded async (non-render-blocking) -->
         <link
             rel="preload"
@@ -51,17 +78,6 @@
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
                 rel="stylesheet"
             />
-        </noscript>
-
-        <!-- Google Fonts - loaded async (non-render-blocking), reduced to essential weights -->
-        <link
-            rel="preload"
-            as="style"
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap"
-            onload="this.onload=null;this.rel='stylesheet'"
-        />
-        <noscript>
-            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
         </noscript>
 
         <!-- Bootstrap JS - defer loading (non-blocking) -->
@@ -84,6 +100,33 @@
             }
             #root {
                 min-height: 100vh;
+            }
+
+            /* font-display: swap override for Font Awesome icons (Lighthouse fix)
+               Ensures text/icons remain visible during font load from Cloudflare CDN */
+            @font-face {
+                font-family: "Font Awesome 6 Free";
+                font-style: normal;
+                font-weight: 900;
+                font-display: swap;
+                src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2") format("woff2"),
+                     url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff") format("woff");
+            }
+            @font-face {
+                font-family: "Font Awesome 6 Free";
+                font-style: normal;
+                font-weight: 400;
+                font-display: swap;
+                src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-regular-400.woff2") format("woff2"),
+                     url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-regular-400.woff") format("woff");
+            }
+            @font-face {
+                font-family: "Font Awesome 6 Brands";
+                font-style: normal;
+                font-weight: 400;
+                font-display: swap;
+                src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-brands-400.woff2") format("woff2"),
+                     url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-brands-400.woff") format("woff");
             }
         </style>
     </head>

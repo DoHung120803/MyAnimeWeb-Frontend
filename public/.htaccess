@@ -1,0 +1,76 @@
+# ─── Enable mod_deflate (gzip) ────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript
+    AddOutputFilterByType DEFLATE application/json text/xml application/xml
+    AddOutputFilterByType DEFLATE font/woff2 font/woff image/svg+xml
+</IfModule>
+
+# ─── Enable mod_brotli (brotli, if available) ─────────────────────────────────
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/css application/javascript
+    AddOutputFilterByType BROTLI_COMPRESS application/json font/woff2
+</IfModule>
+
+# ─── Serve pre-compressed .gz files ───────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Serve gzip JS
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteCond %{REQUEST_FILENAME}.gz -f
+    RewriteRule ^(.*)$ $1.gz [L]
+    <FilesMatch "\.js\.gz$">
+        ForceType application/javascript
+        Header set Content-Encoding gzip
+    </FilesMatch>
+    # Serve gzip CSS
+    <FilesMatch "\.css\.gz$">
+        ForceType text/css
+        Header set Content-Encoding gzip
+    </FilesMatch>
+</IfModule>
+
+# ─── Cache headers ────────────────────────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Hashed JS/CSS (content-hash filenames → immutable)
+    <FilesMatch "\.[0-9a-f]{8,}\.(js|css)(\.gz)?$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Fonts
+    <FilesMatch "\.(woff2|woff|ttf|otf)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Images & media
+    <FilesMatch "\.(png|jpg|jpeg|gif|webp|svg|ico|avif)$">
+        ExpiresDefault "access plus 1 month"
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+
+    # Audio / video
+    <FilesMatch "\.(mp3|ogg|wav|mp4|webm)$">
+        ExpiresDefault "access plus 1 month"
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+
+    # HTML & manifests — always revalidate so new deploys are picked up
+    <FilesMatch "\.(html|json|xml|txt)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# ─── SPA fallback: redirect all routes to index.html ─────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>

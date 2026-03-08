@@ -8,39 +8,48 @@ const cx = classNames.bind(styles);
 
 function AuthContainer({ initialMode = 'login', onClose }) {
     const [mode, setMode] = useState(initialMode);
+    const [animating, setAnimating] = useState(false);
 
-    const switchToRegister = () => setMode('register');
-    const switchToLogin = () => setMode('login');
+    const switchMode = (newMode) => {
+        if (animating) return;
+        setAnimating(true);
+        setTimeout(() => {
+            setMode(newMode);
+            setAnimating(false);
+        }, 250);
+    };
 
     return (
         <div className={cx('auth-container')}>
-            {mode === 'login' ? (
-                <div className={cx('form-wrapper')}>
-                    <LoginForm onClose={onClose} />
-                    <div className={cx('switch-mode')}>
-                        <span>Chưa có tài khoản? </span>
-                        <button 
-                            className={cx('switch-btn')} 
-                            onClick={switchToRegister}
-                        >
-                            Đăng ký ngay
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                <div className={cx('form-wrapper')}>
-                    <RegisterForm onClose={onClose} />
-                    <div className={cx('switch-mode')}>
-                        <span>Đã có tài khoản? </span>
-                        <button 
-                            className={cx('switch-btn')} 
-                            onClick={switchToLogin}
-                        >
-                            Đăng nhập ngay
-                        </button>
-                    </div>
-                </div>
-            )}
+            <div className={cx('form-wrapper', { 'slide-out': animating })}>
+                {mode === 'login' ? (
+                    <>
+                        <LoginForm onClose={onClose} />
+                        <div className={cx('switch-mode')}>
+                            <span>Chưa có tài khoản? </span>
+                            <button 
+                                className={cx('switch-btn')} 
+                                onClick={() => switchMode('register')}
+                            >
+                                Đăng ký ngay
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <RegisterForm onClose={onClose} />
+                        <div className={cx('switch-mode')}>
+                            <span>Đã có tài khoản? </span>
+                            <button 
+                                className={cx('switch-btn')} 
+                                onClick={() => switchMode('login')}
+                            >
+                                Đăng nhập ngay
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 }
