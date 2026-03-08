@@ -13,17 +13,14 @@
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
         <!-- Preconnect to critical origins -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://api.dicebear.com" crossorigin />
+        <link rel="preconnect" href="https://ui-avatars.com" crossorigin />
 
         <!-- DNS prefetch for API server (non-blocking) -->
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
         <link rel="dns-prefetch" href="https://blogger.googleusercontent.com" />
-
-        <!-- Preload critical font — Regular weight is used above-the-fold -->
-        <link rel="preload" href="/assets/fonts/TikTokFont-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
         <!-- Bootstrap CSS - loaded async (non-render-blocking) -->
         <link
@@ -42,29 +39,6 @@
                 crossorigin="anonymous"
             />
         </noscript>
-
-        <!-- Preload Font Awesome critical woff2 fonts to reduce render-blocking -->
-        <link
-            rel="preload"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2"
-            as="font"
-            type="font/woff2"
-            crossorigin="anonymous"
-        />
-        <link
-            rel="preload"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-brands-400.woff2"
-            as="font"
-            type="font/woff2"
-            crossorigin="anonymous"
-        />
-        <link
-            rel="preload"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-regular-400.woff2"
-            as="font"
-            type="font/woff2"
-            crossorigin="anonymous"
-        />
 
         <!-- Font Awesome - loaded async (non-render-blocking) -->
         <link
@@ -100,6 +74,37 @@
             }
             #root {
                 min-height: 100vh;
+            }
+
+            /* TikTok fonts declared here (not in SCSS) to prevent webpack from
+               auto-injecting <link rel="preload"> which puts them in the critical path */
+            @font-face {
+                font-family: "TikTokFont";
+                src: url("/assets/fonts/TikTokFont-Regular.woff2") format("woff2");
+                font-weight: 400;
+                font-display: swap;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: "TikTokFont";
+                src: url("/assets/fonts/TikTokFont-Semibold.woff2") format("woff2");
+                font-weight: 600;
+                font-display: swap;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: "TikTokFont";
+                src: url("/assets/fonts/TikTokFont-Bold.woff2") format("woff2");
+                font-weight: 700;
+                font-display: swap;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: "TikTokDisplayFont";
+                src: url("/assets/fonts/TikTokDisplayFont-Bold.woff2") format("woff2");
+                font-weight: 700;
+                font-display: swap;
+                font-style: normal;
             }
 
             /* font-display: swap override for Font Awesome icons (Lighthouse fix)
