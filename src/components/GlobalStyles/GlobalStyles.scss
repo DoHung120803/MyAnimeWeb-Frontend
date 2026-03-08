@@ -141,41 +141,8 @@ a {
     text-decoration: none;
 }
 
-// fonts
-// Regular weight is preloaded in index.html — use swap for fast text rendering
-@font-face {
-    font-family: "TikTokFont";
-    src: url("/assets/fonts/TikTokFont-Regular.woff2") format("woff2");
-    font-weight: 400;
-    font-display: swap;
-    font-style: normal;
-}
-
-// Non-critical weights — use optional to avoid layout shift on slow connections
-@font-face {
-    font-family: "TikTokFont";
-    src: url("/assets/fonts/TikTokFont-Semibold.woff2") format("woff2");
-    font-weight: 600;
-    font-display: optional;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "TikTokFont";
-    src: url("/assets/fonts/TikTokFont-Bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: optional;
-    font-style: normal;
-}
-
-// TikTokDisplayFont is only used in HomeSidebar — load optionally
-@font-face {
-    font-family: "TikTokDisplayFont";
-    src: url("/assets/fonts/TikTokDisplayFont-Bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: optional;
-    font-style: normal;
-}
+// fonts are declared in public/index.html inline <style> to prevent
+// webpack css-loader from injecting automatic <link rel="preload"> tags
 
 // custom tippy tooltip
 body {
