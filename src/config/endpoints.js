@@ -2,6 +2,7 @@ const endpoints = {
 
     // auth
     login: "api/v1/auth/login",
+    oauth2Exchange: "api/v1/auth/oauth2/exchange",
 
     // user
     register: "api/v1/users/register",

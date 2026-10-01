@@ -16,6 +16,7 @@ const Update = lazy(() => import("~/pages/Update/Update"));
 const AnimePlayer = lazy(() => import("~/pages/AnimePlayer"));
 const Login = lazy(() => import("~/pages/Login"));
 const Register = lazy(() => import("~/pages/Register"));
+const OAuth2Callback = lazy(() => import("~/pages/OAuth2Callback/OAuth2Callback"));
 
 // Public routes - Ai cũng có thể truy cập
 // requireAuth: true → cần đăng nhập, nếu chưa sẽ hiện modal login
@@ -27,6 +28,7 @@ const publicRoutes = [
     { path: config.routes.animes, component: AnimeList },
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.register, component: Register, layout: null },
+    { path: config.routes.oauth2Callback, component: OAuth2Callback, layout: null },
 
     // Routes cần đăng nhập
     { path: config.routes.following, component: Following, requireAuth: true },

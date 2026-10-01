@@ -10,6 +10,7 @@ const routes = {
     update: "/animes/:id/update",
     login: "/auth/login",
     register: "/register",
+    oauth2Callback: "/oauth2/callback",
 };
 
 export default routes;

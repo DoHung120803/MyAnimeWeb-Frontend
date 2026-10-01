@@ -6,6 +6,7 @@ import { useState } from "react";
 import styles from "../Form.module.scss";
 import * as loginServices from "~/services/AuthService/loginService";
 import { useAuth } from "~/contexts/AuthContext";
+import { useOAuth2Login } from "~/hooks/useOAuth2Login";
 import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
@@ -17,6 +18,7 @@ function LoginForm({ onClose }) {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const { loginSuccess } = useAuth();
+    const handleOAuthLogin = useOAuth2Login(onClose);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -118,11 +120,11 @@ function LoginForm({ onClose }) {
                 </div>
 
                 <div className={cx("social")}>
-                    <button type="button" className={cx("social-btn", "google-btn")}>
+                    <button type="button" className={cx("social-btn", "google-btn")} onClick={() => handleOAuthLogin("google")}>
                         <FontAwesomeIcon className={cx("social-icon")} icon={faGoogle} />
                         Google
                     </button>
-                    <button type="button" className={cx("social-btn", "facebook-btn")}>
+                    <button type="button" className={cx("social-btn", "facebook-btn")} onClick={() => handleOAuthLogin("facebook")}>
                         <FontAwesomeIcon className={cx("social-icon")} icon={faFacebook} />
                         Facebook
                     </button>
