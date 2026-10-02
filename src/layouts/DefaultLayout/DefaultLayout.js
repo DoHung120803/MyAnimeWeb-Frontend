@@ -10,6 +10,7 @@ import config from "~/config";
 const Sidebar = lazy(() => import("~/layouts/components/Sidebar"));
 const Banner = lazy(() => import("~/components/Banner"));
 const PremiumAnimeCarousel = lazy(() => import("~/components/PremiumAnimeCarousel"));
+const AniTube = lazy(() => import("~/components/AniTube"));
 const GenreCarousel = lazy(() => import("~/components/GenreCarousel"));
 const ChatBoxContainer = lazy(() => import("~/components/ChatBoxContainer"));
 const FriendsList = lazy(() => import("~/components/FriendsList"));
@@ -43,6 +44,11 @@ function DefaultLayout({ children }) {
                         getBy="api/v1/animes/top-animes" 
                         title="Top đánh giá cao"
                     />
+                </Suspense>
+            )}
+            {isHome && (
+                <Suspense fallback={<div style={{ minHeight: 280 }} />}>
+                    <AniTube />
                 </Suspense>
             )}
             <div className={cx("container")}>

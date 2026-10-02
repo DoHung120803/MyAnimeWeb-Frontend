@@ -36,6 +36,9 @@ const endpoints = {
     // upload
     uploadFile: "api/v1/upload",
 
+    // ani-tube
+    aniTubeEmbedded: "api/v1/ani-tube/embedded",
+
     // notifications
     getNotifications: "api/v1/notifications",
     getUnreadCount: "api/v1/notifications/unread-count",
