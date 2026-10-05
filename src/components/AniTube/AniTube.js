@@ -84,9 +84,28 @@ function AniTube() {
         setActiveModalIndex(index);
     };
 
+    const formatNumber = (num) => {
+        if (!num) return "0";
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+        if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+        return num.toString();
+    };
+
+    const formatDuration = (seconds) => {
+        if (!seconds) return "";
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m}:${s < 10 ? "0" : ""}${s}`;
+    };
+
     const renderCard = (item, index) => {
         const id = item.id || item.videoId;
-        // Poster / thumbnail fallback if any, or modern gradient card with TikTok logo and video ID
+        const coverUrl = item.video?.dynamicCover || item.video?.cover || item.video?.originCover;
+        const authorName = item.author?.nickname;
+        const description = item.desc;
+        const diggCount = item.stats?.diggCount;
+        const duration = item.video?.duration;
+
         return (
             <div
                 key={id || index}
@@ -94,15 +113,30 @@ function AniTube() {
                 onClick={() => handleCardClick(index)}
             >
                 <div className={cx("card-media")}>
-                    {/* Placeholder or embed iframe */}
-                    <div className={cx("video-preview-bg")}>
-                        <div className={cx("preview-icon")}>
-                            {selectedProvider === "TIKTOK" && <FontAwesomeIcon icon={faTiktok} />}
-                            {selectedProvider === "YOUTUBE" && <FontAwesomeIcon icon={faYoutube} />}
-                            {selectedProvider === "FACEBOOK" && <FontAwesomeIcon icon={faFacebookF} />}
+                    {coverUrl ? (
+                        <div className={cx("cover-container")}>
+                            <img
+                                src={coverUrl}
+                                alt={description || `Video ${id}`}
+                                className={cx("cover-img")}
+                                loading="lazy"
+                            />
+                            {duration && duration !== '0' ? (
+                                <span className={cx("duration-badge")}>
+                                    {formatDuration(duration)}
+                                </span>
+                            ) : null}
                         </div>
-                        <span className={cx("preview-id")}>#{id}</span>
-                    </div>
+                    ) : (
+                        <div className={cx("video-preview-bg")}>
+                            <div className={cx("preview-icon")}>
+                                {selectedProvider === "TIKTOK" && <FontAwesomeIcon icon={faTiktok} />}
+                                {selectedProvider === "YOUTUBE" && <FontAwesomeIcon icon={faYoutube} />}
+                                {selectedProvider === "FACEBOOK" && <FontAwesomeIcon icon={faFacebookF} />}
+                            </div>
+                            <span className={cx("preview-id")}>#{id}</span>
+                        </div>
+                    )}
 
                     <div className={cx("card-overlay")}>
                         <div className={cx("play-icon-box")}>
@@ -112,12 +146,19 @@ function AniTube() {
                 </div>
                 <div className={cx("card-info")}>
                     <div className={cx("title-row")}>
-                        <span className={cx("badge-live")}>
-                            <FontAwesomeIcon icon={faBolt} /> Short
+                        <span className={cx("author-name")}>
+                            {authorName ? `@${authorName}` : `#${id}`}
                         </span>
-                        <span className={cx("provider-tag")}>{selectedProvider}</span>
+                        {diggCount !== undefined && diggCount !== null && (
+                            <span className={cx("likes-count")}>
+                                <FontAwesomeIcon icon={faBolt} className={cx("bolt-icon")} />
+                                {formatNumber(diggCount)}
+                            </span>
+                        )}
                     </div>
-                    <p className={cx("video-id-text")}>Video {index + 1}</p>
+                    <p className={cx("video-desc-text")} title={description || `Video ${index + 1}`}>
+                        {description || `Video ${index + 1}`}
+                    </p>
                 </div>
             </div>
         );

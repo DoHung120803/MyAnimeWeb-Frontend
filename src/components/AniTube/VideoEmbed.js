@@ -91,38 +91,38 @@ function VideoEmbed({ video, isDetail = false, isActive = false }) {
         }
     }, [normProvider]);
 
-    const handleIframeLoad = () => {
-        if (normProvider === "TIKTOK") {
-            const sendPlay = () => {
-                if (iframeRef.current && iframeRef.current.contentWindow) {
-                    iframeRef.current.contentWindow.postMessage(
-                        {
-                            "x-tiktok-player": true,
-                            type: "play",
-                        },
-                        "*"
-                    );
-                }
-            };
-            sendPlay();
-            const playTimeouts = [300, 800, 1500].map((delay) => setTimeout(sendPlay, delay));
-            if (audioEnabledRef.current) {
-                const sendUnMute = () => {
-                    if (iframeRef.current && iframeRef.current.contentWindow) {
-                        iframeRef.current.contentWindow.postMessage(
-                            {
-                                "x-tiktok-player": true,
-                                type: "unMute",
-                            },
-                            "*"
-                        );
-                    }
-                };
-                sendUnMute();
-                playTimeouts.push(setTimeout(sendUnMute, 300), setTimeout(sendUnMute, 800));
-            }
-        }
-    };
+    // const handleIframeLoad = () => {
+    //     if (normProvider === "TIKTOK") {
+    //         const sendPlay = () => {
+    //             if (iframeRef.current && iframeRef.current.contentWindow) {
+    //                 iframeRef.current.contentWindow.postMessage(
+    //                     {
+    //                         "x-tiktok-player": true,
+    //                         type: "play",
+    //                     },
+    //                     "*"
+    //                 );
+    //             }
+    //         };
+    //         sendPlay();
+    //         const playTimeouts = [300, 800, 1500].map((delay) => setTimeout(sendPlay, delay));
+    //         if (audioEnabledRef.current) {
+    //             const sendUnMute = () => {
+    //                 if (iframeRef.current && iframeRef.current.contentWindow) {
+    //                     iframeRef.current.contentWindow.postMessage(
+    //                         {
+    //                             "x-tiktok-player": true,
+    //                             type: "unMute",
+    //                         },
+    //                         "*"
+    //                     );
+    //                 }
+    //             };
+    //             sendUnMute();
+    //             playTimeouts.push(setTimeout(sendUnMute, 300), setTimeout(sendUnMute, 800));
+    //         }
+    //     }
+    // };
 
     // Render YouTube Short / Video embed
     if (normProvider === "YOUTUBE") {
@@ -236,7 +236,7 @@ function VideoEmbed({ video, isDetail = false, isActive = false }) {
         >
             <iframe
                 ref={iframeRef}
-                onLoad={handleIframeLoad}
+                // onLoad={handleIframeLoad}
                 src={`https://www.tiktok.com/player/v1/${actualId}?autoplay=1&lang=vi-VN`}
                 title={`tiktok-${actualId}`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

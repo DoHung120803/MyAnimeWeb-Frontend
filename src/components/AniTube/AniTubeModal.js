@@ -116,7 +116,20 @@ function AniTubeModal({ initialVideos = [], initialIndex = 0, onClose, provider 
         }));
     };
 
+    const formatNumber = (num) => {
+        if (!num) return "0";
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+        if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+        return num.toString();
+    };
+
     const currentVideo = videos[currentIndex] || {};
+    const authorNickname = currentVideo.author?.nickname;
+    const desc = currentVideo.desc;
+    const baseLikes = currentVideo.stats?.diggCount || 0;
+    const isLiked = liked[currentIndex];
+    const displayLikes = baseLikes + (isLiked ? 1 : 0);
+    const commentCount = currentVideo.stats?.commentCount;
 
     return (
         <div className={cx("modal-overlay")} onWheel={handleWheel}>
@@ -141,21 +154,33 @@ function AniTubeModal({ initialVideos = [], initialIndex = 0, onClose, provider 
                             isActive={true}
                         />
                     )}
+
+                    {/* Bottom-left overlay info inside player */}
+                    {(authorNickname || desc) && (
+                        <div className={cx("video-info-overlay")}>
+                            {authorNickname && (
+                                <h4 className={cx("overlay-author")}>@{authorNickname}</h4>
+                            )}
+                            {desc && (
+                                <p className={cx("overlay-desc")}>{desc}</p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Right side interaction buttons */}
                 <div className={cx("action-buttons")}>
                     <button
-                        className={cx("action-btn", { active: liked[currentIndex] })}
+                        className={cx("action-btn", { active: isLiked })}
                         onClick={() => toggleLike(currentIndex)}
                         title="Thích"
                     >
                         <FontAwesomeIcon icon={faHeart} />
-                        <span>Thích</span>
+                        <span>{displayLikes > 0 ? formatNumber(displayLikes) : "Thích"}</span>
                     </button>
                     <button className={cx("action-btn")} title="Bình luận">
                         <FontAwesomeIcon icon={faCommentDots} />
-                        <span>Bình luận</span>
+                        <span>{commentCount ? formatNumber(commentCount) : "Bình luận"}</span>
                     </button>
                     <button
                         className={cx("action-btn")}
